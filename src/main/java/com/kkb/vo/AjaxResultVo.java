@@ -28,6 +28,12 @@ public class AjaxResultVo<T> {
         this.msg = msg;
     }
 
+    public AjaxResultVo(Integer code, String msg, Object data) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+    }
+
     public Integer getCode() {
         return code;
     }
