@@ -1,5 +1,6 @@
 package com.kkb.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.kkb.pojo.User;
 import com.kkb.service.UserService;
 import com.kkb.vo.AjaxResultVo;
@@ -27,32 +28,52 @@ public class UserController {
 
     // 多条件分页查询
     @RequestMapping(value = "list",method = RequestMethod.GET)
-    public AjaxResultVo<User> queryByPage(Integer pageNum, Integer pageSize, UserQueryVO userQueryVO){
-        return new AjaxResultVo<>(200, "服务器内部异常, 请稍后再试!");
+    public AjaxResultVo<PageInfo> queryByPage(Integer pageNum, Integer pageSize, UserQueryVO userQueryVO){
+        PageInfo<User> userPageInfo = userService.queryByPage(pageNum, pageSize, userQueryVO);
+        if(userPageInfo != null){
+            return new AjaxResultVo<>(200, "ok", userPageInfo);
+        }
+        return new AjaxResultVo<>(500, "服务器内部异常, 请稍后再试!");
     }
 
     // 根据主键查询
     @RequestMapping(value = "{u_id}", method = RequestMethod.GET)
     public AjaxResultVo<User> queryById(@PathVariable("u_id") Integer u_id){
-        return new AjaxResultVo<>(200, "服务器内部异常, 请稍后再试!");
+        User user = userService.queryById(u_id);
+        if(user != null){
+            return new AjaxResultVo<>(200, "ok", user);
+        }
+        return new AjaxResultVo<>(500, "服务器内部异常, 请稍后再试!");
     }
 
     // 添加一条数据
     @RequestMapping(value = "", method = RequestMethod.POST)
     public AjaxResultVo<User> addUser(User user){
-        return new AjaxResultVo<>(200, "服务器内部异常, 请稍后再试!");
+        Integer res = userService.addUser(user);
+        if(res > 0){
+            return new AjaxResultVo<>(201, "ok");
+        }
+        return new AjaxResultVo<>(500, "服务器内部异常, 请稍后再试!");
     }
 
     // 根据主键删除
     @RequestMapping(value = "{u_id}", method = RequestMethod.DELETE)
     public AjaxResultVo<User> deleteById(@PathVariable("u_id") Integer u_id){
-        return new AjaxResultVo<>(200, "服务器内部异常, 请稍后再试!");
+        Integer res = userService.deleteById(u_id);
+        if(res > 0){
+            return new AjaxResultVo<>(204, "ok", null);
+        }
+        return new AjaxResultVo<>(500, "服务器内部异常, 请稍后再试!");
     }
 
     // 根据主键更新
     @RequestMapping(value = "{u_id}", method = RequestMethod.PUT)
-    public AjaxResultVo<User> updateById(@PathVariable("u_id") Integer u_id){
-        return new AjaxResultVo<>(200, "服务器内部异常, 请稍后再试!");
+    public AjaxResultVo<User> updateById(@PathVariable("u_id") Integer u_id, User user){
+        Integer res = userService.updateById(u_id, user);
+        if(res > 0){
+            return new AjaxResultVo<>(200, "ok", null);
+        }
+        return new AjaxResultVo<>(500, "服务器内部异常, 请稍后再试!");
     }
 
 

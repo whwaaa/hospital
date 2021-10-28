@@ -7,10 +7,11 @@
     <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
     <link rel="stylesheet" type="text/css" href="../Css/style.css" />
     <script type="text/javascript" src="../Js/jquery.js"></script>
-    <script type="text/javascript" src="../Js/jquery.sorted.js"></script>
     <script type="text/javascript" src="../Js/bootstrap.js"></script>
     <script type="text/javascript" src="../Js/ckform.js"></script>
     <script type="text/javascript" src="../Js/common.js"></script>
+    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/layer/3.5.1/layer.js"></script>
 
     <style type="text/css">
         body {
@@ -33,7 +34,7 @@
     </style>
     <script type="text/javascript">
      $(function () {
-         // TODO: 从cookie中获取JWTToken令牌
+         // TODO: 从cookie中获取jwtToken令牌, 每一个请求都需要带上这个参数, "&jwtToken="+jwtToken
          let jwtToken = $.cookie("jwtToken")
 
 		$('#newNav').click(function(){
@@ -45,16 +46,50 @@
              url: "/user/list/?pageNum=1&pageSize=5&jwtToken=" + jwtToken, //RESTful风格的API定义
              data: "",
              success: function (data) {
-                 if(data.code==200){
-
+                 if(data.code === 200){
+                    console.log(data)
                  }else{
-                     alert(data.msg);
+                 }
+             }
+             // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的数据
+             ,complete : function(xhr, status) {
+                 // 通过xhr取得响应头
+                 var REDIRECT = xhr.getResponseHeader("REDIRECT");
+                 // 如果响应头中包含 REDIRECT 则说明是拦截器返回的
+                 if(REDIRECT == "REDIRECT"){
+                     // 跳到登陆界面, 传入当前URL作为参数, 登陆成功再跳回来
+                     let callBackUrL = window.location.href;
+                     window.location.href = xhr.getResponseHeader("CONTENTPATH") + "?callBackUrL=" + callBackUrL;
                  }
              }
          });
     });
-	
-	
+
+     //填充分页信息
+     function fillPageData(pageInfo) {
+         //填充信息
+         $("#total").html(pageInfo.total);
+         $("#pages").html(pageInfo.pages);
+         $("input[name='pageNum']").val(pageInfo.pageNum);
+         $("select[name='pageSize']").val(pageInfo.pageSize);
+         //设置按钮的属性值和样式
+         $("#firstPage").attr("name",1);
+         $("#prePage").attr("name",pageInfo.prePage);
+         $("#nextPage").attr("name",pageInfo.nextPage);
+         $("#lastPage").attr("name",pageInfo.pages);
+         $("#firstPage").removeClass("disabled");
+         $("#prePage").removeClass("disabled");
+         $("#nextPage").removeClass("disabled");
+         $("#lastPage").removeClass("disabled");
+         if(pageInfo.isFirstPage){//如果是第一页：上一页和首页禁用
+             $("#firstPage").addClass("disabled");
+             $("#prePage").addClass("disabled");
+         }
+         if(pageInfo.isLastPage){//如果已经是最后一页：下一页和末页禁用
+             $("#nextPage").addClass("disabled");
+             $("#lastPage").addClass("disabled");
+         }
+     }
     function checkall(){
 			var alls=document.getElementsByName("check");
 			var ch=document.getElementById("checkall");
@@ -113,8 +148,19 @@
         </tr>	
 </table>
 <table class="table table-bordered table-hover definewidth m10" >
-  	<tr><th colspan="5">  <div class="inline pull-right page">
-         10122 条记录 1/507 页  <a href='#'>下一页</a>     <span class='current'>1</span><a href='#'>2</a><a href='/chinapost/index.php?m=Label&a=index&p=3'>3</a><a href='#'>4</a><a href='#'>5</a>  <a href='#' >下5页</a> <a href='#' >最后一页</a></div><div><button type="button" class="btn btn-success" id="newNav">添加用户</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-success" id="delPro" onClick="delAll();">删除选中</button></div></th></tr>
+  	<tr><th colspan="5">
+        <div class="inline pull-right page">
+            <span id="total"></span>条记录 <input class="form-control" name="pageNum" value="1" />/<span id="pages"></span> 页  <li name="pageLi" id="nextPage"><a href="javascript:void(0)">下一页</a></li>
+        <span class='current'>1</span>
+        <a href='#'>2</a>
+        <a href='/chinapost/index.php?m=Label&a=index&p=3'>3</a>
+        <a href='#'>4</a>
+        <a href='#'>5</a>
+        <a href='#' >下5页</a>
+        <a href='#' >最后一页</a>
+        </div>
+        <div>
+            <button type="button" class="btn btn-success" id="newNav">添加用户</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-success" id="delPro" onClick="delAll();">删除选中</button></div></th></tr>
   </table>
 </body>
 </html>

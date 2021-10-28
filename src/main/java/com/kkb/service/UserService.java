@@ -15,8 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Shandong_Hospital
- *
+ * UserService
  * @author wuhanwei
  * @version 1.0
  * @date 2021/10/28
@@ -44,8 +43,6 @@ public class UserService {
             criteria.andU_loginNameLike("%" + userQueryVO.getU_loginName() + "%");
         }
         criteria.andU_isDelEqualTo(0);  // 是否删除 0不删除 1删除
-        // ...
-
         // 分页
         PageHelper.startPage(pageNum, pageSize);
         List<User> users = userMapper.selectByExample(userExample);
