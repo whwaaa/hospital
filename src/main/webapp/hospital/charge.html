@@ -84,7 +84,7 @@
 		
         <td>
 		<button type="submit" class="btn btn-primary" type="button">查询</button> 
-			<button type="submit" class="btn btn-primary" type="button">清空</button> </td>
+			<button type="reset" class="btn btn-primary" type="button">清空</button> </td>
     </tr>
    
 </table>
@@ -101,6 +101,7 @@
         <th>操作</th>
     </tr>
     </thead>
+    <tbody id="tbody">
 	     <tr >
             <td style="vertical-align:middle;">1103</td>
             <td style="vertical-align:middle;">心脏检查</td>
@@ -112,6 +113,7 @@
 				<a href="charge-edit1.html">查看详情</a>
 			</td>
         </tr>
+    </tbody>
   </table>
   
   <table class="table table-bordered table-hover definewidth m10" >
@@ -128,3 +130,49 @@
   
 </body>
 </html>
+<script type="text/javascript">
+   
+    $(function () {
+        loadDate();
+       
+    })
+
+        function loadDate() {
+            debugger;
+            $.ajax({
+                type:"GET",
+                url :"charge/list?pageNum=1&pageSize",
+                date:"",
+                success:function (data) {
+                    console.log(data) // 没有数据啊？weixin
+                    console.log(data.obj)
+                    let list = data.obj.list;
+
+                    let str = "";
+                    for (let i =0;i<list.length;i++){
+                        let obj = list[i];
+                        let id=obj.chaP_id==null?'':obj.chaP_id;
+                        let name=obj.chaP_name==null?'':obj.chaP_name;
+                        let money=obj.chaP_money==null?'':obj.chaP_money;
+                        let createtime=obj.chaP_create_time==null?'':obj.chaP_create_time;
+                        str+='<tr>' +
+                            '            <td>'+id+'</td>' +
+                            '            <td>'+name+'</td>' +
+                            '            <td>'+money+'</td>' +
+                            '            <td>'+createtime+'</td>' +
+                            '            <td style="vertical-align:middle;">'+
+                                            '<a href="charge-edit1.html">'+"修改"+'</a>'
+                                            '<a href="">'+"删除"+'</a>'
+                                            '<a href="charge-edit1.html">'+"查看详情"+'</a>'+
+                            '            </td>'
+                            '</tr>'
+
+                    }
+                    $("#tboby").html(str);
+                }
+
+            });
+
+       
+   }
+</script>
