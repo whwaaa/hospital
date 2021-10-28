@@ -138,10 +138,9 @@
     })
 
         function loadDate() {
-            debugger;
             $.ajax({
                 type:"GET",
-                url :"charge/list?pageNum=1&pageSize",
+                url :"/charge/list?pageNum=1&pageSize=4",
                 date:"",
                 success:function (data) {
                     console.log(data) // 没有数据啊？weixin
@@ -168,7 +167,7 @@
                             '</tr>'
 
                     }
-                    $("#tboby").html(str);
+                    $("#tbody").html($(str));
                 }
 
             });
