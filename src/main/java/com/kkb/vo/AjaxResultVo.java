@@ -10,12 +10,12 @@ package com.kkb.vo;
 public class AjaxResultVo<T> {
     private Integer code;
     private String msg;
-    private Object data;
+    private Object obj;
 
-    public AjaxResultVo(Object data) {
+    public AjaxResultVo(Object obj) {
         this.code = 200;
         this.msg = "ok";
-        this.data = data;
+        this.obj = obj;
     }
 
     public AjaxResultVo() {
@@ -28,10 +28,10 @@ public class AjaxResultVo<T> {
         this.msg = msg;
     }
 
-    public AjaxResultVo(Integer code, String msg, Object data) {
+    public AjaxResultVo(Integer code, String msg, Object obj) {
         this.code = code;
         this.msg = msg;
-        this.data = data;
+        this.obj = obj;
     }
 
     public Integer getCode() {
@@ -50,11 +50,11 @@ public class AjaxResultVo<T> {
         this.msg = msg;
     }
 
-    public Object getData() {
-        return data;
+    public Object getObj() {
+        return obj;
     }
 
-    public void setData(Object data) {
-        this.data = data;
+    public void setObj(Object obj) {
+        this.obj = obj;
     }
 }
