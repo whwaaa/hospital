@@ -47,21 +47,22 @@
             <bean class="com.kkb.interceptor.CORSInterceptor"/>
         </mvc:interceptor>
         <!-- 权限控制 -->
-        <mvc:interceptor>
-            <mvc:mapping path="/**"/>
-            <mvc:exclude-mapping path="/index/**"/>
-            <mvc:exclude-mapping path="/User/**"/>
-            <mvc:exclude-mapping path="/**/fonts/*"/>
-            <mvc:exclude-mapping path="/**/*.css"/>
-            <mvc:exclude-mapping path="/**/*.js"/>
-            <mvc:exclude-mapping path="/**/*.png"/>
-            <mvc:exclude-mapping path="/**/*.gif"/>
-            <mvc:exclude-mapping path="/**/*.jpg"/>
-            <mvc:exclude-mapping path="/**/*.jpeg"/>
-            <mvc:exclude-mapping path="/**/*login*"/>
-            <mvc:exclude-mapping path="/**/*Login*"/>
-            <bean class="com.kkb.interceptor.AccessControlInterceptor"/>
-        </mvc:interceptor>
+        <!-- TODO: 权限控制整体项目完成后再开启-->
+<!--        <mvc:interceptor>-->
+<!--            <mvc:mapping path="/**"/>-->
+<!--            <mvc:exclude-mapping path="/index/**"/>-->
+<!--            <mvc:exclude-mapping path="/User/**"/>-->
+<!--            <mvc:exclude-mapping path="/**/fonts/*"/>-->
+<!--            <mvc:exclude-mapping path="/**/*.css"/>-->
+<!--            <mvc:exclude-mapping path="/**/*.js"/>-->
+<!--            <mvc:exclude-mapping path="/**/*.png"/>-->
+<!--            <mvc:exclude-mapping path="/**/*.gif"/>-->
+<!--            <mvc:exclude-mapping path="/**/*.jpg"/>-->
+<!--            <mvc:exclude-mapping path="/**/*.jpeg"/>-->
+<!--            <mvc:exclude-mapping path="/**/*login*"/>-->
+<!--            <mvc:exclude-mapping path="/**/*Login*"/>-->
+<!--            <bean class="com.kkb.interceptor.AccessControlInterceptor"/>-->
+<!--        </mvc:interceptor>-->
     </mvc:interceptors>
 
     <!-- 文件上传 -->

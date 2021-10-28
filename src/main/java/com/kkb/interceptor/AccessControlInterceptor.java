@@ -2,7 +2,6 @@ package com.kkb.interceptor;
 
 import com.kkb.exceptions.JWTTokenInvalidException;
 import com.kkb.utils.JWTUtil;
-import org.apache.log4j.Logger;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
