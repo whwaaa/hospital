@@ -20,7 +20,7 @@ public class AccessControlInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 获取请求中的token
-        String jwtToken = request.getParameter("JWTToken");
+        String jwtToken = request.getParameter("jwtToken");
         if(jwtToken != null){
             // 验证成功则更新token, 验证失败抛出异常
             try {

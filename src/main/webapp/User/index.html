@@ -12,8 +12,6 @@
     <script type="text/javascript" src="../Js/ckform.js"></script>
     <script type="text/javascript" src="../Js/common.js"></script>
 
- 
-
     <style type="text/css">
         body {
             padding-bottom: 40px;
@@ -36,8 +34,7 @@
     <script type="text/javascript">
      $(function () {
          // TODO: 从cookie中获取JWTToken令牌
-         // let JWTToken = $.cookie("JWTToken")
-         let JWTToken = "eyJhbGciOiJIUzI1NiJ9.eyJ1X2xvZ2luTmFtZSI6IuWwj-aYjiIsInVfaWQiOiIxIiwiZXhwIjoxNjM1NDEzNDc5fQ.0LDiGYQsOVNkCthnDOZRjlNb9J0wexi1VrCi9MgsP_Q";
+         let jwtToken = $.cookie("jwtToken")
 
 		$('#newNav').click(function(){
 				window.location.href="addUser.html";
@@ -45,16 +42,13 @@
 
          $.ajax({
              type: "GET",
-             url: "/user/list/?pageNum=1&pageSize=5&JWTToken=" + JWTToken, //RESTful风格的API定义
+             url: "/user/list/?pageNum=1&pageSize=5&jwtToken=" + jwtToken, //RESTful风格的API定义
              data: "",
-             success: function (vo) {
-                 console.log(vo)
-                 console.log(vo.code)
-                 if(vo.code==200){
-                     loadData();
-                     $("#all").removeProp("checked")
+             success: function (data) {
+                 if(data.code==200){
+
                  }else{
-                     alert("删除失败！"+vo.msg);
+                     alert(data.msg);
                  }
              }
          });
