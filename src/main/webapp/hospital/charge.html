@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>收费项目登记</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/style.css" />
+    <script type="text/javascript" src="../Js/jquery.js"></script>
+    <script type="text/javascript" src="../Js/jquery.sorted.js"></script>
+    <script type="text/javascript" src="../Js/bootstrap.js"></script>
+    <script type="text/javascript" src="../Js/ckform.js"></script>
+    <script type="text/javascript" src="../Js/common.js"></script>
+    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/layer/3.5.1/layer.js"></script>
+
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+    <script type="text/javascript">
+	 $(function () {
+		$('#newNav').click(function(){
+				window.location.href="charge-edit1.html";
+		 });
+    });
+	
+    	function checkall(){
+			var alls=document.getElementsByName("check");
+			var ch=document.getElementById("checkall");
+			if(ch.checked){
+				for(var i=0;i<alls.length;i++){
+					alls[i].checked=true;	
+				}	
+			}else{
+				for(var i=0;i<alls.length;i++){
+					alls[i].checked=false;	
+				}	
+			}
+		}
+		function delAll(){
+			var alls=document.getElementsByName("check");
+			var ids=new Array();
+			for(var i=0;i<alls.length;i++){
+				if(alls[i].checked){
+					ids.push(alls[i].value);
+				}		
+			}
+			if(ids.length>0){
+				if(confirm("确认操作?")){
+					alert("成功!");
+				}
+			}else{
+				alert("请选中要操作的项");
+			}
+		}
+    $(function () {       
+		$('#backid').click(function(){
+				window.location.href="dispensing.html";
+		 });
+    });
+    </script>
+</head>
+<body>
+   
+<form action="charge.html" method="post" class="definewidth m20">
+<table class="table table-bordered table-hover definewidth m10">
+    <tr>
+        <td width="10%" class="tableleft">收费项目名称：</td>
+        <td width="10%"><input type="text" id="pname"  value=""/></td>
+		
+        <td>
+		<button type="submit" class="btn btn-primary" type="button"onclick="queryList(1)" >查询</button>
+			<button type="reset" class="btn btn-primary" type="button">清空</button> </td>
+    </tr>
+   
+</table>
+
+
+</form>
+<table class="table table-bordered table-hover definewidth m10" >
+   <thead>
+    <tr>
+        <th>编号</th>
+        <th>收费项目名称</th>        
+        <th>收费金额</th>
+        <th>创建日期</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody id="tbody">
+	     <tr >
+            <td style="vertical-align:middle;">1103</td>
+            <td style="vertical-align:middle;">心脏检查</td>
+            <td style="vertical-align:middle;">200</td>
+            <td style="vertical-align:middle;">2015-01-04 10:34</td>
+            <td style="vertical-align:middle;">
+				<a href="charge-edit1.html">修改</a>
+				<a href="">删除</a>
+				<a href="charge-edit1.html">查看详情</a>
+			</td>
+        </tr>
+    </tbody>
+  </table>
+  
+  <table class="table table-bordered table-hover definewidth m10" >
+  	<tr>
+        <th colspan="5">
+<!--            <div class="inline pull-right page" id = "pageInfo">-->
+<!--          <a href='#' >第一页</a> <a href='#'>上一页</a>-->
+<!--          <span class='current'>1</span><a href='#'>2</a>-->
+<!--          <a href='/chinapost/index.php?m=Label&a=index&p=3'>3</a>-->
+<!--          <a href='#'>4</a>-->
+<!--          <a href='#'>5</a>-->
+<!--          <a href='#' >下一页</a>-->
+<!--          <a href='#' >最后一页</a>-->
+<!--		  &nbsp;&nbsp;&nbsp;共<span class='current' id="total"></span>条记录<span class='current' id="pages"> </span>页-->
+<!--		  </div>-->
+            <div id="pageInfo-box" class="inline pull-right page">
+            </div>
+		 <div><button type="button" class="btn btn-success" id="newNav">添加收费项目</button>
+		 
+		 </div>
+		 
+		 </th>
+    </tr>
+  </table>
+  
+</body>
+</html>
+<script type="text/javascript">
+
+    $(function () {
+
+
+        $('#newNav').click(function(){
+            window.location.href="addUser.html";
+        });
+        queryList(1);
+    });
+    function queryList(pageNum){
+        let pageSize = $("#pageSize").val();
+        if(pageSize == undefined) {
+            pageSize = 5;
+        }
+    $.ajax({
+        type: "GET",
+        url: "/charge/list/?pageNum="+pageNum+"&pageSize="+pageSize+"&jwtToken=" + jwtToken,
+        data:$("#pname").val(),
+        //
+        success: function (data) {
+            if(data.code === 200){
+                // 填充分页
+                fillPageData(data.obj);
+                // 填充内容
+                loadDate(data);
+            }else{
+            }
+        }
+        // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+        ,complete : function(xhr, status) {
+            // 通过xhr取得响应头
+            var REDIRECT = xhr.getResponseHeader("REDIRECT");
+            // 如果响应头中包含 REDIRECT 则说明是拦截器返回的
+            if(REDIRECT == "REDIRECT"){
+                // 跳到登陆界面, 传入当前URL作为参数, 登陆成功再跳回来
+                let callBackUrL = window.location.href;
+                window.location.href = xhr.getResponseHeader("CONTENTPATH") + "?callBackUrL=" + callBackUrL;
+            }
+        }
+    });
+    }
+        function loadDate(data) {
+
+                    let list = data.obj.list;
+
+                    let str = "";
+                    for (let i =0;i<list.length;i++){
+                        let obj = list[i];
+                        let id=obj.chaP_id==null?'':obj.chaP_id;
+                        let name=obj.chaP_name==null?'':obj.chaP_name;
+                        let money=obj.chaP_money==null?'':obj.chaP_money;
+                        let createtime=obj.chaP_create_time==null?'':obj.chaP_create_time;
+                        str+='<tr>' +
+                            '            <td>'+id+'</td>' +
+                            '            <td>'+name+'</td>' +
+                            '            <td>'+money+'</td>' +
+                            '            <td>'+createtime+'</td>' +
+                            '            <td style="vertical-align:middle;">'+
+                                            '<a href="charge-edit1.html">'+"修改&nbsp;&nbsp;"+'</a>'+
+                                            '<a href="">'+"删除&nbsp;&nbsp;"+'</a>'+
+                                            '<a href="charge-edit1.html">'+"查看详情"+'</a>'+
+                            '            </td>'
+                            '</tr>'
+
+                    }
+                    $("#tbody").html($(str));
+
+       
+   }
+    //填充分页信息
+    // function fillPageData(pageInfo) {
+    //     //填充信息
+    //     $("#total").html(pageInfo.total);
+    //     let page =pageInfo.pages;
+    //     let pageNum =pageInfo.pageNum;
+    //     $("#pages").html(pageNum+"/"+page);
+    //     let str = "";
+    //     str+=
+    //     '<a href="/charge/list?pageNum=1&pageSize=4" id="firstPage">'+"第一页"+'</a>'+
+    //     '<a href=/charge/list?pageNum='+(pageNum-1)+'&pageSize=4" id="prePage">'+"上一页"+'</a>'+
+    //     '<span className="current">'+"1"+'</span>'+
+    //     '<a href="/charge/list?pageNum=2&pageSize=4">'+"2"+'</a>'+
+    //     '<a href="/charge/list?pageNum=3&pageSize=4">'+"3"+'</a>'+
+    //     '<a href="/charge/list?pageNum=4&pageSize=4">'+"4"+'</a>'+
+    //     '<a href="/charge/list?pageNum=5&pageSize=4">'+"5"+'</a>'+
+    //     '<a href="/charge/list?pageNum='+(pageNum+1)+'&pageSize=4" id="nextPage">'+"下一页"+'</a>'+
+    //     '<a href="/charge/list?pageNum='+page+'&pageSize=4" id="lastPage">'+"最后一页"+'</a>'
+    //     if(pageInfo.isFirstPage){//如果是第一页：上一页和首页禁用
+    //         $("#firstPage").addClass("disabled");
+    //         $("#prePage").addClass("disabled");
+    //     }
+    //     if(pageInfo.isLastPage){//如果已经是最后一页：下一页和末页禁用
+    //         $("#nextPage").addClass("disabled");
+    //         $("#lastPage").addClass("disabled");
+    //     }
+    //     $("#pageInfo").html($(str));
+    // }
+    // 填充分页信息
+    // TODO: 使用这个函数需要配置两点: 1. 分页信息的div的id值为: pageInfo-box, 2. 查询函数格式: function queryList(pageNum){}
+    function fillPageData(pageInfo) {
+        // 清空div内容
+        $("#pageInfo-box").empty();
+        let box = "<span id='total'>" + pageInfo.total + "</span> 条记录 <span id='pages'>" + pageInfo.pageNum + "</span>/<span id='pages'>" + pageInfo.pages + "</span>页&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每页显示<select id='pageSize' style='width:35px;position:relative;top:3px;'><option value='5'>5<option value='10'>10</select>条&nbsp;<a id='prePage' href='javascript:queryList(" + pageInfo.prePage + ")'>上一页</a>";
+        // 例: 总页数16, 当前页13, 则显示(Math.ceil(13/5)*5-5)=10 - (Math.ceil(13/5)*5)=15   10-15
+        let showPages_start = Math.ceil(pageInfo.pageNum / 5) * 5 - 4;
+        let showPages_end = Math.ceil(pageInfo.pageNum / 5) * 5 <= pageInfo.pages ? Math.ceil(pageInfo.pageNum / 5) * 5 : pageInfo.pages;
+        console.log(showPages_start + " - " + showPages_end)
+        for (let i = showPages_start; i <= showPages_end; i++) {
+            if (i == pageInfo.pageNum) { // 是当前页
+                box += "<span class='current'>" + pageInfo.pageNum + "</span>"
+            } else {  // 非当前页
+                if (i != 0)
+                    box += "<a href='javascript:queryList(" + i + ")'>" + i + "</a>"
+            }
+        }
+        // 还有后页
+        if (showPages_end < pageInfo.pages) {
+            box += "<a href='javascript:queryList(" + (showPages_end + 1) + ")'>...</a>"
+        }
+        box += "<a id='nextPage' href='javascript:queryList(" + pageInfo.nextPage + ")'>下一页</a><a id='lastPage' href='javascript:queryList(" + pageInfo.pages + ")'>最后一页</a>";
+        $("#pageInfo-box").append($(box));
+        // 如果当前页是第一页: 上一页不可用
+        if (pageInfo.pageNum == 1) {
+            $("#prePage").removeAttr("href");
+        }
+        // 如果是尾页: 尾页和下一页不可用
+        if (pageInfo.pageNum == pageInfo.pages) {
+            $("#nextPage").removeAttr("href");
+            $("#lastPage").removeAttr("href");
+        }
+        // 每页查询条数赋值
+        $("#pageSize").val(pageInfo.pageSize);
+        // 监听每页显示的值发生变化
+        $("#pageSize").bind("input propertychange", function () {
+            // 再次查询
+            queryList(pageInfo.pageNum);
+        })
+    }
+
+
+</script>
