@@ -10,8 +10,6 @@
     <script type="text/javascript" src="../Js/bootstrap.js"></script>
     <script type="text/javascript" src="../Js/ckform.js"></script>
     <script type="text/javascript" src="../Js/common.js"></script>
-    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/layer/3.5.1/layer.js"></script>
 
     <style type="text/css">
         body {
@@ -30,137 +28,124 @@
             }
         }
 
-
     </style>
     <script type="text/javascript">
-     $(function () {
-         // TODO: 从cookie中获取jwtToken令牌, 每一个请求都需要带上这个参数, "&jwtToken="+jwtToken
-         let jwtToken = $.cookie("jwtToken")
 
-		$('#newNav').click(function(){
-				window.location.href="addUser.html";
-		 });
+        $(function () {
+            $('#newNav').click(function(){
+                window.location.href="addUser.html";
+            });
+            queryList(1);
+        });
 
-         $.ajax({
-             type: "GET",
-             url: "/user/list/?pageNum=1&pageSize=5&jwtToken=" + jwtToken, //RESTful风格的API定义
-             data: "",
-             success: function (data) {
-                 if(data.code === 200){
-                    console.log(data)
-                 }else{
-                 }
-             }
-             // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的数据
-             ,complete : function(xhr, status) {
-                 // 通过xhr取得响应头
-                 var REDIRECT = xhr.getResponseHeader("REDIRECT");
-                 // 如果响应头中包含 REDIRECT 则说明是拦截器返回的
-                 if(REDIRECT == "REDIRECT"){
-                     // 跳到登陆界面, 传入当前URL作为参数, 登陆成功再跳回来
-                     let callBackUrL = window.location.href;
-                     window.location.href = xhr.getResponseHeader("CONTENTPATH") + "?callBackUrL=" + callBackUrL;
-                 }
-             }
-         });
-    });
+        queryList = function(pageNum){
+            let pageSize = $("#pageSize").val();
+            if(pageSize === undefined){
+                pageSize = 5;
+            }
+            $.ajax({
+                type: "GET",                                                   // TODO: jwtToken在common.js直接调用
+                url: "/user/list/?pageNum="+ pageNum +"&pageSize="+ pageSize +"&jwtToken=" + jwtToken,
+                data: "",
+                success: function (data) {
+                    if(data.code === 200){
+                        console.log(data)
+                        // 填充分页 TODO: 这个函数调用common.js里定义的
+                        fillPageData(data.obj);
+                        // 填充内容 : 这个函数自己写
+                        fillContent(data.obj);
+                    }else{
+                    }
+                }
+                // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+                ,complete : function(xhr, status) {
+                    myComplete(xhr, status);
+                }
+            });
+        }
 
-     //填充分页信息
-     function fillPageData(pageInfo) {
-         //填充信息
-         $("#total").html(pageInfo.total);
-         $("#pages").html(pageInfo.pages);
-         $("input[name='pageNum']").val(pageInfo.pageNum);
-         $("select[name='pageSize']").val(pageInfo.pageSize);
-         //设置按钮的属性值和样式
-         $("#firstPage").attr("name",1);
-         $("#prePage").attr("name",pageInfo.prePage);
-         $("#nextPage").attr("name",pageInfo.nextPage);
-         $("#lastPage").attr("name",pageInfo.pages);
-         $("#firstPage").removeClass("disabled");
-         $("#prePage").removeClass("disabled");
-         $("#nextPage").removeClass("disabled");
-         $("#lastPage").removeClass("disabled");
-         if(pageInfo.isFirstPage){//如果是第一页：上一页和首页禁用
-             $("#firstPage").addClass("disabled");
-             $("#prePage").addClass("disabled");
-         }
-         if(pageInfo.isLastPage){//如果已经是最后一页：下一页和末页禁用
-             $("#nextPage").addClass("disabled");
-             $("#lastPage").addClass("disabled");
-         }
-     }
-    function checkall(){
-			var alls=document.getElementsByName("check");
-			var ch=document.getElementById("checkall");
-			if(ch.checked){
-				for(var i=0;i<alls.length;i++){
-					alls[i].checked=true;	
-				}	
-			}else{
-				for(var i=0;i<alls.length;i++){
-					alls[i].checked=false;	
-				}	
-			}
-		}
-	function delAll(){
-			var alls=document.getElementsByName("check");
-			var ids=new Array();
-			for(var i=0;i<alls.length;i++){
-				if(alls[i].checked){
-					ids.push(alls[i].value);
-				}		
-			}
-			if(ids.length>0){
-				if(confirm("确认删除?")){
-					alert("删除成功!");
-				}
-			}else{
-				alert("请选中要删除的项");
-			}
-		}
+        // 填充内容,自行修改
+        function fillContent(pageInfo){
+            $(".con-box").empty();
+            $("#mycon").find("tbody").empty()
+            $.each(pageInfo.list, function(){
+                let con = "<tr>\n" +
+                    "             <td style='vertical-align:middle;'><input type='checkbox' name='check' value='"+ this.u_id +"'></td>\n" +
+                    "             <td>"+ this.u_loginName +"</td>\n" +
+                    "             <td>"+ this.u_trueName +"</td>\n" +
+                    "             <td>"+ this.role.r_name +"</td>\n" +
+                    "             <td>\n" +
+                    "                 <a href='editUser.html?pageNum="+ pageInfo.pageNum +"&pageSize="+ pageInfo.pageSize +"'>编辑</a>&nbsp;&nbsp;&nbsp;<a href='javascript:alert(\"删除成功！\");'>删除</a>\n" +
+                    "             </td>\n" +
+                    "         </tr>"
+                $("#mycon").find("tbody").append($(con))
+            })
+        }
+
+
+        function checkall(){
+            var alls=document.getElementsByName("check");
+            var ch=document.getElementById("checkall");
+            if(ch.checked){
+                for(var i=0;i<alls.length;i++){
+                    alls[i].checked=true;
+                }
+            }else{
+                for(var i=0;i<alls.length;i++){
+                    alls[i].checked=false;
+                }
+            }
+        }
+        function delAll(){
+            var alls=document.getElementsByName("check");
+            var ids=new Array();
+            for(var i=0;i<alls.length;i++){
+                if(alls[i].checked){
+                    ids.push(alls[i].value);
+                }
+            }
+            if(ids.length>0){
+                if(confirm("确认删除?")){
+                    alert("删除成功!");
+                }
+            }else{
+                alert("请选中要删除的项");
+            }
+        }
     </script>
 </head>
 <body>
-<form class="form-inline definewidth m20" action="index.html" method="get">    
+<form class="form-inline definewidth m20" action="index.html" method="get">
     用户名称：
-    <input type="text" name="username" id="username"class="abc input-default" placeholder="" value="">&nbsp;&nbsp;  
+    <input type="text" name="username" id="username"class="abc input-default" placeholder="" value="">&nbsp;&nbsp;
     <button type="submit" class="btn btn-primary">查询</button>
 </form>
-<table class="table table-bordered table-hover definewidth m10">
+<table id="mycon" class="table table-bordered table-hover definewidth m10">
     <thead>
     <tr>
-    	<th width="5%"><input type="checkbox" id="checkall" onChange="checkall();"></th>
+        <th width="5%"><input type="checkbox" id="checkall" onChange="checkall();"></th>
         <th>用户账户</th>
         <th>真实姓名</th>
         <th>角色</th>
         <th  width="10%">操作</th>
     </tr>
     </thead>
-	     <tr>
-         	<td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
-            <td>admin</td>
-            <td>管理员</td>
-            <td>管理员</td>
-            <td>
-                <a href="editUser.html">编辑</a>&nbsp;&nbsp;&nbsp;<a href="javascript:alert('删除成功！');">删除</a>             
-            </td>
-        </tr>	
+    <tbody></tbody>
 </table>
+
 <table class="table table-bordered table-hover definewidth m10" >
-  	<tr><th colspan="5">
-        <div class="inline pull-right page">
-            <span id="total"></span>条记录 <input class="form-control" name="pageNum" value="1" />/<span id="pages"></span> 页  <li name="pageLi" id="nextPage"><a href="javascript:void(0)">下一页</a></li>
-        <span class='current'>1</span>
-        <a href='#'>2</a>
-        <a href='/chinapost/index.php?m=Label&a=index&p=3'>3</a>
-        <a href='#'>4</a>
-        <a href='#'>5</a>
-        <a href='#' >下5页</a>
-        <a href='#' >最后一页</a>
+    <tr><th colspan="5">
+        <div id="pageInfo-box" class="inline pull-right page">
+            <!--            <span id="total"></span>条记录<span id="pages"></span>页<a id="nextPage" href="javascript:void(0)">下一页</a><span class='current'>1</span>-->
+            <!--            <a href='#'>2</a>-->
+            <!--            <a href='#'>3</a>-->
+            <!--            <a href='#'>4</a>-->
+            <!--            <a href='#'>5</a>-->
+            <!--            <a href='#' >下5页</a>-->
+            <!--            <a href='#' >最后一页</a>-->
         </div>
         <div>
             <button type="button" class="btn btn-success" id="newNav">添加用户</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-success" id="delPro" onClick="delAll();">删除选中</button></div></th></tr>
-  </table>
+</table>
 </body>
 </html>
