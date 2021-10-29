@@ -2,7 +2,9 @@ package com.kkb.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.kkb.mapper.RoleMapper;
 import com.kkb.mapper.UserMapper;
+import com.kkb.pojo.Role;
 import com.kkb.pojo.User;
 import com.kkb.pojo.UserExample;
 import com.kkb.vo.UserQueryVO;
@@ -26,6 +28,9 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private RoleMapper roleMapper;
+
     /**
      * 多条件查询
      * @param pageNum
@@ -46,6 +51,12 @@ public class UserService {
         // 分页
         PageHelper.startPage(pageNum, pageSize);
         List<User> users = userMapper.selectByExample(userExample);
+        for (User user : users) {
+            if(user.getR_id() != null){
+                Role role = roleMapper.selectByPrimaryKey(user.getR_id());
+                user.setRole(role);
+            }
+        }
         return new PageInfo<>(users);
     }
 
@@ -68,6 +79,25 @@ public class UserService {
     @Transactional(propagation = Propagation.REQUIRED,readOnly = true)
     public User queryById(Integer u_id){
         return userMapper.selectByPrimaryKey(u_id);
+    }
+
+    /**
+     * 根据用户名查询
+     * @param u_loginName
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED,readOnly = true)
+    public User queryByLoginName(String u_loginName){
+        if(u_loginName == null || "".equals(u_loginName))
+            return null;
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        criteria.andU_loginNameEqualTo(u_loginName);
+        List<User> users = userMapper.selectByExample(userExample);
+        if(users.size() != 0){
+            return users.get(0);
+        }
+        return null;
     }
 
     /**

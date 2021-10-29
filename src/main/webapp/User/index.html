@@ -38,6 +38,7 @@
         queryList(1);
     });
 
+    // TODO : 这里一定要重写queryList(查询列表)
     queryList = function(pageNum){
         let pageSize = $("#pageSize").val();
         if(pageSize === undefined){
@@ -54,6 +55,7 @@
                     fillPageData(data.obj);
                     // 填充内容
                     fillContent(data.obj);
+                    $("#checkall").removeAttr("checked");
                 }else{
                 }
             }
@@ -75,27 +77,51 @@
                  "             <td>"+ this.u_trueName +"</td>\n" +
                  "             <td>"+ this.role.r_name +"</td>\n" +
                  "             <td>\n" +
-                 "                 <a href='editUser.html?pageNum="+ pageInfo.pageNum +"&pageSize="+ pageInfo.pageSize +"'>编辑</a>&nbsp;&nbsp;&nbsp;<a href='javascript:alert(\"删除成功！\");'>删除</a>\n" +
+                 "                 <a href='editUser.html?pageNum="+ pageInfo.pageNum +"&pageSize="+ pageInfo.pageSize +"'>编辑</a>&nbsp;&nbsp;&nbsp;<a href='javascript:deleteUserById("+this.u_id+");'>删除</a>\n" +
                  "             </td>\n" +
                  "         </tr>"
              $("#mycon").find("tbody").append($(con))
          })
      }
 
+     // 删除用户
+     function deleteUserById(u_id){
+        layer.load(0);
+         $.ajax({
+             type: "POST",
+             url: "/user/"+ u_id,
+             data: {_method:"DELETE",jwtToken:jwtToken},
+             success: function (data) {
+                 layer.closeAll();
+                 if(data.code === 204){
+                     layer.msg("删除成功");
+                     queryList($(".current").text())     // 刷新页面
+                 }else{
+                     layer.msg(data.msg,function(){})
+                 }
+             }
+             // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+             ,complete : function(xhr, status) {
+                 myComplete(xhr, status);
+             }
+         });
+     }
+
 
      function checkall(){
-			var alls=document.getElementsByName("check");
-			var ch=document.getElementById("checkall");
-			if(ch.checked){
-				for(var i=0;i<alls.length;i++){
-					alls[i].checked=true;	
-				}	
-			}else{
-				for(var i=0;i<alls.length;i++){
-					alls[i].checked=false;	
-				}	
-			}
-		}
+        var alls=document.getElementsByName("check");
+        var ch=document.getElementById("checkall");
+        if(ch.checked){
+            for(var i=0;i<alls.length;i++){
+                alls[i].checked=true;
+            }
+        }else{
+            for(var i=0;i<alls.length;i++){
+                alls[i].checked=false;
+            }
+        }
+    }
+    // 批量删除用户
 	function delAll(){
 			var alls=document.getElementsByName("check");
 			var ids=new Array();
@@ -106,7 +132,30 @@
 			}
 			if(ids.length>0){
 				if(confirm("确认删除?")){
-					alert("删除成功!");
+                    layer.load(0);
+                    $.each(ids, function(index,id){
+                        $.ajax({
+                            type: "POST",
+                            url: "/user/"+ id,
+                            data: {_method:"DELETE",jwtToken:jwtToken},
+                            success: function (data) {
+                                layer.closeAll();
+                                if(data.code === 204){
+                                    if(index === ids.length-1){
+                                        layer.msg("删除成功");
+                                        queryList($(".current").text())     // 刷新页面
+                                    }
+                                }else{
+                                    layer.msg(data.msg,function(){})
+                                }
+                            }
+                            // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+                            ,complete : function(xhr, status) {
+                                myComplete(xhr, status);
+                            }
+                        });
+                    })
+                    return false;
 				}
 			}else{
 				alert("请选中要删除的项");

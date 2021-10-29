@@ -1,8 +1,20 @@
 package com.kkb.pojo;
 
 import java.util.Date;
+import com.kkb.pojo.Role;
 
 public class User {
+
+    private Role role;
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     private Integer u_id;
 
     private String u_loginName;

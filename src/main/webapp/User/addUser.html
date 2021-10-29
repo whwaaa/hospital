@@ -10,9 +10,6 @@
     <script type="text/javascript" src="../Js/bootstrap.js"></script>
     <script type="text/javascript" src="../Js/ckform.js"></script>
     <script type="text/javascript" src="../Js/common.js"></script>
-    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/layer/3.5.1/layer.js"></script>
-
     <style type="text/css">
         body {
             padding-bottom: 40px;
@@ -29,27 +26,139 @@
                 padding-right: 5px;
             }
         }
-
-
+        .warning{
+            border-color: red !important;
+        }
     </style>
-    <script>
+<script>
+    let roleCheckFlag = false;
+    let loginNameCheckFlag = false;
+    let passwordCheckFlag = false;
+    let trueNameCheckFlag = false;
+    let emailCheckFlag = false;
+    // let jwtToken = $.cookie("jwtToken")
+
+    // 角色非空验证
+    function roleCheck(r_id){
+        if(r_id.value === "" || r_id.value === undefined){
+            layer.msg("必须选择一个角色", function(){})
+            roleCheckFlag = false;
+            $("#r_id").addClass("warning")
+
+        }else{
+            roleCheckFlag = true;
+            $("#r_id").removeClass("warning")
+        }
+    }
+    // 登录名的唯一性验证, 非空
+    function loginNameCheck(u_loginName){
+        if(u_loginName.value == null || u_loginName.value === "" || u_loginName.value === undefined){
+            layer.msg("登录名不能为空", function(){})
+            $("input[name='u_loginName']").addClass("warning")
+        }else{
+            $.ajax({
+                type: "GET",
+                url: "/user/loginname/" + u_loginName.value,
+                data: {jwtToken:jwtToken},
+                dataType: "json",
+                success: function (data) {
+                    if (data.code == 200){
+                        loginNameCheckFlag = true;
+                        $("input[name='u_loginName']").removeClass("warning")
+                        // ajax查询有延迟,可在此处可设置再次自动提交
+                        $('#useradd-btn').trigger("click");
+                    }else{
+                        layer.msg("登录名已存在，请重新输入。", function(){})
+                        loginNameCheckFlag = false;
+                        $("input[name='u_loginName']").addClass("warning")
+                    }
+                }
+                // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+                ,complete : function(xhr, status) {
+                    // 通过xhr取得响应头
+                    var REDIRECT = xhr.getResponseHeader("REDIRECT");
+                    // 如果响应头中包含 REDIRECT 则说明是拦截器返回的
+                    if(REDIRECT == "REDIRECT"){
+                        // 跳到登陆界面, 传入当前URL作为参数, 登陆成功再跳回来
+                        let callBackUrL = window.location.href;
+                        window.location.href = xhr.getResponseHeader("CONTENTPATH") + "?callBackUrL=" + callBackUrL;
+                    }
+                }
+            })
+        }
+    }
+    // 密码强度的验证, 非空
+    function passwordCheck(u_passWord){
+        // 密码长度6-16位，必须包含有数字，字母及特殊字符。
+        var reg = /^.*(?=.{6,16})(?=.*\d)(?=.*[A-z])(?=.*[!@#$%^&*?\(\)]).*$/;
+        if(reg.test(u_passWord.value)){
+            passwordCheckFlag = true;
+            $("input[name='u_passWord']").removeClass("warning")
+        } else {
+            layer.msg("密码强度太弱,请重新设置", function(){})
+            passwordCheckFlag = false;
+            $("input[name='u_passWord']").addClass("warning")
+        }
+    }
+    // 真实姓名的非空验证
+    function trueNameCheck(u_loginName){
+        if(u_loginName.value === "" || u_loginName.value === undefined){
+            layer.msg("姓名不能为空", function(){})
+            trueNameCheckFlag = false;
+            $("input[name='u_trueName']").addClass("warning")
+        } else {
+            trueNameCheckFlag = true;
+            $("input[name='u_trueName']").removeClass("warning")
+        }
+    }
+    // 邮箱的正规合法验证
+    function emailCheck(u_email){
+        var reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+        if(reg.test(u_email.value)){
+            emailCheckFlag = true;
+            $("input[name='u_email']").removeClass("warning")
+        } else {
+            layer.msg("邮箱格式不正确", function(){})
+            emailCheckFlag = false;
+            $("input[name='u_email']").addClass("warning")
+        }
+    }
+
     $(function () {
 
-        let jwtToken = $.cookie("jwtToken")
-
-		$('#backid').click(function(){
-				window.location.href="index.html";
-		 });
+        $('#backid').click(function(){
+            window.location.href="index.html";
+        });
 
         $('#useradd-btn').click(function() {
-
-            let r_id = $("input[name='r_id']").val();
+            let r_id = $("#r_id").val();
             let u_email = $("input[name='u_email']").val();
             let u_trueName = $("input[name='u_trueName']").val();
             let u_passWord = $("input[name='u_passWord']").val();
             let u_loginName = $("input[name='u_loginName']").val();
             let u_state = $("input[name='u_state']:checked").val();
 
+            if( !loginNameCheckFlag ){
+                loginNameCheck(u_loginName);
+                return false;
+            }
+            if( !passwordCheckFlag ){
+                passwordCheck(u_passWord);
+                return false;
+            }
+            if( !trueNameCheckFlag ){
+                trueNameCheck(u_trueName);
+                return false;
+            }
+            if( !emailCheckFlag ){
+                emailCheck(u_email);
+                return false;
+            }
+            if( !roleCheckFlag ){
+                roleCheck(r_id);
+                return false;
+            }
+            // 校验没有问题, 发起请求添加用户
             layer.load(0)
             $.ajax({
                 type: "POST",
@@ -57,10 +166,6 @@
                 data: {jwtToken:jwtToken,r_id:r_id,u_email:u_email,u_trueName:u_trueName,
                     u_passWord:u_passWord,u_loginName:u_loginName,u_state:u_state},
                 dataType: "json",
-                // xhrFields: {
-                //     withCredentials: true
-                // },
-                // crossDomain: true,
                 success: function (data) {
                     layer.closeAll()
                     if (data.code == 201){
@@ -82,19 +187,19 @@
     <table class="table table-bordered table-hover definewidth m10">
         <tr>
             <td width="10%" class="tableleft">登录名</td>
-            <td><input type="text" name="u_loginName"/></td>
+            <td><input onblur="loginNameCheck(this)" type="text" name="u_loginName"/></td>
         </tr>
         <tr>
             <td class="tableleft">密码</td>
-            <td><input type="password" name="u_passWord"/></td>
+            <td><input onblur="passwordCheck(this)" type="password" name="u_passWord"/></td>
         </tr>
         <tr>
             <td class="tableleft">真实姓名</td>
-            <td><input type="text" name="u_trueName"/></td>
+            <td><input onblur="trueNameCheck(this)" type="text" name="u_trueName"/></td>
         </tr>
         <tr>
             <td class="tableleft">邮箱</td>
-            <td><input type="text" name="u_email"/></td>
+            <td><input onblur="emailCheck(this)" type="text" name="u_email"/></td>
         </tr>
         <tr>
             <td class="tableleft">状态</td>
@@ -106,7 +211,7 @@
         <tr>
             <td class="tableleft">角色</td>
             <td>
-            	<select name="r_id">
+            	<select onblur="roleCheck(this)" id="r_id" name="r_id">
         			<option value="">--请选择--
         			<option value="1">管理员
         			<option value="2">院长

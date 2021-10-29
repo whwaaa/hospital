@@ -37,12 +37,9 @@
 <script type="text/javascript" src="../assets/js/common/main-min.js"></script>
 <script type="text/javascript" src="../assets/js/config-min.js"></script>
 <script type="text/javascript" src="../Js/jquery.js"></script>
-<script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-<script src="https://cdn.bootcdn.net/ajax/libs/layer/3.5.1/layer.js"></script>
+<script type="text/javascript" src="../Js/common.js"></script>
 
 <script>
-    // TODO: 从cookie中获取jwtToken令牌, 每一个请求都需要带上这个参数, "&jwtToken="+jwtToken
-    let jwtToken = $.cookie("jwtToken")
 
     $(function (){
         // 判断是否登陆
@@ -62,16 +59,9 @@
                         $(".dl-log-user").text(data.obj)
                     }
                 }
-                // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的数据
+                // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上下面的代码
                 ,complete : function(xhr, status) {
-                    // 通过xhr取得响应头
-                    var REDIRECT = xhr.getResponseHeader("REDIRECT");
-                    // 如果响应头中包含 REDIRECT 则说明是拦截器返回的
-                    if(REDIRECT == "REDIRECT"){
-                        // 跳到登陆界面, 传入当前URL作为参数, 登陆成功再跳回来
-                        let callBackUrL = window.location.href;
-                        window.location.href = xhr.getResponseHeader("CONTENTPATH") + "?callBackUrL=" + callBackUrL;
-                    }
+                    myComplete(xhr, status)
                 }
             })
         }

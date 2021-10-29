@@ -35,15 +35,16 @@ public class UserControllerTest extends TestCase {
 
     @Test
     public void testAddUser() {
-        User user = new User();
-        user.setR_id(1);
-        user.setU_loginName("shuaige");
-        user.setU_email("abc123@gmail.com");
-        user.setU_passWord("nicai");
-        user.setU_state(1);
-        user.setU_trueName("bushuo");
-        Integer res = userService.addUser(user);
-        System.out.println(res);
+        for(int i=0; i<30; i++){
+            User user = new User();
+            user.setR_id(1);
+            user.setU_loginName("aaa" + i);
+            user.setU_email("abc"+ i +"@gmail.com");
+            user.setU_passWord("nicai" + i);
+            user.setU_state(1);
+            user.setU_trueName("bushuo" + i);
+            userService.addUser(user);
+        }
     }
 
     public void testDeleteById() {

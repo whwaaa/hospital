@@ -46,6 +46,16 @@ public class UserController {
         return new AjaxResultVo<>(500, "服务器内部异常, 请稍后再试!");
     }
 
+    // 根据u_loginName查询,判断是否重复
+    @RequestMapping(value = "loginname/{u_loginName}", method = RequestMethod.GET)
+    public AjaxResultVo<User> queryById(@PathVariable("u_loginName") String u_loginName){
+        User user = userService.queryByLoginName(u_loginName);
+        if(user != null){
+            return new AjaxResultVo<>(500, "用户名重复", user);
+        }
+        return new AjaxResultVo<>();
+    }
+
     // 添加一条数据
     @RequestMapping(value = "", method = RequestMethod.POST)
     public AjaxResultVo<User> addUser(User user){

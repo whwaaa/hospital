@@ -51,7 +51,6 @@
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <mvc:exclude-mapping path="/**/login"/>
-            <mvc:exclude-mapping path="/index/**"/>
             <mvc:exclude-mapping path="/**/fonts/*"/>
             <mvc:exclude-mapping path="/**/*.css"/>
             <mvc:exclude-mapping path="/**/*.js"/>

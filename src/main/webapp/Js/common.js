@@ -28,6 +28,7 @@ function U() {
     return _APP_+'?'+arr.join('&');
 }
 
+
 let jwtToken;
 document.write("<script src=\"https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js\"></script>");
 document.write("<script src=\"https://cdn.bootcdn.net/ajax/libs/layer/3.5.1/layer.js\"></script>");
@@ -42,10 +43,16 @@ function myComplete(xhr, status){
     var REDIRECT = xhr.getResponseHeader("REDIRECT");
     // 如果响应头中包含 REDIRECT 则说明是拦截器返回的
     if(REDIRECT == "REDIRECT"){
+        layer.closeAll()
+        layer.msg("请先登陆")
         // 跳到登陆界面, 传入当前URL作为参数, 登陆成功再跳回来
-        let callBackUrL = window.location.href;
-        window.location.href = xhr.getResponseHeader("CONTENTPATH") + "?callBackUrL=" + callBackUrL;
+        setTimeout(function (){
+            let callBackUrL = window.location.href;
+            console.log(callBackUrL)
+            window.location.href = xhr.getResponseHeader("CONTENTPATH") + "?callBackUrL=" + callBackUrL;
+        }, 1000)
     }
+
 }
 
 // 填充分页信息
@@ -89,6 +96,19 @@ function fillPageData(pageInfo) {
     })
 }
 function queryList(pageNum){}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

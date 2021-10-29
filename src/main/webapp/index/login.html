@@ -7,12 +7,9 @@
     <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
     <link rel="stylesheet" type="text/css" href="../Css/style.css" />
     <script type="text/javascript" src="../Js/jquery.js"></script>
-    <script type="text/javascript" src="Js/jquery.sorted.js"></script>
     <script type="text/javascript" src="../Js/bootstrap.js"></script>
     <script type="text/javascript" src="../Js/ckform.js"></script>
     <script type="text/javascript" src="../Js/common.js"></script>
-    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-    <script src="https://cdn.bootcdn.net/ajax/libs/layer/3.5.1/layer.js"></script>
     <style type="text/css">
         body {
             padding-top: 40px;
@@ -54,9 +51,9 @@
 
     <div class="form-signin">
         <h2 class="form-signin-heading">&nbsp;&nbsp;&nbsp;登录系统</h2>
-        <input type="text" name="username" class="input-block-level" placeholder="账号">
-        <input type="password" name="password" class="input-block-level" placeholder="密码">
-        <input type="text" name="verify" class="input-medium" placeholder="验证码">7236
+        <input type="text" name="username" class="input-block-level" value="abc" placeholder="账号">
+        <input type="password" name="password" class="input-block-level" value="123" placeholder="密码">
+        <input type="text" name="verify" class="input-medium" value="7236" placeholder="验证码">7236
        
         <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-large btn-primary" id="login-btn" type="button">登录</button></p>
     </div>
@@ -64,8 +61,6 @@
 </div>
 <script>
     $(function (){
-        // 登陆令牌
-        let jwtToken = $.cookie("jwtToken")
         // 回调地址
         let callBackUrL = document.location.toString().GetValue("callBackUrL");
 
