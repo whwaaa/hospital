@@ -107,7 +107,7 @@ public class JWTUtil {
      * @param token : 需要验证的token
      * @return  : 有效则返回Claims, 包含了payLoad信息, 无效则抛出异常
      */
-    private static Claims verifyToken(String token) {
+    public static Claims verifyToken(String token) {
         Claims claims = Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary(sercetKey))
                 .parseClaimsJws(token).getBody();
         return claims;

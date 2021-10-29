@@ -28,7 +28,20 @@ public class GlobalExceptionHandle implements HandlerExceptionResolver {
         // JWTToken验证失败异常
         if(e instanceof JWTTokenInvalidException){
             logger.debug(e.getMessage());
-            mv.setViewName("/index/login");
+            // 判断请求的如果是ajax
+            if("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))){
+                // 返回重定向head标志给前端ajax
+                response.setHeader("REDIRECT", "REDIRECT");
+                // 返回重定向路径给前端ajax
+                response.setHeader("CONTENTPATH", "/index/login.html");
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN); // 添加403状态码 (服务器拒绝)
+            }else{
+                try {
+                    response.sendRedirect("/index/login.html");
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
         return mv;
     }
