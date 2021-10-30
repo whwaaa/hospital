@@ -10,7 +10,7 @@
 ">
 
     <!-- 包扫描 -->
-    <context:component-scan base-package="com.kkb.mapper,com.kkb.service,com.kkb.utils"/>
+    <context:component-scan base-package="com.kkb.service,com.kkb.utils"/>
 
     <!-- spring与mybatis整合 -->
     <context:property-placeholder location="classpath*:jdbc.properties"/>
