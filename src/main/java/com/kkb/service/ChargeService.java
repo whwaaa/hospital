@@ -28,7 +28,7 @@ public class ChargeService {
         //创建查询条件容器
         ChargeProjectExample.Criteria criteria = chargeProjectExample.createCriteria();
         if(vo != null){
-            if(vo.getChapName()!=null && "".equals(vo.getChapName().trim())){
+            if(vo.getChapName()!=null && !"".equals(vo.getChapName().trim())){
                 criteria.andChapNameLike("%"+vo.getChapName()+"%");
             }
 
