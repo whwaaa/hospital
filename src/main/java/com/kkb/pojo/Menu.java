@@ -9,6 +9,10 @@ public class Menu {
 
     private Integer m_state;
 
+    public Menu(){
+        m_state = 0;
+    }
+
     public Integer getM_id() {
         return m_id;
     }
