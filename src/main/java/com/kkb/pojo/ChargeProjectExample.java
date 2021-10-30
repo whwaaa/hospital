@@ -1,17 +1,18 @@
 package com.kkb.pojo;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class RoleExample {
+public class ChargeProjectExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public RoleExample() {
+    public ChargeProjectExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -105,373 +106,373 @@ public class RoleExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andRIdIsNull() {
-            addCriterion("r_id is null");
+        public Criteria andChapIdIsNull() {
+            addCriterion("chap_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andRIdIsNotNull() {
-            addCriterion("r_id is not null");
+        public Criteria andChapIdIsNotNull() {
+            addCriterion("chap_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRIdEqualTo(Integer value) {
-            addCriterion("r_id =", value, "rId");
+        public Criteria andChapIdEqualTo(Integer value) {
+            addCriterion("chap_id =", value, "chapId");
             return (Criteria) this;
         }
 
-        public Criteria andRIdNotEqualTo(Integer value) {
-            addCriterion("r_id <>", value, "rId");
+        public Criteria andChapIdNotEqualTo(Integer value) {
+            addCriterion("chap_id <>", value, "chapId");
             return (Criteria) this;
         }
 
-        public Criteria andRIdGreaterThan(Integer value) {
-            addCriterion("r_id >", value, "rId");
+        public Criteria andChapIdGreaterThan(Integer value) {
+            addCriterion("chap_id >", value, "chapId");
             return (Criteria) this;
         }
 
-        public Criteria andRIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("r_id >=", value, "rId");
+        public Criteria andChapIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("chap_id >=", value, "chapId");
             return (Criteria) this;
         }
 
-        public Criteria andRIdLessThan(Integer value) {
-            addCriterion("r_id <", value, "rId");
+        public Criteria andChapIdLessThan(Integer value) {
+            addCriterion("chap_id <", value, "chapId");
             return (Criteria) this;
         }
 
-        public Criteria andRIdLessThanOrEqualTo(Integer value) {
-            addCriterion("r_id <=", value, "rId");
+        public Criteria andChapIdLessThanOrEqualTo(Integer value) {
+            addCriterion("chap_id <=", value, "chapId");
             return (Criteria) this;
         }
 
-        public Criteria andRIdIn(List<Integer> values) {
-            addCriterion("r_id in", values, "rId");
+        public Criteria andChapIdIn(List<Integer> values) {
+            addCriterion("chap_id in", values, "chapId");
             return (Criteria) this;
         }
 
-        public Criteria andRIdNotIn(List<Integer> values) {
-            addCriterion("r_id not in", values, "rId");
+        public Criteria andChapIdNotIn(List<Integer> values) {
+            addCriterion("chap_id not in", values, "chapId");
             return (Criteria) this;
         }
 
-        public Criteria andRIdBetween(Integer value1, Integer value2) {
-            addCriterion("r_id between", value1, value2, "rId");
+        public Criteria andChapIdBetween(Integer value1, Integer value2) {
+            addCriterion("chap_id between", value1, value2, "chapId");
             return (Criteria) this;
         }
 
-        public Criteria andRIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("r_id not between", value1, value2, "rId");
+        public Criteria andChapIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("chap_id not between", value1, value2, "chapId");
             return (Criteria) this;
         }
 
-        public Criteria andRNameIsNull() {
-            addCriterion("r_name is null");
+        public Criteria andChapNameIsNull() {
+            addCriterion("chap_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andRNameIsNotNull() {
-            addCriterion("r_name is not null");
+        public Criteria andChapNameIsNotNull() {
+            addCriterion("chap_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRNameEqualTo(String value) {
-            addCriterion("r_name =", value, "rName");
+        public Criteria andChapNameEqualTo(String value) {
+            addCriterion("chap_name =", value, "chapName");
             return (Criteria) this;
         }
 
-        public Criteria andRNameNotEqualTo(String value) {
-            addCriterion("r_name <>", value, "rName");
+        public Criteria andChapNameNotEqualTo(String value) {
+            addCriterion("chap_name <>", value, "chapName");
             return (Criteria) this;
         }
 
-        public Criteria andRNameGreaterThan(String value) {
-            addCriterion("r_name >", value, "rName");
+        public Criteria andChapNameGreaterThan(String value) {
+            addCriterion("chap_name >", value, "chapName");
             return (Criteria) this;
         }
 
-        public Criteria andRNameGreaterThanOrEqualTo(String value) {
-            addCriterion("r_name >=", value, "rName");
+        public Criteria andChapNameGreaterThanOrEqualTo(String value) {
+            addCriterion("chap_name >=", value, "chapName");
             return (Criteria) this;
         }
 
-        public Criteria andRNameLessThan(String value) {
-            addCriterion("r_name <", value, "rName");
+        public Criteria andChapNameLessThan(String value) {
+            addCriterion("chap_name <", value, "chapName");
             return (Criteria) this;
         }
 
-        public Criteria andRNameLessThanOrEqualTo(String value) {
-            addCriterion("r_name <=", value, "rName");
+        public Criteria andChapNameLessThanOrEqualTo(String value) {
+            addCriterion("chap_name <=", value, "chapName");
             return (Criteria) this;
         }
 
-        public Criteria andRNameLike(String value) {
-            addCriterion("r_name like", value, "rName");
+        public Criteria andChapNameLike(String value) {
+            addCriterion("chap_name like", value, "chapName");
             return (Criteria) this;
         }
 
-        public Criteria andRNameNotLike(String value) {
-            addCriterion("r_name not like", value, "rName");
+        public Criteria andChapNameNotLike(String value) {
+            addCriterion("chap_name not like", value, "chapName");
             return (Criteria) this;
         }
 
-        public Criteria andRNameIn(List<String> values) {
-            addCriterion("r_name in", values, "rName");
+        public Criteria andChapNameIn(List<String> values) {
+            addCriterion("chap_name in", values, "chapName");
             return (Criteria) this;
         }
 
-        public Criteria andRNameNotIn(List<String> values) {
-            addCriterion("r_name not in", values, "rName");
+        public Criteria andChapNameNotIn(List<String> values) {
+            addCriterion("chap_name not in", values, "chapName");
             return (Criteria) this;
         }
 
-        public Criteria andRNameBetween(String value1, String value2) {
-            addCriterion("r_name between", value1, value2, "rName");
+        public Criteria andChapNameBetween(String value1, String value2) {
+            addCriterion("chap_name between", value1, value2, "chapName");
             return (Criteria) this;
         }
 
-        public Criteria andRNameNotBetween(String value1, String value2) {
-            addCriterion("r_name not between", value1, value2, "rName");
+        public Criteria andChapNameNotBetween(String value1, String value2) {
+            addCriterion("chap_name not between", value1, value2, "chapName");
             return (Criteria) this;
         }
 
-        public Criteria andRStateIsNull() {
-            addCriterion("r_state is null");
+        public Criteria andChapMoneyIsNull() {
+            addCriterion("chap_money is null");
             return (Criteria) this;
         }
 
-        public Criteria andRStateIsNotNull() {
-            addCriterion("r_state is not null");
+        public Criteria andChapMoneyIsNotNull() {
+            addCriterion("chap_money is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRStateEqualTo(Integer value) {
-            addCriterion("r_state =", value, "rState");
+        public Criteria andChapMoneyEqualTo(BigDecimal value) {
+            addCriterion("chap_money =", value, "chapMoney");
             return (Criteria) this;
         }
 
-        public Criteria andRStateNotEqualTo(Integer value) {
-            addCriterion("r_state <>", value, "rState");
+        public Criteria andChapMoneyNotEqualTo(BigDecimal value) {
+            addCriterion("chap_money <>", value, "chapMoney");
             return (Criteria) this;
         }
 
-        public Criteria andRStateGreaterThan(Integer value) {
-            addCriterion("r_state >", value, "rState");
+        public Criteria andChapMoneyGreaterThan(BigDecimal value) {
+            addCriterion("chap_money >", value, "chapMoney");
             return (Criteria) this;
         }
 
-        public Criteria andRStateGreaterThanOrEqualTo(Integer value) {
-            addCriterion("r_state >=", value, "rState");
+        public Criteria andChapMoneyGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("chap_money >=", value, "chapMoney");
             return (Criteria) this;
         }
 
-        public Criteria andRStateLessThan(Integer value) {
-            addCriterion("r_state <", value, "rState");
+        public Criteria andChapMoneyLessThan(BigDecimal value) {
+            addCriterion("chap_money <", value, "chapMoney");
             return (Criteria) this;
         }
 
-        public Criteria andRStateLessThanOrEqualTo(Integer value) {
-            addCriterion("r_state <=", value, "rState");
+        public Criteria andChapMoneyLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("chap_money <=", value, "chapMoney");
             return (Criteria) this;
         }
 
-        public Criteria andRStateIn(List<Integer> values) {
-            addCriterion("r_state in", values, "rState");
+        public Criteria andChapMoneyIn(List<BigDecimal> values) {
+            addCriterion("chap_money in", values, "chapMoney");
             return (Criteria) this;
         }
 
-        public Criteria andRStateNotIn(List<Integer> values) {
-            addCriterion("r_state not in", values, "rState");
+        public Criteria andChapMoneyNotIn(List<BigDecimal> values) {
+            addCriterion("chap_money not in", values, "chapMoney");
             return (Criteria) this;
         }
 
-        public Criteria andRStateBetween(Integer value1, Integer value2) {
-            addCriterion("r_state between", value1, value2, "rState");
+        public Criteria andChapMoneyBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("chap_money between", value1, value2, "chapMoney");
             return (Criteria) this;
         }
 
-        public Criteria andRStateNotBetween(Integer value1, Integer value2) {
-            addCriterion("r_state not between", value1, value2, "rState");
+        public Criteria andChapMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("chap_money not between", value1, value2, "chapMoney");
             return (Criteria) this;
         }
 
-        public Criteria andRIsDelIsNull() {
-            addCriterion("r_is_del is null");
+        public Criteria andChapIsDelIsNull() {
+            addCriterion("chap_is_del is null");
             return (Criteria) this;
         }
 
-        public Criteria andRIsDelIsNotNull() {
-            addCriterion("r_is_del is not null");
+        public Criteria andChapIsDelIsNotNull() {
+            addCriterion("chap_is_del is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRIsDelEqualTo(Integer value) {
-            addCriterion("r_is_del =", value, "rIsDel");
+        public Criteria andChapIsDelEqualTo(Integer value) {
+            addCriterion("chap_is_del =", value, "chapIsDel");
             return (Criteria) this;
         }
 
-        public Criteria andRIsDelNotEqualTo(Integer value) {
-            addCriterion("r_is_del <>", value, "rIsDel");
+        public Criteria andChapIsDelNotEqualTo(Integer value) {
+            addCriterion("chap_is_del <>", value, "chapIsDel");
             return (Criteria) this;
         }
 
-        public Criteria andRIsDelGreaterThan(Integer value) {
-            addCriterion("r_is_del >", value, "rIsDel");
+        public Criteria andChapIsDelGreaterThan(Integer value) {
+            addCriterion("chap_is_del >", value, "chapIsDel");
             return (Criteria) this;
         }
 
-        public Criteria andRIsDelGreaterThanOrEqualTo(Integer value) {
-            addCriterion("r_is_del >=", value, "rIsDel");
+        public Criteria andChapIsDelGreaterThanOrEqualTo(Integer value) {
+            addCriterion("chap_is_del >=", value, "chapIsDel");
             return (Criteria) this;
         }
 
-        public Criteria andRIsDelLessThan(Integer value) {
-            addCriterion("r_is_del <", value, "rIsDel");
+        public Criteria andChapIsDelLessThan(Integer value) {
+            addCriterion("chap_is_del <", value, "chapIsDel");
             return (Criteria) this;
         }
 
-        public Criteria andRIsDelLessThanOrEqualTo(Integer value) {
-            addCriterion("r_is_del <=", value, "rIsDel");
+        public Criteria andChapIsDelLessThanOrEqualTo(Integer value) {
+            addCriterion("chap_is_del <=", value, "chapIsDel");
             return (Criteria) this;
         }
 
-        public Criteria andRIsDelIn(List<Integer> values) {
-            addCriterion("r_is_del in", values, "rIsDel");
+        public Criteria andChapIsDelIn(List<Integer> values) {
+            addCriterion("chap_is_del in", values, "chapIsDel");
             return (Criteria) this;
         }
 
-        public Criteria andRIsDelNotIn(List<Integer> values) {
-            addCriterion("r_is_del not in", values, "rIsDel");
+        public Criteria andChapIsDelNotIn(List<Integer> values) {
+            addCriterion("chap_is_del not in", values, "chapIsDel");
             return (Criteria) this;
         }
 
-        public Criteria andRIsDelBetween(Integer value1, Integer value2) {
-            addCriterion("r_is_del between", value1, value2, "rIsDel");
+        public Criteria andChapIsDelBetween(Integer value1, Integer value2) {
+            addCriterion("chap_is_del between", value1, value2, "chapIsDel");
             return (Criteria) this;
         }
 
-        public Criteria andRIsDelNotBetween(Integer value1, Integer value2) {
-            addCriterion("r_is_del not between", value1, value2, "rIsDel");
+        public Criteria andChapIsDelNotBetween(Integer value1, Integer value2) {
+            addCriterion("chap_is_del not between", value1, value2, "chapIsDel");
             return (Criteria) this;
         }
 
-        public Criteria andRCreateTimeIsNull() {
-            addCriterion("r_create_time is null");
+        public Criteria andChapCreateTimeIsNull() {
+            addCriterion("chap_create_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andRCreateTimeIsNotNull() {
-            addCriterion("r_create_time is not null");
+        public Criteria andChapCreateTimeIsNotNull() {
+            addCriterion("chap_create_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRCreateTimeEqualTo(Date value) {
-            addCriterion("r_create_time =", value, "rCreateTime");
+        public Criteria andChapCreateTimeEqualTo(Date value) {
+            addCriterion("chap_create_time =", value, "chapCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRCreateTimeNotEqualTo(Date value) {
-            addCriterion("r_create_time <>", value, "rCreateTime");
+        public Criteria andChapCreateTimeNotEqualTo(Date value) {
+            addCriterion("chap_create_time <>", value, "chapCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRCreateTimeGreaterThan(Date value) {
-            addCriterion("r_create_time >", value, "rCreateTime");
+        public Criteria andChapCreateTimeGreaterThan(Date value) {
+            addCriterion("chap_create_time >", value, "chapCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRCreateTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("r_create_time >=", value, "rCreateTime");
+        public Criteria andChapCreateTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("chap_create_time >=", value, "chapCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRCreateTimeLessThan(Date value) {
-            addCriterion("r_create_time <", value, "rCreateTime");
+        public Criteria andChapCreateTimeLessThan(Date value) {
+            addCriterion("chap_create_time <", value, "chapCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRCreateTimeLessThanOrEqualTo(Date value) {
-            addCriterion("r_create_time <=", value, "rCreateTime");
+        public Criteria andChapCreateTimeLessThanOrEqualTo(Date value) {
+            addCriterion("chap_create_time <=", value, "chapCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRCreateTimeIn(List<Date> values) {
-            addCriterion("r_create_time in", values, "rCreateTime");
+        public Criteria andChapCreateTimeIn(List<Date> values) {
+            addCriterion("chap_create_time in", values, "chapCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRCreateTimeNotIn(List<Date> values) {
-            addCriterion("r_create_time not in", values, "rCreateTime");
+        public Criteria andChapCreateTimeNotIn(List<Date> values) {
+            addCriterion("chap_create_time not in", values, "chapCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRCreateTimeBetween(Date value1, Date value2) {
-            addCriterion("r_create_time between", value1, value2, "rCreateTime");
+        public Criteria andChapCreateTimeBetween(Date value1, Date value2) {
+            addCriterion("chap_create_time between", value1, value2, "chapCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRCreateTimeNotBetween(Date value1, Date value2) {
-            addCriterion("r_create_time not between", value1, value2, "rCreateTime");
+        public Criteria andChapCreateTimeNotBetween(Date value1, Date value2) {
+            addCriterion("chap_create_time not between", value1, value2, "chapCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRUpdateTimeIsNull() {
-            addCriterion("r_update_time is null");
+        public Criteria andChapUpdateTimeIsNull() {
+            addCriterion("chap_update_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andRUpdateTimeIsNotNull() {
-            addCriterion("r_update_time is not null");
+        public Criteria andChapUpdateTimeIsNotNull() {
+            addCriterion("chap_update_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRUpdateTimeEqualTo(Date value) {
-            addCriterion("r_update_time =", value, "rUpdateTime");
+        public Criteria andChapUpdateTimeEqualTo(Date value) {
+            addCriterion("chap_update_time =", value, "chapUpdateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRUpdateTimeNotEqualTo(Date value) {
-            addCriterion("r_update_time <>", value, "rUpdateTime");
+        public Criteria andChapUpdateTimeNotEqualTo(Date value) {
+            addCriterion("chap_update_time <>", value, "chapUpdateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRUpdateTimeGreaterThan(Date value) {
-            addCriterion("r_update_time >", value, "rUpdateTime");
+        public Criteria andChapUpdateTimeGreaterThan(Date value) {
+            addCriterion("chap_update_time >", value, "chapUpdateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRUpdateTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("r_update_time >=", value, "rUpdateTime");
+        public Criteria andChapUpdateTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("chap_update_time >=", value, "chapUpdateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRUpdateTimeLessThan(Date value) {
-            addCriterion("r_update_time <", value, "rUpdateTime");
+        public Criteria andChapUpdateTimeLessThan(Date value) {
+            addCriterion("chap_update_time <", value, "chapUpdateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRUpdateTimeLessThanOrEqualTo(Date value) {
-            addCriterion("r_update_time <=", value, "rUpdateTime");
+        public Criteria andChapUpdateTimeLessThanOrEqualTo(Date value) {
+            addCriterion("chap_update_time <=", value, "chapUpdateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRUpdateTimeIn(List<Date> values) {
-            addCriterion("r_update_time in", values, "rUpdateTime");
+        public Criteria andChapUpdateTimeIn(List<Date> values) {
+            addCriterion("chap_update_time in", values, "chapUpdateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRUpdateTimeNotIn(List<Date> values) {
-            addCriterion("r_update_time not in", values, "rUpdateTime");
+        public Criteria andChapUpdateTimeNotIn(List<Date> values) {
+            addCriterion("chap_update_time not in", values, "chapUpdateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRUpdateTimeBetween(Date value1, Date value2) {
-            addCriterion("r_update_time between", value1, value2, "rUpdateTime");
+        public Criteria andChapUpdateTimeBetween(Date value1, Date value2) {
+            addCriterion("chap_update_time between", value1, value2, "chapUpdateTime");
             return (Criteria) this;
         }
 
-        public Criteria andRUpdateTimeNotBetween(Date value1, Date value2) {
-            addCriterion("r_update_time not between", value1, value2, "rUpdateTime");
+        public Criteria andChapUpdateTimeNotBetween(Date value1, Date value2) {
+            addCriterion("chap_update_time not between", value1, value2, "chapUpdateTime");
             return (Criteria) this;
         }
 

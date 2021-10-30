@@ -1,33 +1,33 @@
 package com.kkb.pojo;
 
 public class RoleMenu {
-    private Integer r_m_id;
+    private Integer rmId;
 
-    private Integer r_id;
+    private Integer rId;
 
-    private Integer m_id;
+    private Integer mId;
 
-    public Integer getR_m_id() {
-        return r_m_id;
+    public Integer getRmId() {
+        return rmId;
     }
 
-    public void setR_m_id(Integer r_m_id) {
-        this.r_m_id = r_m_id;
+    public void setRmId(Integer rmId) {
+        this.rmId = rmId;
     }
 
-    public Integer getR_id() {
-        return r_id;
+    public Integer getrId() {
+        return rId;
     }
 
-    public void setR_id(Integer r_id) {
-        this.r_id = r_id;
+    public void setrId(Integer rId) {
+        this.rId = rId;
     }
 
-    public Integer getM_id() {
-        return m_id;
+    public Integer getmId() {
+        return mId;
     }
 
-    public void setM_id(Integer m_id) {
-        this.m_id = m_id;
+    public void setmId(Integer mId) {
+        this.mId = mId;
     }
 }

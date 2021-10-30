@@ -1,47 +1,43 @@
 package com.kkb.pojo;
 
 public class Menu {
-    private Integer m_id;
+    private Integer mId;
 
-    private String m_url;
+    private String mUrl;
 
-    private String m_name;
+    private String mName;
 
-    private Integer m_state;
+    private Integer mState;
 
-    public Menu(){
-        m_state = 0;
+    public Integer getmId() {
+        return mId;
     }
 
-    public Integer getM_id() {
-        return m_id;
+    public void setmId(Integer mId) {
+        this.mId = mId;
     }
 
-    public void setM_id(Integer m_id) {
-        this.m_id = m_id;
+    public String getmUrl() {
+        return mUrl;
     }
 
-    public String getM_url() {
-        return m_url;
+    public void setmUrl(String mUrl) {
+        this.mUrl = mUrl == null ? null : mUrl.trim();
     }
 
-    public void setM_url(String m_url) {
-        this.m_url = m_url == null ? null : m_url.trim();
+    public String getmName() {
+        return mName;
     }
 
-    public String getM_name() {
-        return m_name;
+    public void setmName(String mName) {
+        this.mName = mName == null ? null : mName.trim();
     }
 
-    public void setM_name(String m_name) {
-        this.m_name = m_name == null ? null : m_name.trim();
+    public Integer getmState() {
+        return mState;
     }
 
-    public Integer getM_state() {
-        return m_state;
-    }
-
-    public void setM_state(Integer m_state) {
-        this.m_state = m_state;
+    public void setmState(Integer mState) {
+        this.mState = mState;
     }
 }

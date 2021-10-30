@@ -3,177 +3,173 @@ package com.kkb.pojo;
 import java.util.Date;
 
 public class Doctor {
-    private Integer d_id;
+    private Integer dId;
 
-    private String d_idCar;
+    private String dIdCar;
 
-    private String d_phone;
+    private String dPhone;
 
-    private String d_telPhone;
+    private String dTelphone;
 
-    private Integer d_sex;
+    private Integer dSex;
 
-    private Date d_birthday;
+    private Date dBirthday;
 
-    private Integer d_age;
+    private Integer dAge;
 
-    private String d_email;
+    private String dEmail;
 
-    private String d_keshi;
+    private String dKeshi;
 
-    private String d_xueli;
+    private String dXueli;
 
-    private String d_desc;
+    private String dDesc;
 
-    private Date d_inTime;
+    private Date dIntime;
 
-    private Integer d_state;
+    private Integer dState;
 
-    private Integer d_isDel;
+    private Integer dIsDel;
 
-    private Date d_create_time;
+    private Date dCreateTime;
 
-    private Date d_update_time;
+    private Date dUpdateTime;
 
-    private Integer u_id;
+    private Integer uId;
 
-    public Doctor(){
-        d_isDel = 0;
+    public Integer getdId() {
+        return dId;
     }
 
-    public Integer getD_id() {
-        return d_id;
+    public void setdId(Integer dId) {
+        this.dId = dId;
     }
 
-    public void setD_id(Integer d_id) {
-        this.d_id = d_id;
+    public String getdIdCar() {
+        return dIdCar;
     }
 
-    public String getD_idCar() {
-        return d_idCar;
+    public void setdIdCar(String dIdCar) {
+        this.dIdCar = dIdCar == null ? null : dIdCar.trim();
     }
 
-    public void setD_idCar(String d_idCar) {
-        this.d_idCar = d_idCar == null ? null : d_idCar.trim();
+    public String getdPhone() {
+        return dPhone;
     }
 
-    public String getD_phone() {
-        return d_phone;
+    public void setdPhone(String dPhone) {
+        this.dPhone = dPhone == null ? null : dPhone.trim();
     }
 
-    public void setD_phone(String d_phone) {
-        this.d_phone = d_phone == null ? null : d_phone.trim();
+    public String getdTelphone() {
+        return dTelphone;
     }
 
-    public String getD_telPhone() {
-        return d_telPhone;
+    public void setdTelphone(String dTelphone) {
+        this.dTelphone = dTelphone == null ? null : dTelphone.trim();
     }
 
-    public void setD_telPhone(String d_telPhone) {
-        this.d_telPhone = d_telPhone == null ? null : d_telPhone.trim();
+    public Integer getdSex() {
+        return dSex;
     }
 
-    public Integer getD_sex() {
-        return d_sex;
+    public void setdSex(Integer dSex) {
+        this.dSex = dSex;
     }
 
-    public void setD_sex(Integer d_sex) {
-        this.d_sex = d_sex;
+    public Date getdBirthday() {
+        return dBirthday;
     }
 
-    public Date getD_birthday() {
-        return d_birthday;
+    public void setdBirthday(Date dBirthday) {
+        this.dBirthday = dBirthday;
     }
 
-    public void setD_birthday(Date d_birthday) {
-        this.d_birthday = d_birthday;
+    public Integer getdAge() {
+        return dAge;
     }
 
-    public Integer getD_age() {
-        return d_age;
+    public void setdAge(Integer dAge) {
+        this.dAge = dAge;
     }
 
-    public void setD_age(Integer d_age) {
-        this.d_age = d_age;
+    public String getdEmail() {
+        return dEmail;
     }
 
-    public String getD_email() {
-        return d_email;
+    public void setdEmail(String dEmail) {
+        this.dEmail = dEmail == null ? null : dEmail.trim();
     }
 
-    public void setD_email(String d_email) {
-        this.d_email = d_email == null ? null : d_email.trim();
+    public String getdKeshi() {
+        return dKeshi;
     }
 
-    public String getD_keshi() {
-        return d_keshi;
+    public void setdKeshi(String dKeshi) {
+        this.dKeshi = dKeshi == null ? null : dKeshi.trim();
     }
 
-    public void setD_keshi(String d_keshi) {
-        this.d_keshi = d_keshi == null ? null : d_keshi.trim();
+    public String getdXueli() {
+        return dXueli;
     }
 
-    public String getD_xueli() {
-        return d_xueli;
+    public void setdXueli(String dXueli) {
+        this.dXueli = dXueli == null ? null : dXueli.trim();
     }
 
-    public void setD_xueli(String d_xueli) {
-        this.d_xueli = d_xueli == null ? null : d_xueli.trim();
+    public String getdDesc() {
+        return dDesc;
     }
 
-    public String getD_desc() {
-        return d_desc;
+    public void setdDesc(String dDesc) {
+        this.dDesc = dDesc == null ? null : dDesc.trim();
     }
 
-    public void setD_desc(String d_desc) {
-        this.d_desc = d_desc == null ? null : d_desc.trim();
+    public Date getdIntime() {
+        return dIntime;
     }
 
-    public Date getD_inTime() {
-        return d_inTime;
+    public void setdIntime(Date dIntime) {
+        this.dIntime = dIntime;
     }
 
-    public void setD_inTime(Date d_inTime) {
-        this.d_inTime = d_inTime;
+    public Integer getdState() {
+        return dState;
     }
 
-    public Integer getD_state() {
-        return d_state;
+    public void setdState(Integer dState) {
+        this.dState = dState;
     }
 
-    public void setD_state(Integer d_state) {
-        this.d_state = d_state;
+    public Integer getdIsDel() {
+        return dIsDel;
     }
 
-    public Integer getD_isDel() {
-        return d_isDel;
+    public void setdIsDel(Integer dIsDel) {
+        this.dIsDel = dIsDel;
     }
 
-    public void setD_isDel(Integer d_isDel) {
-        this.d_isDel = d_isDel;
+    public Date getdCreateTime() {
+        return dCreateTime;
     }
 
-    public Date getD_create_time() {
-        return d_create_time;
+    public void setdCreateTime(Date dCreateTime) {
+        this.dCreateTime = dCreateTime;
     }
 
-    public void setD_create_time(Date d_create_time) {
-        this.d_create_time = d_create_time;
+    public Date getdUpdateTime() {
+        return dUpdateTime;
     }
 
-    public Date getD_update_time() {
-        return d_update_time;
+    public void setdUpdateTime(Date dUpdateTime) {
+        this.dUpdateTime = dUpdateTime;
     }
 
-    public void setD_update_time(Date d_update_time) {
-        this.d_update_time = d_update_time;
+    public Integer getuId() {
+        return uId;
     }
 
-    public Integer getU_id() {
-        return u_id;
-    }
-
-    public void setU_id(Integer u_id) {
-        this.u_id = u_id;
+    public void setuId(Integer uId) {
+        this.uId = uId;
     }
 }
