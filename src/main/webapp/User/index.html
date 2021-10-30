@@ -67,12 +67,12 @@
                 pageSize = 5;
             }
         }
-        let u_loginName = $("#username").val()
+        let uLoginName = $("#username").val()
         layer.load(0)
         $.ajax({
             type: "GET",
             url: "/user/list",
-            data: {pageNum:pageNum,pageSize:pageSize,jwtToken:jwtToken,u_loginName:u_loginName},
+            data: {pageNum:pageNum,pageSize:pageSize,jwtToken:jwtToken,uLoginName:uLoginName},
             success: function (data) {
                 layer.closeAll()
                 if(data.code === 200){
@@ -93,32 +93,32 @@
     }
 
     // 修改用户state
-    function updateState(u_id, u_state){
-        console.log("原 u_state 为 : " + u_state)
-        if(u_state == 0){
-            u_state = 1;
+    function updateState(rId, uState){
+        console.log("原 uState 为 : " + uState)
+        if(uState == 0){
+            uState = 1;
         }else{
-            u_state = 0;
+            uState = 0;
         }
-        console.log("u_state 更新为 : " + u_state)
+        console.log("uState 更新为 : " + uState)
         layer.load(0)
         $.ajax({
             type: "POST",
-            url: "/user/" + u_id,
-            data: {jwtToken:jwtToken,u_state:u_state,_method:"PUT"},
+            url: "/user/" + rId,
+            data: {jwtToken:jwtToken,uState:uState,_method:"PUT"},
             dataType: "json",
             success: function (data) {
                 layer.closeAll()
                 if (data.code == 200){
-                    if(u_state == 0){
+                    if(uState == 0){
                         layer.msg("启用成功")
-                        $("#uid_"+ u_id).text("启用")
+                        $("#uid_"+ rId).text("启用")
                     }else{
                         layer.msg("已禁用")
-                        $("#uid_"+ u_id).text("禁用")
+                        $("#uid_"+ rId).text("禁用")
                     }
-                    $("#uid_"+ u_id).attr("onclick","")
-                    $("#uid_"+ u_id).attr("onclick","updateState("+ u_id +","+ u_state +")")
+                    $("#uid_"+ rId).attr("onclick","")
+                    $("#uid_"+ rId).attr("onclick","updateState("+ rId +","+ uState +")")
                 }else{
                     layer.msg(data.msg,function(){})
                 }
@@ -134,15 +134,15 @@
          $(".con-box").empty();
          $("#mycon").find("tbody").empty()
          $.each(pageInfo.list, function(){
-             let ustate = this.u_state==0?'启用':'禁用'
+             let ustate = this.uState==0?'启用':'禁用'
              let con = "<tr>\n" +
-                 "             <td style='vertical-align:middle;'><input type='checkbox' name='check' value='"+ this.u_id +"'></td>\n" +
-                 "             <td>"+ this.u_loginName +"</td>\n" +
-                 "             <td>"+ this.u_trueName +"</td>\n" +
-                 "             <td>"+ this.role.r_name +"</td>\n" +
-                 "             <td><a id='uid_"+ this.u_id +"' onclick='updateState("+ this.u_id +", "+ this.u_state +")' href='javascript:void(0);'>"+ ustate +"</a></td>\n" +
+                 "             <td style='vertical-align:middle;'><input type='checkbox' name='check' value='"+ this.rId +"'></td>\n" +
+                 "             <td>"+ this.uLoginName +"</td>\n" +
+                 "             <td>"+ this.uTrueName +"</td>\n" +
+                 "             <td>"+ this.role.rName +"</td>\n" +
+                 "             <td><a id='uid_"+ this.rId +"' onclick='updateState("+ this.rId +", "+ this.uState +")' href='javascript:void(0);'>"+ ustate +"</a></td>\n" +
                  "             <td>\n" +
-                 "                 <a href='editUser.html?pageNum="+ pageInfo.pageNum +"&pageSize="+ pageInfo.pageSize +"&u_id="+ this.u_id +"'>编辑</a>&nbsp;&nbsp;&nbsp;<a href='javascript:deleteUserById("+this.u_id+");'>删除</a>\n" +
+                 "                 <a href='editUser.html?pageNum="+ pageInfo.pageNum +"&pageSize="+ pageInfo.pageSize +"&rId="+ this.rId +"'>编辑</a>&nbsp;&nbsp;&nbsp;<a href='javascript:deleteUserById("+this.rId+");'>删除</a>\n" +
                  "             </td>\n" +
                  "         </tr>"
              $("#mycon").find("tbody").append($(con))
@@ -150,12 +150,12 @@
      }
 
      // 删除用户
-     function deleteUserById(u_id){
+     function deleteUserById(rId){
         if(confirm("确认删除?")){
             layer.load(0);
             $.ajax({
                 type: "POST",
-                url: "/user/"+ u_id,
+                url: "/user/"+ rId,
                 data: {_method:"DELETE",jwtToken:jwtToken},
                 success: function (data) {
                     layer.closeAll();

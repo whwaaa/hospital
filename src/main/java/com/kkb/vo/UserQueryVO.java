@@ -10,16 +10,20 @@ package com.kkb.vo;
  */
 public class UserQueryVO {
 
-    private String u_loginName;
+    private String uLoginName;
+
+    public UserQueryVO(String uLoginName) {
+        this.uLoginName = uLoginName;
+    }
 
     public UserQueryVO() {
     }
 
-    public String getU_loginName() {
-        return u_loginName;
+    public String getuLoginName() {
+        return uLoginName;
     }
 
-    public void setU_loginName(String u_loginName) {
-        this.u_loginName = u_loginName;
+    public void setuLoginName(String uLoginName) {
+        this.uLoginName = uLoginName;
     }
 }

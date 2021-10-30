@@ -38,6 +38,10 @@ public class HosRegister {
 
     private Integer uId;
 
+    public HosRegister(){
+        hosrIsDel = 0;
+    }
+
     public Integer getHosrId() {
         return hosrId;
     }

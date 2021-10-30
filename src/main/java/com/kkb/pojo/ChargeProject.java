@@ -18,6 +18,10 @@ public class ChargeProject {
 
     private Integer uId;
 
+    public ChargeProject(){
+        chapIsDel = 0;
+    }
+
     public Integer getChapId() {
         return chapId;
     }

@@ -33,18 +33,18 @@ public class AccessService {
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
         // 用户名为空返回null
-        if(user.getU_loginName() != null && !"".equals(user.getU_loginName())){
-            criteria.andU_loginNameEqualTo(user.getU_loginName());
+        if(user.getuLoginName() != null && !"".equals(user.getuLoginName())){
+            criteria.andULoginNameEqualTo(user.getuLoginName());
         }else{
             return null;
         }
         // 密码为空返回null
-        if(user.getU_passWord() != null && !"".equals(user.getU_passWord())){
-            criteria.andU_passWordEqualTo(user.getU_passWord());
+        if(user.getuPassword() != null && !"".equals(user.getuPassword())){
+            criteria.andUPasswordEqualTo(user.getuPassword());
         }else{
             return null;
         }
-        criteria.andU_isDelEqualTo(0);
+        criteria.andUIsDelEqualTo(0);
         return userMapper.selectByExample(userExample);
     }
 }

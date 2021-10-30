@@ -44,16 +44,17 @@ public class UserService {
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
         // 添加多条件
-        if(userQueryVO.getU_loginName()!=null && !"".equals(userQueryVO.getU_loginName())){
-            criteria.andU_loginNameLike("%" + userQueryVO.getU_loginName() + "%");
+        if(userQueryVO.getuLoginName()!=null && !"".equals(userQueryVO.getuLoginName())){
+            criteria.andULoginNameLike("%" + userQueryVO.getuLoginName() + "%");
         }
-        criteria.andU_isDelEqualTo(0);  // 是否删除 0不删除 1删除
+        criteria.andUIsDelEqualTo(0);  // 是否删除 0不删除 1删除
         // 分页
         PageHelper.startPage(pageNum, pageSize);
         List<User> users = userMapper.selectByExample(userExample);
+        System.out.println(users);
         for (User user : users) {
-            if(user.getR_id() != null){
-                Role role = roleMapper.selectByPrimaryKey(user.getR_id());
+            if(user.getrId() != null){
+                Role role = roleMapper.selectByPrimaryKey(user.getrId());
                 user.setRole(role);
             }
         }
@@ -67,32 +68,32 @@ public class UserService {
      */
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = {Exception.class})
     public Integer addUser(User user){
-        user.setU_create_time(new Date());
+        user.setuCreateTime(new Date());
         return userMapper.insert(user);
     }
 
     /**
      * 根据主键查询
-     * @param u_id
+     * @param uId
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED,readOnly = true)
-    public User queryById(Integer u_id){
-        return userMapper.selectByPrimaryKey(u_id);
+    public User queryById(Integer uId){
+        return userMapper.selectByPrimaryKey(uId);
     }
 
     /**
      * 根据用户名查询
-     * @param u_loginName
+     * @param uLoginName
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED,readOnly = true)
-    public User queryByLoginName(String u_loginName){
-        if(u_loginName == null || "".equals(u_loginName))
+    public User queryByLoginName(String uLoginName){
+        if(uLoginName == null || "".equals(uLoginName))
             return null;
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
-        criteria.andU_loginNameEqualTo(u_loginName);
+        criteria.andULoginNameEqualTo(uLoginName);
         List<User> users = userMapper.selectByExample(userExample);
         if(users.size() != 0){
             return users.get(0);
@@ -105,9 +106,9 @@ public class UserService {
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = {Exception.class})
-    public Integer updateById(Integer u_id, User user){
-        user.setU_id(u_id);
-        user.setU_update_time(new Date());
+    public Integer updateById(Integer uId, User user){
+        user.setuId(uId);
+        user.setuUpdateTime(new Date());
         return userMapper.updateByPrimaryKeySelective(user);
     }
 
@@ -116,11 +117,11 @@ public class UserService {
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = {Exception.class})
-    public Integer deleteById(Integer u_id){
+    public Integer deleteById(Integer uId){
         User user = new User();
-        user.setU_id(u_id);
-        user.setU_isDel(1);     // 是否删除 0不删除 1删除
-        user.setU_update_time(new Date());
+        user.setuId(uId);
+        user.setuIsDel(1);     // 是否删除 0不删除 1删除
+        user.setuUpdateTime(new Date());
         return userMapper.updateByPrimaryKeySelective(user);
     }
 }

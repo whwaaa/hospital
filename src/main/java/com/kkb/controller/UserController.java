@@ -37,8 +37,8 @@ public class UserController {
     }
 
     // 根据主键查询
-    @RequestMapping(value = "{u_id}", method = RequestMethod.GET)
-    public AjaxResultVo<User> queryById(@PathVariable("u_id") Integer u_id){
+    @RequestMapping(value = "{uId}", method = RequestMethod.GET)
+    public AjaxResultVo<User> queryById(@PathVariable("uId") Integer u_id){
         User user = userService.queryById(u_id);
         if(user != null){
             return new AjaxResultVo<>(200, "ok", user);
@@ -47,8 +47,8 @@ public class UserController {
     }
 
     // 根据u_loginName查询,判断是否重复
-    @RequestMapping(value = "loginname/{u_loginName}", method = RequestMethod.GET)
-    public AjaxResultVo<User> queryById(@PathVariable("u_loginName") String u_loginName){
+    @RequestMapping(value = "loginname/{uLoginName}", method = RequestMethod.GET)
+    public AjaxResultVo<User> queryById(@PathVariable("uLoginName") String u_loginName){
         User user = userService.queryByLoginName(u_loginName);
         if(user != null){
             return new AjaxResultVo<>(500, "用户名重复", user);
@@ -67,9 +67,9 @@ public class UserController {
     }
 
     // 根据主键删除
-    @RequestMapping(value = "{u_id}", method = RequestMethod.DELETE)
-    public AjaxResultVo<User> deleteById(@PathVariable("u_id") Integer u_id){
-        Integer res = userService.deleteById(u_id);
+    @RequestMapping(value = "{uId}", method = RequestMethod.DELETE)
+    public AjaxResultVo<User> deleteById(@PathVariable("uId") Integer uId){
+        Integer res = userService.deleteById(uId);
         if(res > 0){
             return new AjaxResultVo<>(204, "ok", null);
         }
@@ -77,9 +77,9 @@ public class UserController {
     }
 
     // 根据主键更新
-    @RequestMapping(value = "{u_id}", method = RequestMethod.PUT)
-    public AjaxResultVo<User> updateById(@PathVariable("u_id") Integer u_id, User user){
-        Integer res = userService.updateById(u_id, user);
+    @RequestMapping(value = "{uId}", method = RequestMethod.PUT)
+    public AjaxResultVo<User> updateById(@PathVariable("uId") Integer uId, User user){
+        Integer res = userService.updateById(uId, user);
         if(res > 0){
             return new AjaxResultVo<>(200, "ok", null);
         }

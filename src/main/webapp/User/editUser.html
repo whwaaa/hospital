@@ -41,31 +41,31 @@
     <table class="table table-bordered table-hover definewidth m10">
         <tr>
             <td width="10%" class="tableleft">登录名</td>
-            <td id="u_loginName"></td>
+            <td id="uLoginName"></td>
         </tr>
         <tr>
             <td class="tableleft">密码</td>
-            <td><input onblur="passwordCheck(this)" type="password" name="u_passWord"/></td>
+            <td><input onblur="passwordCheck(this)" type="password" name="uPassword"/></td>
         </tr>
         <tr>
             <td class="tableleft">真实姓名</td>
-            <td><input onblur="trueNameCheck(this)" type="text" name="u_trueName" value=""/></td>
+            <td><input onblur="trueNameCheck(this)" type="text" name="uTrueName" value=""/></td>
         </tr>
         <tr>
             <td class="tableleft">邮箱</td>
-            <td><input onblur="emailCheck(this)" type="text" name="u_email" value=""/></td>
+            <td><input onblur="emailCheck(this)" type="text" name="uEmail" value=""/></td>
         </tr>
         <tr>
             <td class="tableleft">状态</td>
             <td>
-                <input type="radio" name="u_state" value="0" /> 启用
-                <input type="radio" name="u_state" value="1" checked/> 禁用
+                <input type="radio" name="uState" value="0" /> 启用
+                <input type="radio" name="uState" value="1" checked/> 禁用
             </td>
         </tr>
         <tr>
             <td class="tableleft">角色</td>
             <td>
-            	<select onblur="roleCheck(this)" id="r_id" name="r_id">
+            	<select onblur="roleCheck(this)" id="rId" name="rId">
         			<option value="">--请选择--
 <!--        			<option value="1">管理员-->
 <!--        			<option value="2">院长-->
@@ -90,51 +90,51 @@
     let emailCheckFlag = true;
 
     // 密码强度的验证, 非空
-    function passwordCheck(u_passWord){
+    function passwordCheck(uPassword){
         // 密码长度6-16位，必须包含有数字，字母及特殊字符。
         var reg = /^.*(?=.{6,16})(?=.*\d)(?=.*[A-z])(?=.*[!@#$%^&*?\(\)]).*$/;
-        if(reg.test(u_passWord.value)){
+        if(reg.test(uPassword.value)){
             passwordCheckFlag = true;
-            $("input[name='u_passWord']").removeClass("warning")
+            $("input[name='uPassword']").removeClass("warning")
         } else {
             layer.msg("密码强度太弱,请重新设置", function(){})
             passwordCheckFlag = false;
-            $("input[name='u_passWord']").addClass("warning")
+            $("input[name='uPassword']").addClass("warning")
         }
     }
     // 真实姓名的非空验证
-    function trueNameCheck(u_loginName){
-        if(u_loginName.value === "" || u_loginName.value === undefined){
+    function trueNameCheck(uLoginName){
+        if(uLoginName.value === "" || uLoginName.value === undefined){
             layer.msg("姓名不能为空", function(){})
             trueNameCheckFlag = false;
-            $("input[name='u_trueName']").addClass("warning")
+            $("input[name='uTrueName']").addClass("warning")
         } else {
             trueNameCheckFlag = true;
-            $("input[name='u_trueName']").removeClass("warning")
+            $("input[name='uTrueName']").removeClass("warning")
         }
     }
     // 邮箱的正规合法验证
-    function emailCheck(u_email){
+    function emailCheck(uEmail){
         var reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
-        if(reg.test(u_email.value)){
+        if(reg.test(uEmail.value)){
             emailCheckFlag = true;
-            $("input[name='u_email']").removeClass("warning")
+            $("input[name='uEmail']").removeClass("warning")
         } else {
             layer.msg("邮箱格式不正确", function(){})
             emailCheckFlag = false;
-            $("input[name='u_email']").addClass("warning")
+            $("input[name='uEmail']").addClass("warning")
         }
     }
     // 角色非空验证
-    function roleCheck(r_id){
-        if(r_id.value === "" || r_id.value === undefined){
+    function roleCheck(rId){
+        if(rId.value === "" || rId.value === undefined){
             layer.msg("必须选择一个角色", function(){})
             roleCheckFlag = false;
-            $("#r_id").addClass("warning")
+            $("#rId").addClass("warning")
 
         }else{
             roleCheckFlag = true;
-            $("#r_id").removeClass("warning")
+            $("#rId").removeClass("warning")
         }
     }
 
@@ -146,14 +146,14 @@
     // 回调地址参数
     let pageNum = document.location.toString().GetValue("pageNum");
     let pageSize = document.location.toString().GetValue("pageSize");
-    let u_id = document.location.toString().GetValue("u_id");
+    let rId = document.location.toString().GetValue("rId");
 
     function queryUser(){
         layer.load(0)
-        // 通过u_id查询用户信息
+        // 通过rId查询用户信息
         $.ajax({
             type: "GET",
-            url: "/user/"+ u_id,
+            url: "/user/"+ rId,
             data: {jwtToken:jwtToken},
             success: function (data) {
                 layer.closeAll();
@@ -182,7 +182,7 @@
         //     success: function (data) {
         //         if(data.code === 200){
         //             $.each(data.obj, function(){
-        //                 $("#r_id").append("<option value='"+ this.r_id +"'>" + this.r_name);
+        //                 $("#rId").append("<option value='"+ this.rId +"'>" + this.r_name);
         //             })
         //             // 查询用户信息
         //             queryUser();
@@ -193,9 +193,9 @@
         //     }
         // })
         // TODO: 等待角色查询启用上面代码, 下面代码暂时替代
-        roles = [{"r_id":1,"r_isDel":0,"r_name":"管理员","r_state":1},{"r_id":2,"r_isDel":0,"r_name":"院长","r_state":1},{"r_id":3,"r_isDel":0,"r_name":"医生护士","r_state":1},{"r_id":4,"r_isDel":0,"r_name":"药品管理员","r_state":1}]
+        roles = [{"rId":1,"r_isDel":0,"r_name":"管理员","r_state":1},{"rId":2,"r_isDel":0,"r_name":"院长","r_state":1},{"rId":3,"r_isDel":0,"r_name":"医生护士","r_state":1},{"rId":4,"r_isDel":0,"r_name":"药品管理员","r_state":1}]
         $.each(roles, function(){
-            $("#r_id").append("<option value='"+ this.r_id +"'>" + this.r_name);
+            $("#rId").append("<option value='"+ this.rId +"'>" + this.r_name);
         })
         setTimeout(function(){
             // 查询用户信息
@@ -209,35 +209,35 @@
 
         // 更新
         $('#userEdit').click(function() {
-            let r_id = $("#r_id").val();
-            let u_email = $("input[name='u_email']").val();
-            let u_trueName = $("input[name='u_trueName']").val();
-            let u_passWord = $("input[name='u_passWord']").val();
-            let u_state = $("input[name='u_state']:checked").val();
+            let rId = $("#rId").val();
+            let uEmail = $("input[name='uEmail']").val();
+            let uTrueName = $("input[name='uTrueName']").val();
+            let uPassword = $("input[name='uPassword']").val();
+            let uState = $("input[name='uState']:checked").val();
 
             if( !passwordCheckFlag ){
-                passwordCheck(u_passWord);
+                passwordCheck(uPassword);
                 return false;
             }
             if( !trueNameCheckFlag ){
-                trueNameCheck(u_trueName);
+                trueNameCheck(uTrueName);
                 return false;
             }
             if( !emailCheckFlag ){
-                emailCheck(u_email);
+                emailCheck(uEmail);
                 return false;
             }
             if( !roleCheckFlag ){
-                roleCheck(r_id);
+                roleCheck(rId);
                 return false;
             }
             // 校验没有问题, 发起请求添加用户
             layer.load(0)
             $.ajax({
                 type: "POST",
-                url: "/user/" + u_id,
-                data: {_method:"PUT",jwtToken:jwtToken,r_id:r_id,u_email:u_email,u_trueName:u_trueName,
-                    u_passWord:u_passWord,u_state:u_state},
+                url: "/user/" + rId,
+                data: {_method:"PUT",jwtToken:jwtToken,rId:rId,uEmail:uEmail,uTrueName:uTrueName,
+                    uPassword:uPassword,uState:uState},
                 dataType: "json",
                 success: function (data) {
                     layer.closeAll()
@@ -260,18 +260,18 @@
     // 填充查询数据
     function loadDate(user){
         console.log(user);
-        $("#u_loginName").text(user.u_loginName)
-        $("input[name='u_passWord']").val(user.u_passWord)
-        $("input[name='u_trueName']").val(user.u_trueName)
-        $("input[name='u_email']").val(user.u_email)
-        if(user.u_state == 0){
-            $(':radio[name="u_state"]').eq(0).prop("checked",true)
-            $(':radio[name="u_state"]').eq(1).attr("checked",false)
+        $("#uLoginName").text(user.uLoginName)
+        $("input[name='uPassword']").val(user.uPassword)
+        $("input[name='uTrueName']").val(user.uTrueName)
+        $("input[name='uEmail']").val(user.uEmail)
+        if(user.uState == 0){
+            $(':radio[name="uState"]').eq(0).prop("checked",true)
+            $(':radio[name="uState"]').eq(1).attr("checked",false)
         }else{
-            $(':radio[name="u_state"]').eq(1).prop("checked",true)
-            $(':radio[name="u_state"]').eq(0).attr("checked",false)
+            $(':radio[name="uState"]').eq(1).prop("checked",true)
+            $(':radio[name="uState"]').eq(0).attr("checked",false)
         }
-        $("select[name='r_id']").val(user.r_id)
+        $("select[name='rId']").val(user.rId)
     }
 
 

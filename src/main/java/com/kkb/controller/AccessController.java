@@ -40,14 +40,14 @@ public class AccessController {
             return new AjaxResultVo(401, "用户名或密码错误");
         }
         user = users.get(0);
-        if(user.getU_state() != 0){
+        if(user.getuState() != 0){
             // 角色禁用
             return new AjaxResultVo(401, "此用户被禁用请联系管理员。");
         }
         // 将用户id和用户名称封装, 生成jwtToken令牌返回
         Map<String, Object> payLoadMap = new HashMap<>();
-        payLoadMap.put("u_id", user.getU_id());
-        payLoadMap.put("u_loginName", user.getU_loginName());
+        payLoadMap.put("u_id", user.getuState());
+        payLoadMap.put("u_loginName", user.getuLoginName());
         String jwtToken = JWTUtil.generToken(payLoadMap);
         return new AjaxResultVo(200, "ok", jwtToken);
     }

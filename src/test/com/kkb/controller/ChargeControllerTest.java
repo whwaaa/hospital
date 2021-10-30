@@ -1,7 +1,7 @@
 package com.kkb.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.kkb.pojo.Chargeproject;
+import com.kkb.pojo.ChargeProject;
 import com.kkb.service.ChargeService;
 import junit.framework.TestCase;
 import org.junit.Test;
@@ -24,7 +24,7 @@ public class ChargeControllerTest extends TestCase {
 
     @Test
     public void testQueryByPage() {
-        PageInfo<Chargeproject> pageInfo = service.queryByPage(1, 5, null);
+        PageInfo<ChargeProject> pageInfo = service.queryByPage(1, 5, null);
         System.out.println(pageInfo);
     }
 }

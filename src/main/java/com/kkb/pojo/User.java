@@ -23,6 +23,20 @@ public class User {
 
     private Date uUpdateTime;
 
+    private Role role;
+
+    public User(){
+        uId = 0;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     public Integer getuId() {
         return uId;
     }
