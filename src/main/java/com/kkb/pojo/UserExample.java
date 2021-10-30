@@ -105,643 +105,643 @@ public class UserExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andU_idIsNull() {
+        public Criteria andUIdIsNull() {
             addCriterion("u_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andU_idIsNotNull() {
+        public Criteria andUIdIsNotNull() {
             addCriterion("u_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andU_idEqualTo(Integer value) {
-            addCriterion("u_id =", value, "u_id");
+        public Criteria andUIdEqualTo(Integer value) {
+            addCriterion("u_id =", value, "uId");
             return (Criteria) this;
         }
 
-        public Criteria andU_idNotEqualTo(Integer value) {
-            addCriterion("u_id <>", value, "u_id");
+        public Criteria andUIdNotEqualTo(Integer value) {
+            addCriterion("u_id <>", value, "uId");
             return (Criteria) this;
         }
 
-        public Criteria andU_idGreaterThan(Integer value) {
-            addCriterion("u_id >", value, "u_id");
+        public Criteria andUIdGreaterThan(Integer value) {
+            addCriterion("u_id >", value, "uId");
             return (Criteria) this;
         }
 
-        public Criteria andU_idGreaterThanOrEqualTo(Integer value) {
-            addCriterion("u_id >=", value, "u_id");
+        public Criteria andUIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("u_id >=", value, "uId");
             return (Criteria) this;
         }
 
-        public Criteria andU_idLessThan(Integer value) {
-            addCriterion("u_id <", value, "u_id");
+        public Criteria andUIdLessThan(Integer value) {
+            addCriterion("u_id <", value, "uId");
             return (Criteria) this;
         }
 
-        public Criteria andU_idLessThanOrEqualTo(Integer value) {
-            addCriterion("u_id <=", value, "u_id");
+        public Criteria andUIdLessThanOrEqualTo(Integer value) {
+            addCriterion("u_id <=", value, "uId");
             return (Criteria) this;
         }
 
-        public Criteria andU_idIn(List<Integer> values) {
-            addCriterion("u_id in", values, "u_id");
+        public Criteria andUIdIn(List<Integer> values) {
+            addCriterion("u_id in", values, "uId");
             return (Criteria) this;
         }
 
-        public Criteria andU_idNotIn(List<Integer> values) {
-            addCriterion("u_id not in", values, "u_id");
+        public Criteria andUIdNotIn(List<Integer> values) {
+            addCriterion("u_id not in", values, "uId");
             return (Criteria) this;
         }
 
-        public Criteria andU_idBetween(Integer value1, Integer value2) {
-            addCriterion("u_id between", value1, value2, "u_id");
+        public Criteria andUIdBetween(Integer value1, Integer value2) {
+            addCriterion("u_id between", value1, value2, "uId");
             return (Criteria) this;
         }
 
-        public Criteria andU_idNotBetween(Integer value1, Integer value2) {
-            addCriterion("u_id not between", value1, value2, "u_id");
+        public Criteria andUIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("u_id not between", value1, value2, "uId");
             return (Criteria) this;
         }
 
-        public Criteria andU_loginNameIsNull() {
-            addCriterion("u_loginName is null");
+        public Criteria andULoginNameIsNull() {
+            addCriterion("u_login_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andU_loginNameIsNotNull() {
-            addCriterion("u_loginName is not null");
+        public Criteria andULoginNameIsNotNull() {
+            addCriterion("u_login_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andU_loginNameEqualTo(String value) {
-            addCriterion("u_loginName =", value, "u_loginName");
+        public Criteria andULoginNameEqualTo(String value) {
+            addCriterion("u_login_name =", value, "uLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andU_loginNameNotEqualTo(String value) {
-            addCriterion("u_loginName <>", value, "u_loginName");
+        public Criteria andULoginNameNotEqualTo(String value) {
+            addCriterion("u_login_name <>", value, "uLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andU_loginNameGreaterThan(String value) {
-            addCriterion("u_loginName >", value, "u_loginName");
+        public Criteria andULoginNameGreaterThan(String value) {
+            addCriterion("u_login_name >", value, "uLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andU_loginNameGreaterThanOrEqualTo(String value) {
-            addCriterion("u_loginName >=", value, "u_loginName");
+        public Criteria andULoginNameGreaterThanOrEqualTo(String value) {
+            addCriterion("u_login_name >=", value, "uLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andU_loginNameLessThan(String value) {
-            addCriterion("u_loginName <", value, "u_loginName");
+        public Criteria andULoginNameLessThan(String value) {
+            addCriterion("u_login_name <", value, "uLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andU_loginNameLessThanOrEqualTo(String value) {
-            addCriterion("u_loginName <=", value, "u_loginName");
+        public Criteria andULoginNameLessThanOrEqualTo(String value) {
+            addCriterion("u_login_name <=", value, "uLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andU_loginNameLike(String value) {
-            addCriterion("u_loginName like", value, "u_loginName");
+        public Criteria andULoginNameLike(String value) {
+            addCriterion("u_login_name like", value, "uLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andU_loginNameNotLike(String value) {
-            addCriterion("u_loginName not like", value, "u_loginName");
+        public Criteria andULoginNameNotLike(String value) {
+            addCriterion("u_login_name not like", value, "uLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andU_loginNameIn(List<String> values) {
-            addCriterion("u_loginName in", values, "u_loginName");
+        public Criteria andULoginNameIn(List<String> values) {
+            addCriterion("u_login_name in", values, "uLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andU_loginNameNotIn(List<String> values) {
-            addCriterion("u_loginName not in", values, "u_loginName");
+        public Criteria andULoginNameNotIn(List<String> values) {
+            addCriterion("u_login_name not in", values, "uLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andU_loginNameBetween(String value1, String value2) {
-            addCriterion("u_loginName between", value1, value2, "u_loginName");
+        public Criteria andULoginNameBetween(String value1, String value2) {
+            addCriterion("u_login_name between", value1, value2, "uLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andU_loginNameNotBetween(String value1, String value2) {
-            addCriterion("u_loginName not between", value1, value2, "u_loginName");
+        public Criteria andULoginNameNotBetween(String value1, String value2) {
+            addCriterion("u_login_name not between", value1, value2, "uLoginName");
             return (Criteria) this;
         }
 
-        public Criteria andU_passWordIsNull() {
-            addCriterion("u_passWord is null");
+        public Criteria andUPasswordIsNull() {
+            addCriterion("u_password is null");
             return (Criteria) this;
         }
 
-        public Criteria andU_passWordIsNotNull() {
-            addCriterion("u_passWord is not null");
+        public Criteria andUPasswordIsNotNull() {
+            addCriterion("u_password is not null");
             return (Criteria) this;
         }
 
-        public Criteria andU_passWordEqualTo(String value) {
-            addCriterion("u_passWord =", value, "u_passWord");
+        public Criteria andUPasswordEqualTo(String value) {
+            addCriterion("u_password =", value, "uPassword");
             return (Criteria) this;
         }
 
-        public Criteria andU_passWordNotEqualTo(String value) {
-            addCriterion("u_passWord <>", value, "u_passWord");
+        public Criteria andUPasswordNotEqualTo(String value) {
+            addCriterion("u_password <>", value, "uPassword");
             return (Criteria) this;
         }
 
-        public Criteria andU_passWordGreaterThan(String value) {
-            addCriterion("u_passWord >", value, "u_passWord");
+        public Criteria andUPasswordGreaterThan(String value) {
+            addCriterion("u_password >", value, "uPassword");
             return (Criteria) this;
         }
 
-        public Criteria andU_passWordGreaterThanOrEqualTo(String value) {
-            addCriterion("u_passWord >=", value, "u_passWord");
+        public Criteria andUPasswordGreaterThanOrEqualTo(String value) {
+            addCriterion("u_password >=", value, "uPassword");
             return (Criteria) this;
         }
 
-        public Criteria andU_passWordLessThan(String value) {
-            addCriterion("u_passWord <", value, "u_passWord");
+        public Criteria andUPasswordLessThan(String value) {
+            addCriterion("u_password <", value, "uPassword");
             return (Criteria) this;
         }
 
-        public Criteria andU_passWordLessThanOrEqualTo(String value) {
-            addCriterion("u_passWord <=", value, "u_passWord");
+        public Criteria andUPasswordLessThanOrEqualTo(String value) {
+            addCriterion("u_password <=", value, "uPassword");
             return (Criteria) this;
         }
 
-        public Criteria andU_passWordLike(String value) {
-            addCriterion("u_passWord like", value, "u_passWord");
+        public Criteria andUPasswordLike(String value) {
+            addCriterion("u_password like", value, "uPassword");
             return (Criteria) this;
         }
 
-        public Criteria andU_passWordNotLike(String value) {
-            addCriterion("u_passWord not like", value, "u_passWord");
+        public Criteria andUPasswordNotLike(String value) {
+            addCriterion("u_password not like", value, "uPassword");
             return (Criteria) this;
         }
 
-        public Criteria andU_passWordIn(List<String> values) {
-            addCriterion("u_passWord in", values, "u_passWord");
+        public Criteria andUPasswordIn(List<String> values) {
+            addCriterion("u_password in", values, "uPassword");
             return (Criteria) this;
         }
 
-        public Criteria andU_passWordNotIn(List<String> values) {
-            addCriterion("u_passWord not in", values, "u_passWord");
+        public Criteria andUPasswordNotIn(List<String> values) {
+            addCriterion("u_password not in", values, "uPassword");
             return (Criteria) this;
         }
 
-        public Criteria andU_passWordBetween(String value1, String value2) {
-            addCriterion("u_passWord between", value1, value2, "u_passWord");
+        public Criteria andUPasswordBetween(String value1, String value2) {
+            addCriterion("u_password between", value1, value2, "uPassword");
             return (Criteria) this;
         }
 
-        public Criteria andU_passWordNotBetween(String value1, String value2) {
-            addCriterion("u_passWord not between", value1, value2, "u_passWord");
+        public Criteria andUPasswordNotBetween(String value1, String value2) {
+            addCriterion("u_password not between", value1, value2, "uPassword");
             return (Criteria) this;
         }
 
-        public Criteria andU_trueNameIsNull() {
-            addCriterion("u_trueName is null");
+        public Criteria andUTrunAmeIsNull() {
+            addCriterion("u_trun_ame is null");
             return (Criteria) this;
         }
 
-        public Criteria andU_trueNameIsNotNull() {
-            addCriterion("u_trueName is not null");
+        public Criteria andUTrunAmeIsNotNull() {
+            addCriterion("u_trun_ame is not null");
             return (Criteria) this;
         }
 
-        public Criteria andU_trueNameEqualTo(String value) {
-            addCriterion("u_trueName =", value, "u_trueName");
+        public Criteria andUTrunAmeEqualTo(String value) {
+            addCriterion("u_trun_ame =", value, "uTrunAme");
             return (Criteria) this;
         }
 
-        public Criteria andU_trueNameNotEqualTo(String value) {
-            addCriterion("u_trueName <>", value, "u_trueName");
+        public Criteria andUTrunAmeNotEqualTo(String value) {
+            addCriterion("u_trun_ame <>", value, "uTrunAme");
             return (Criteria) this;
         }
 
-        public Criteria andU_trueNameGreaterThan(String value) {
-            addCriterion("u_trueName >", value, "u_trueName");
+        public Criteria andUTrunAmeGreaterThan(String value) {
+            addCriterion("u_trun_ame >", value, "uTrunAme");
             return (Criteria) this;
         }
 
-        public Criteria andU_trueNameGreaterThanOrEqualTo(String value) {
-            addCriterion("u_trueName >=", value, "u_trueName");
+        public Criteria andUTrunAmeGreaterThanOrEqualTo(String value) {
+            addCriterion("u_trun_ame >=", value, "uTrunAme");
             return (Criteria) this;
         }
 
-        public Criteria andU_trueNameLessThan(String value) {
-            addCriterion("u_trueName <", value, "u_trueName");
+        public Criteria andUTrunAmeLessThan(String value) {
+            addCriterion("u_trun_ame <", value, "uTrunAme");
             return (Criteria) this;
         }
 
-        public Criteria andU_trueNameLessThanOrEqualTo(String value) {
-            addCriterion("u_trueName <=", value, "u_trueName");
+        public Criteria andUTrunAmeLessThanOrEqualTo(String value) {
+            addCriterion("u_trun_ame <=", value, "uTrunAme");
             return (Criteria) this;
         }
 
-        public Criteria andU_trueNameLike(String value) {
-            addCriterion("u_trueName like", value, "u_trueName");
+        public Criteria andUTrunAmeLike(String value) {
+            addCriterion("u_trun_ame like", value, "uTrunAme");
             return (Criteria) this;
         }
 
-        public Criteria andU_trueNameNotLike(String value) {
-            addCriterion("u_trueName not like", value, "u_trueName");
+        public Criteria andUTrunAmeNotLike(String value) {
+            addCriterion("u_trun_ame not like", value, "uTrunAme");
             return (Criteria) this;
         }
 
-        public Criteria andU_trueNameIn(List<String> values) {
-            addCriterion("u_trueName in", values, "u_trueName");
+        public Criteria andUTrunAmeIn(List<String> values) {
+            addCriterion("u_trun_ame in", values, "uTrunAme");
             return (Criteria) this;
         }
 
-        public Criteria andU_trueNameNotIn(List<String> values) {
-            addCriterion("u_trueName not in", values, "u_trueName");
+        public Criteria andUTrunAmeNotIn(List<String> values) {
+            addCriterion("u_trun_ame not in", values, "uTrunAme");
             return (Criteria) this;
         }
 
-        public Criteria andU_trueNameBetween(String value1, String value2) {
-            addCriterion("u_trueName between", value1, value2, "u_trueName");
+        public Criteria andUTrunAmeBetween(String value1, String value2) {
+            addCriterion("u_trun_ame between", value1, value2, "uTrunAme");
             return (Criteria) this;
         }
 
-        public Criteria andU_trueNameNotBetween(String value1, String value2) {
-            addCriterion("u_trueName not between", value1, value2, "u_trueName");
+        public Criteria andUTrunAmeNotBetween(String value1, String value2) {
+            addCriterion("u_trun_ame not between", value1, value2, "uTrunAme");
             return (Criteria) this;
         }
 
-        public Criteria andU_emailIsNull() {
+        public Criteria andUEmailIsNull() {
             addCriterion("u_email is null");
             return (Criteria) this;
         }
 
-        public Criteria andU_emailIsNotNull() {
+        public Criteria andUEmailIsNotNull() {
             addCriterion("u_email is not null");
             return (Criteria) this;
         }
 
-        public Criteria andU_emailEqualTo(String value) {
-            addCriterion("u_email =", value, "u_email");
+        public Criteria andUEmailEqualTo(String value) {
+            addCriterion("u_email =", value, "uEmail");
             return (Criteria) this;
         }
 
-        public Criteria andU_emailNotEqualTo(String value) {
-            addCriterion("u_email <>", value, "u_email");
+        public Criteria andUEmailNotEqualTo(String value) {
+            addCriterion("u_email <>", value, "uEmail");
             return (Criteria) this;
         }
 
-        public Criteria andU_emailGreaterThan(String value) {
-            addCriterion("u_email >", value, "u_email");
+        public Criteria andUEmailGreaterThan(String value) {
+            addCriterion("u_email >", value, "uEmail");
             return (Criteria) this;
         }
 
-        public Criteria andU_emailGreaterThanOrEqualTo(String value) {
-            addCriterion("u_email >=", value, "u_email");
+        public Criteria andUEmailGreaterThanOrEqualTo(String value) {
+            addCriterion("u_email >=", value, "uEmail");
             return (Criteria) this;
         }
 
-        public Criteria andU_emailLessThan(String value) {
-            addCriterion("u_email <", value, "u_email");
+        public Criteria andUEmailLessThan(String value) {
+            addCriterion("u_email <", value, "uEmail");
             return (Criteria) this;
         }
 
-        public Criteria andU_emailLessThanOrEqualTo(String value) {
-            addCriterion("u_email <=", value, "u_email");
+        public Criteria andUEmailLessThanOrEqualTo(String value) {
+            addCriterion("u_email <=", value, "uEmail");
             return (Criteria) this;
         }
 
-        public Criteria andU_emailLike(String value) {
-            addCriterion("u_email like", value, "u_email");
+        public Criteria andUEmailLike(String value) {
+            addCriterion("u_email like", value, "uEmail");
             return (Criteria) this;
         }
 
-        public Criteria andU_emailNotLike(String value) {
-            addCriterion("u_email not like", value, "u_email");
+        public Criteria andUEmailNotLike(String value) {
+            addCriterion("u_email not like", value, "uEmail");
             return (Criteria) this;
         }
 
-        public Criteria andU_emailIn(List<String> values) {
-            addCriterion("u_email in", values, "u_email");
+        public Criteria andUEmailIn(List<String> values) {
+            addCriterion("u_email in", values, "uEmail");
             return (Criteria) this;
         }
 
-        public Criteria andU_emailNotIn(List<String> values) {
-            addCriterion("u_email not in", values, "u_email");
+        public Criteria andUEmailNotIn(List<String> values) {
+            addCriterion("u_email not in", values, "uEmail");
             return (Criteria) this;
         }
 
-        public Criteria andU_emailBetween(String value1, String value2) {
-            addCriterion("u_email between", value1, value2, "u_email");
+        public Criteria andUEmailBetween(String value1, String value2) {
+            addCriterion("u_email between", value1, value2, "uEmail");
             return (Criteria) this;
         }
 
-        public Criteria andU_emailNotBetween(String value1, String value2) {
-            addCriterion("u_email not between", value1, value2, "u_email");
+        public Criteria andUEmailNotBetween(String value1, String value2) {
+            addCriterion("u_email not between", value1, value2, "uEmail");
             return (Criteria) this;
         }
 
-        public Criteria andU_stateIsNull() {
+        public Criteria andUStateIsNull() {
             addCriterion("u_state is null");
             return (Criteria) this;
         }
 
-        public Criteria andU_stateIsNotNull() {
+        public Criteria andUStateIsNotNull() {
             addCriterion("u_state is not null");
             return (Criteria) this;
         }
 
-        public Criteria andU_stateEqualTo(Integer value) {
-            addCriterion("u_state =", value, "u_state");
+        public Criteria andUStateEqualTo(Integer value) {
+            addCriterion("u_state =", value, "uState");
             return (Criteria) this;
         }
 
-        public Criteria andU_stateNotEqualTo(Integer value) {
-            addCriterion("u_state <>", value, "u_state");
+        public Criteria andUStateNotEqualTo(Integer value) {
+            addCriterion("u_state <>", value, "uState");
             return (Criteria) this;
         }
 
-        public Criteria andU_stateGreaterThan(Integer value) {
-            addCriterion("u_state >", value, "u_state");
+        public Criteria andUStateGreaterThan(Integer value) {
+            addCriterion("u_state >", value, "uState");
             return (Criteria) this;
         }
 
-        public Criteria andU_stateGreaterThanOrEqualTo(Integer value) {
-            addCriterion("u_state >=", value, "u_state");
+        public Criteria andUStateGreaterThanOrEqualTo(Integer value) {
+            addCriterion("u_state >=", value, "uState");
             return (Criteria) this;
         }
 
-        public Criteria andU_stateLessThan(Integer value) {
-            addCriterion("u_state <", value, "u_state");
+        public Criteria andUStateLessThan(Integer value) {
+            addCriterion("u_state <", value, "uState");
             return (Criteria) this;
         }
 
-        public Criteria andU_stateLessThanOrEqualTo(Integer value) {
-            addCriterion("u_state <=", value, "u_state");
+        public Criteria andUStateLessThanOrEqualTo(Integer value) {
+            addCriterion("u_state <=", value, "uState");
             return (Criteria) this;
         }
 
-        public Criteria andU_stateIn(List<Integer> values) {
-            addCriterion("u_state in", values, "u_state");
+        public Criteria andUStateIn(List<Integer> values) {
+            addCriterion("u_state in", values, "uState");
             return (Criteria) this;
         }
 
-        public Criteria andU_stateNotIn(List<Integer> values) {
-            addCriterion("u_state not in", values, "u_state");
+        public Criteria andUStateNotIn(List<Integer> values) {
+            addCriterion("u_state not in", values, "uState");
             return (Criteria) this;
         }
 
-        public Criteria andU_stateBetween(Integer value1, Integer value2) {
-            addCriterion("u_state between", value1, value2, "u_state");
+        public Criteria andUStateBetween(Integer value1, Integer value2) {
+            addCriterion("u_state between", value1, value2, "uState");
             return (Criteria) this;
         }
 
-        public Criteria andU_stateNotBetween(Integer value1, Integer value2) {
-            addCriterion("u_state not between", value1, value2, "u_state");
+        public Criteria andUStateNotBetween(Integer value1, Integer value2) {
+            addCriterion("u_state not between", value1, value2, "uState");
             return (Criteria) this;
         }
 
-        public Criteria andR_idIsNull() {
+        public Criteria andRIdIsNull() {
             addCriterion("r_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andR_idIsNotNull() {
+        public Criteria andRIdIsNotNull() {
             addCriterion("r_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andR_idEqualTo(Integer value) {
-            addCriterion("r_id =", value, "r_id");
+        public Criteria andRIdEqualTo(Integer value) {
+            addCriterion("r_id =", value, "rId");
             return (Criteria) this;
         }
 
-        public Criteria andR_idNotEqualTo(Integer value) {
-            addCriterion("r_id <>", value, "r_id");
+        public Criteria andRIdNotEqualTo(Integer value) {
+            addCriterion("r_id <>", value, "rId");
             return (Criteria) this;
         }
 
-        public Criteria andR_idGreaterThan(Integer value) {
-            addCriterion("r_id >", value, "r_id");
+        public Criteria andRIdGreaterThan(Integer value) {
+            addCriterion("r_id >", value, "rId");
             return (Criteria) this;
         }
 
-        public Criteria andR_idGreaterThanOrEqualTo(Integer value) {
-            addCriterion("r_id >=", value, "r_id");
+        public Criteria andRIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("r_id >=", value, "rId");
             return (Criteria) this;
         }
 
-        public Criteria andR_idLessThan(Integer value) {
-            addCriterion("r_id <", value, "r_id");
+        public Criteria andRIdLessThan(Integer value) {
+            addCriterion("r_id <", value, "rId");
             return (Criteria) this;
         }
 
-        public Criteria andR_idLessThanOrEqualTo(Integer value) {
-            addCriterion("r_id <=", value, "r_id");
+        public Criteria andRIdLessThanOrEqualTo(Integer value) {
+            addCriterion("r_id <=", value, "rId");
             return (Criteria) this;
         }
 
-        public Criteria andR_idIn(List<Integer> values) {
-            addCriterion("r_id in", values, "r_id");
+        public Criteria andRIdIn(List<Integer> values) {
+            addCriterion("r_id in", values, "rId");
             return (Criteria) this;
         }
 
-        public Criteria andR_idNotIn(List<Integer> values) {
-            addCriterion("r_id not in", values, "r_id");
+        public Criteria andRIdNotIn(List<Integer> values) {
+            addCriterion("r_id not in", values, "rId");
             return (Criteria) this;
         }
 
-        public Criteria andR_idBetween(Integer value1, Integer value2) {
-            addCriterion("r_id between", value1, value2, "r_id");
+        public Criteria andRIdBetween(Integer value1, Integer value2) {
+            addCriterion("r_id between", value1, value2, "rId");
             return (Criteria) this;
         }
 
-        public Criteria andR_idNotBetween(Integer value1, Integer value2) {
-            addCriterion("r_id not between", value1, value2, "r_id");
+        public Criteria andRIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("r_id not between", value1, value2, "rId");
             return (Criteria) this;
         }
 
-        public Criteria andU_isDelIsNull() {
-            addCriterion("u_isDel is null");
+        public Criteria andUIsDelIsNull() {
+            addCriterion("u_is_del is null");
             return (Criteria) this;
         }
 
-        public Criteria andU_isDelIsNotNull() {
-            addCriterion("u_isDel is not null");
+        public Criteria andUIsDelIsNotNull() {
+            addCriterion("u_is_del is not null");
             return (Criteria) this;
         }
 
-        public Criteria andU_isDelEqualTo(Integer value) {
-            addCriterion("u_isDel =", value, "u_isDel");
+        public Criteria andUIsDelEqualTo(Integer value) {
+            addCriterion("u_is_del =", value, "uIsDel");
             return (Criteria) this;
         }
 
-        public Criteria andU_isDelNotEqualTo(Integer value) {
-            addCriterion("u_isDel <>", value, "u_isDel");
+        public Criteria andUIsDelNotEqualTo(Integer value) {
+            addCriterion("u_is_del <>", value, "uIsDel");
             return (Criteria) this;
         }
 
-        public Criteria andU_isDelGreaterThan(Integer value) {
-            addCriterion("u_isDel >", value, "u_isDel");
+        public Criteria andUIsDelGreaterThan(Integer value) {
+            addCriterion("u_is_del >", value, "uIsDel");
             return (Criteria) this;
         }
 
-        public Criteria andU_isDelGreaterThanOrEqualTo(Integer value) {
-            addCriterion("u_isDel >=", value, "u_isDel");
+        public Criteria andUIsDelGreaterThanOrEqualTo(Integer value) {
+            addCriterion("u_is_del >=", value, "uIsDel");
             return (Criteria) this;
         }
 
-        public Criteria andU_isDelLessThan(Integer value) {
-            addCriterion("u_isDel <", value, "u_isDel");
+        public Criteria andUIsDelLessThan(Integer value) {
+            addCriterion("u_is_del <", value, "uIsDel");
             return (Criteria) this;
         }
 
-        public Criteria andU_isDelLessThanOrEqualTo(Integer value) {
-            addCriterion("u_isDel <=", value, "u_isDel");
+        public Criteria andUIsDelLessThanOrEqualTo(Integer value) {
+            addCriterion("u_is_del <=", value, "uIsDel");
             return (Criteria) this;
         }
 
-        public Criteria andU_isDelIn(List<Integer> values) {
-            addCriterion("u_isDel in", values, "u_isDel");
+        public Criteria andUIsDelIn(List<Integer> values) {
+            addCriterion("u_is_del in", values, "uIsDel");
             return (Criteria) this;
         }
 
-        public Criteria andU_isDelNotIn(List<Integer> values) {
-            addCriterion("u_isDel not in", values, "u_isDel");
+        public Criteria andUIsDelNotIn(List<Integer> values) {
+            addCriterion("u_is_del not in", values, "uIsDel");
             return (Criteria) this;
         }
 
-        public Criteria andU_isDelBetween(Integer value1, Integer value2) {
-            addCriterion("u_isDel between", value1, value2, "u_isDel");
+        public Criteria andUIsDelBetween(Integer value1, Integer value2) {
+            addCriterion("u_is_del between", value1, value2, "uIsDel");
             return (Criteria) this;
         }
 
-        public Criteria andU_isDelNotBetween(Integer value1, Integer value2) {
-            addCriterion("u_isDel not between", value1, value2, "u_isDel");
+        public Criteria andUIsDelNotBetween(Integer value1, Integer value2) {
+            addCriterion("u_is_del not between", value1, value2, "uIsDel");
             return (Criteria) this;
         }
 
-        public Criteria andU_create_timeIsNull() {
+        public Criteria andUCreateTimeIsNull() {
             addCriterion("u_create_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andU_create_timeIsNotNull() {
+        public Criteria andUCreateTimeIsNotNull() {
             addCriterion("u_create_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andU_create_timeEqualTo(Date value) {
-            addCriterion("u_create_time =", value, "u_create_time");
+        public Criteria andUCreateTimeEqualTo(Date value) {
+            addCriterion("u_create_time =", value, "uCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andU_create_timeNotEqualTo(Date value) {
-            addCriterion("u_create_time <>", value, "u_create_time");
+        public Criteria andUCreateTimeNotEqualTo(Date value) {
+            addCriterion("u_create_time <>", value, "uCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andU_create_timeGreaterThan(Date value) {
-            addCriterion("u_create_time >", value, "u_create_time");
+        public Criteria andUCreateTimeGreaterThan(Date value) {
+            addCriterion("u_create_time >", value, "uCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andU_create_timeGreaterThanOrEqualTo(Date value) {
-            addCriterion("u_create_time >=", value, "u_create_time");
+        public Criteria andUCreateTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("u_create_time >=", value, "uCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andU_create_timeLessThan(Date value) {
-            addCriterion("u_create_time <", value, "u_create_time");
+        public Criteria andUCreateTimeLessThan(Date value) {
+            addCriterion("u_create_time <", value, "uCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andU_create_timeLessThanOrEqualTo(Date value) {
-            addCriterion("u_create_time <=", value, "u_create_time");
+        public Criteria andUCreateTimeLessThanOrEqualTo(Date value) {
+            addCriterion("u_create_time <=", value, "uCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andU_create_timeIn(List<Date> values) {
-            addCriterion("u_create_time in", values, "u_create_time");
+        public Criteria andUCreateTimeIn(List<Date> values) {
+            addCriterion("u_create_time in", values, "uCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andU_create_timeNotIn(List<Date> values) {
-            addCriterion("u_create_time not in", values, "u_create_time");
+        public Criteria andUCreateTimeNotIn(List<Date> values) {
+            addCriterion("u_create_time not in", values, "uCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andU_create_timeBetween(Date value1, Date value2) {
-            addCriterion("u_create_time between", value1, value2, "u_create_time");
+        public Criteria andUCreateTimeBetween(Date value1, Date value2) {
+            addCriterion("u_create_time between", value1, value2, "uCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andU_create_timeNotBetween(Date value1, Date value2) {
-            addCriterion("u_create_time not between", value1, value2, "u_create_time");
+        public Criteria andUCreateTimeNotBetween(Date value1, Date value2) {
+            addCriterion("u_create_time not between", value1, value2, "uCreateTime");
             return (Criteria) this;
         }
 
-        public Criteria andU_update_timeIsNull() {
+        public Criteria andUUpdateTimeIsNull() {
             addCriterion("u_update_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andU_update_timeIsNotNull() {
+        public Criteria andUUpdateTimeIsNotNull() {
             addCriterion("u_update_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andU_update_timeEqualTo(Date value) {
-            addCriterion("u_update_time =", value, "u_update_time");
+        public Criteria andUUpdateTimeEqualTo(Date value) {
+            addCriterion("u_update_time =", value, "uUpdateTime");
             return (Criteria) this;
         }
 
-        public Criteria andU_update_timeNotEqualTo(Date value) {
-            addCriterion("u_update_time <>", value, "u_update_time");
+        public Criteria andUUpdateTimeNotEqualTo(Date value) {
+            addCriterion("u_update_time <>", value, "uUpdateTime");
             return (Criteria) this;
         }
 
-        public Criteria andU_update_timeGreaterThan(Date value) {
-            addCriterion("u_update_time >", value, "u_update_time");
+        public Criteria andUUpdateTimeGreaterThan(Date value) {
+            addCriterion("u_update_time >", value, "uUpdateTime");
             return (Criteria) this;
         }
 
-        public Criteria andU_update_timeGreaterThanOrEqualTo(Date value) {
-            addCriterion("u_update_time >=", value, "u_update_time");
+        public Criteria andUUpdateTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("u_update_time >=", value, "uUpdateTime");
             return (Criteria) this;
         }
 
-        public Criteria andU_update_timeLessThan(Date value) {
-            addCriterion("u_update_time <", value, "u_update_time");
+        public Criteria andUUpdateTimeLessThan(Date value) {
+            addCriterion("u_update_time <", value, "uUpdateTime");
             return (Criteria) this;
         }
 
-        public Criteria andU_update_timeLessThanOrEqualTo(Date value) {
-            addCriterion("u_update_time <=", value, "u_update_time");
+        public Criteria andUUpdateTimeLessThanOrEqualTo(Date value) {
+            addCriterion("u_update_time <=", value, "uUpdateTime");
             return (Criteria) this;
         }
 
-        public Criteria andU_update_timeIn(List<Date> values) {
-            addCriterion("u_update_time in", values, "u_update_time");
+        public Criteria andUUpdateTimeIn(List<Date> values) {
+            addCriterion("u_update_time in", values, "uUpdateTime");
             return (Criteria) this;
         }
 
-        public Criteria andU_update_timeNotIn(List<Date> values) {
-            addCriterion("u_update_time not in", values, "u_update_time");
+        public Criteria andUUpdateTimeNotIn(List<Date> values) {
+            addCriterion("u_update_time not in", values, "uUpdateTime");
             return (Criteria) this;
         }
 
-        public Criteria andU_update_timeBetween(Date value1, Date value2) {
-            addCriterion("u_update_time between", value1, value2, "u_update_time");
+        public Criteria andUUpdateTimeBetween(Date value1, Date value2) {
+            addCriterion("u_update_time between", value1, value2, "uUpdateTime");
             return (Criteria) this;
         }
 
-        public Criteria andU_update_timeNotBetween(Date value1, Date value2) {
-            addCriterion("u_update_time not between", value1, value2, "u_update_time");
+        public Criteria andUUpdateTimeNotBetween(Date value1, Date value2) {
+            addCriterion("u_update_time not between", value1, value2, "uUpdateTime");
             return (Criteria) this;
         }
     }

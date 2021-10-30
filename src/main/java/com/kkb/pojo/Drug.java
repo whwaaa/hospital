@@ -4,177 +4,173 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class Drug {
-    private Integer dr_id;
+    private Integer drId;
 
-    private String dr_url;
+    private String drUrl;
 
-    private BigDecimal dr_inPrice;
+    private BigDecimal drInprice;
 
-    private BigDecimal dr_outPrice;
+    private BigDecimal drOutprice;
 
-    private String dr_name;
+    private String drName;
 
-    private String dr_type;
+    private String drType;
 
-    private String dr_simDesc;
+    private String drSimDesc;
 
-    private String dr_expire_date;
+    private String drExpireDate;
 
-    private String dr_detaDesc;
+    private String drDetaDesc;
 
-    private String dr_fatory;
+    private String drFatory;
 
-    private String dr_direction;
+    private String drDirection;
 
-    private String dr_remark;
+    private String drRemark;
 
-    private Integer dr_number;
+    private Integer drNumber;
 
-    private Integer dr_isDel;
+    private Integer drIsDel;
 
-    private Date dr_create_time;
+    private Date drCreateTime;
 
-    private Date dr_update_time;
+    private Date drUpdateTime;
 
-    private Integer u_id;
+    private Integer uId;
 
-    public Drug(){
-        dr_isDel = 0;
+    public Integer getDrId() {
+        return drId;
     }
 
-    public Integer getDr_id() {
-        return dr_id;
+    public void setDrId(Integer drId) {
+        this.drId = drId;
     }
 
-    public void setDr_id(Integer dr_id) {
-        this.dr_id = dr_id;
+    public String getDrUrl() {
+        return drUrl;
     }
 
-    public String getDr_url() {
-        return dr_url;
+    public void setDrUrl(String drUrl) {
+        this.drUrl = drUrl == null ? null : drUrl.trim();
     }
 
-    public void setDr_url(String dr_url) {
-        this.dr_url = dr_url == null ? null : dr_url.trim();
+    public BigDecimal getDrInprice() {
+        return drInprice;
     }
 
-    public BigDecimal getDr_inPrice() {
-        return dr_inPrice;
+    public void setDrInprice(BigDecimal drInprice) {
+        this.drInprice = drInprice;
     }
 
-    public void setDr_inPrice(BigDecimal dr_inPrice) {
-        this.dr_inPrice = dr_inPrice;
+    public BigDecimal getDrOutprice() {
+        return drOutprice;
     }
 
-    public BigDecimal getDr_outPrice() {
-        return dr_outPrice;
+    public void setDrOutprice(BigDecimal drOutprice) {
+        this.drOutprice = drOutprice;
     }
 
-    public void setDr_outPrice(BigDecimal dr_outPrice) {
-        this.dr_outPrice = dr_outPrice;
+    public String getDrName() {
+        return drName;
     }
 
-    public String getDr_name() {
-        return dr_name;
+    public void setDrName(String drName) {
+        this.drName = drName == null ? null : drName.trim();
     }
 
-    public void setDr_name(String dr_name) {
-        this.dr_name = dr_name == null ? null : dr_name.trim();
+    public String getDrType() {
+        return drType;
     }
 
-    public String getDr_type() {
-        return dr_type;
+    public void setDrType(String drType) {
+        this.drType = drType == null ? null : drType.trim();
     }
 
-    public void setDr_type(String dr_type) {
-        this.dr_type = dr_type == null ? null : dr_type.trim();
+    public String getDrSimDesc() {
+        return drSimDesc;
     }
 
-    public String getDr_simDesc() {
-        return dr_simDesc;
+    public void setDrSimDesc(String drSimDesc) {
+        this.drSimDesc = drSimDesc == null ? null : drSimDesc.trim();
     }
 
-    public void setDr_simDesc(String dr_simDesc) {
-        this.dr_simDesc = dr_simDesc == null ? null : dr_simDesc.trim();
+    public String getDrExpireDate() {
+        return drExpireDate;
     }
 
-    public String getDr_expire_date() {
-        return dr_expire_date;
+    public void setDrExpireDate(String drExpireDate) {
+        this.drExpireDate = drExpireDate == null ? null : drExpireDate.trim();
     }
 
-    public void setDr_expire_date(String dr_expire_date) {
-        this.dr_expire_date = dr_expire_date == null ? null : dr_expire_date.trim();
+    public String getDrDetaDesc() {
+        return drDetaDesc;
     }
 
-    public String getDr_detaDesc() {
-        return dr_detaDesc;
+    public void setDrDetaDesc(String drDetaDesc) {
+        this.drDetaDesc = drDetaDesc == null ? null : drDetaDesc.trim();
     }
 
-    public void setDr_detaDesc(String dr_detaDesc) {
-        this.dr_detaDesc = dr_detaDesc == null ? null : dr_detaDesc.trim();
+    public String getDrFatory() {
+        return drFatory;
     }
 
-    public String getDr_fatory() {
-        return dr_fatory;
+    public void setDrFatory(String drFatory) {
+        this.drFatory = drFatory == null ? null : drFatory.trim();
     }
 
-    public void setDr_fatory(String dr_fatory) {
-        this.dr_fatory = dr_fatory == null ? null : dr_fatory.trim();
+    public String getDrDirection() {
+        return drDirection;
     }
 
-    public String getDr_direction() {
-        return dr_direction;
+    public void setDrDirection(String drDirection) {
+        this.drDirection = drDirection == null ? null : drDirection.trim();
     }
 
-    public void setDr_direction(String dr_direction) {
-        this.dr_direction = dr_direction == null ? null : dr_direction.trim();
+    public String getDrRemark() {
+        return drRemark;
     }
 
-    public String getDr_remark() {
-        return dr_remark;
+    public void setDrRemark(String drRemark) {
+        this.drRemark = drRemark == null ? null : drRemark.trim();
     }
 
-    public void setDr_remark(String dr_remark) {
-        this.dr_remark = dr_remark == null ? null : dr_remark.trim();
+    public Integer getDrNumber() {
+        return drNumber;
     }
 
-    public Integer getDr_number() {
-        return dr_number;
+    public void setDrNumber(Integer drNumber) {
+        this.drNumber = drNumber;
     }
 
-    public void setDr_number(Integer dr_number) {
-        this.dr_number = dr_number;
+    public Integer getDrIsDel() {
+        return drIsDel;
     }
 
-    public Integer getDr_isDel() {
-        return dr_isDel;
+    public void setDrIsDel(Integer drIsDel) {
+        this.drIsDel = drIsDel;
     }
 
-    public void setDr_isDel(Integer dr_isDel) {
-        this.dr_isDel = dr_isDel;
+    public Date getDrCreateTime() {
+        return drCreateTime;
     }
 
-    public Date getDr_create_time() {
-        return dr_create_time;
+    public void setDrCreateTime(Date drCreateTime) {
+        this.drCreateTime = drCreateTime;
     }
 
-    public void setDr_create_time(Date dr_create_time) {
-        this.dr_create_time = dr_create_time;
+    public Date getDrUpdateTime() {
+        return drUpdateTime;
     }
 
-    public Date getDr_update_time() {
-        return dr_update_time;
+    public void setDrUpdateTime(Date drUpdateTime) {
+        this.drUpdateTime = drUpdateTime;
     }
 
-    public void setDr_update_time(Date dr_update_time) {
-        this.dr_update_time = dr_update_time;
+    public Integer getuId() {
+        return uId;
     }
 
-    public Integer getU_id() {
-        return u_id;
-    }
-
-    public void setU_id(Integer u_id) {
-        this.u_id = u_id;
+    public void setuId(Integer uId) {
+        this.uId = uId;
     }
 }

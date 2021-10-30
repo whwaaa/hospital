@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kkb.mapper.PricepeopleMapper">
-  <resultMap id="BaseResultMap" type="com.kkb.pojo.Pricepeople">
-    <id column="chaP_beH_id" jdbcType="INTEGER" property="chaP_beH_id" />
-    <result column="chaP_id" jdbcType="INTEGER" property="chaP_id" />
-    <result column="beH_id" jdbcType="INTEGER" property="beH_id" />
+<mapper namespace="com.kkb.mapper.PricePeopleMapper">
+  <resultMap id="BaseResultMap" type="com.kkb.pojo.PricePeople">
+    <id column="p_id" jdbcType="INTEGER" property="pId" />
+    <result column="chap_id" jdbcType="INTEGER" property="chapId" />
+    <result column="beh_id" jdbcType="INTEGER" property="behId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,15 +65,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    chaP_beH_id, chaP_id, beH_id
+    p_id, chap_id, beh_id
   </sql>
-  <select id="selectByExample" parameterType="com.kkb.pojo.PricepeopleExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.kkb.pojo.PricePeopleExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from pricepeople
+    from price_people
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -84,67 +84,67 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from pricepeople
-    where chaP_beH_id = #{chaP_beH_id,jdbcType=INTEGER}
+    from price_people
+    where p_id = #{pId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from pricepeople
-    where chaP_beH_id = #{chaP_beH_id,jdbcType=INTEGER}
+    delete from price_people
+    where p_id = #{pId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.kkb.pojo.PricepeopleExample">
-    delete from pricepeople
+  <delete id="deleteByExample" parameterType="com.kkb.pojo.PricePeopleExample">
+    delete from price_people
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.kkb.pojo.Pricepeople">
-    insert into pricepeople (chaP_beH_id, chaP_id, beH_id
+  <insert id="insert" parameterType="com.kkb.pojo.PricePeople">
+    insert into price_people (p_id, chap_id, beh_id
       )
-    values (#{chaP_beH_id,jdbcType=INTEGER}, #{chaP_id,jdbcType=INTEGER}, #{beH_id,jdbcType=INTEGER}
+    values (#{pId,jdbcType=INTEGER}, #{chapId,jdbcType=INTEGER}, #{behId,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.kkb.pojo.Pricepeople">
-    insert into pricepeople
+  <insert id="insertSelective" parameterType="com.kkb.pojo.PricePeople">
+    insert into price_people
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="chaP_beH_id != null">
-        chaP_beH_id,
+      <if test="pId != null">
+        p_id,
       </if>
-      <if test="chaP_id != null">
-        chaP_id,
+      <if test="chapId != null">
+        chap_id,
       </if>
-      <if test="beH_id != null">
-        beH_id,
+      <if test="behId != null">
+        beh_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="chaP_beH_id != null">
-        #{chaP_beH_id,jdbcType=INTEGER},
+      <if test="pId != null">
+        #{pId,jdbcType=INTEGER},
       </if>
-      <if test="chaP_id != null">
-        #{chaP_id,jdbcType=INTEGER},
+      <if test="chapId != null">
+        #{chapId,jdbcType=INTEGER},
       </if>
-      <if test="beH_id != null">
-        #{beH_id,jdbcType=INTEGER},
+      <if test="behId != null">
+        #{behId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.kkb.pojo.PricepeopleExample" resultType="java.lang.Long">
-    select count(*) from pricepeople
+  <select id="countByExample" parameterType="com.kkb.pojo.PricePeopleExample" resultType="java.lang.Long">
+    select count(*) from price_people
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update pricepeople
+    update price_people
     <set>
-      <if test="record.chaP_beH_id != null">
-        chaP_beH_id = #{record.chaP_beH_id,jdbcType=INTEGER},
+      <if test="record.pId != null">
+        p_id = #{record.pId,jdbcType=INTEGER},
       </if>
-      <if test="record.chaP_id != null">
-        chaP_id = #{record.chaP_id,jdbcType=INTEGER},
+      <if test="record.chapId != null">
+        chap_id = #{record.chapId,jdbcType=INTEGER},
       </if>
-      <if test="record.beH_id != null">
-        beH_id = #{record.beH_id,jdbcType=INTEGER},
+      <if test="record.behId != null">
+        beh_id = #{record.behId,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -152,30 +152,30 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update pricepeople
-    set chaP_beH_id = #{record.chaP_beH_id,jdbcType=INTEGER},
-      chaP_id = #{record.chaP_id,jdbcType=INTEGER},
-      beH_id = #{record.beH_id,jdbcType=INTEGER}
+    update price_people
+    set p_id = #{record.pId,jdbcType=INTEGER},
+      chap_id = #{record.chapId,jdbcType=INTEGER},
+      beh_id = #{record.behId,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.kkb.pojo.Pricepeople">
-    update pricepeople
+  <update id="updateByPrimaryKeySelective" parameterType="com.kkb.pojo.PricePeople">
+    update price_people
     <set>
-      <if test="chaP_id != null">
-        chaP_id = #{chaP_id,jdbcType=INTEGER},
+      <if test="chapId != null">
+        chap_id = #{chapId,jdbcType=INTEGER},
       </if>
-      <if test="beH_id != null">
-        beH_id = #{beH_id,jdbcType=INTEGER},
+      <if test="behId != null">
+        beh_id = #{behId,jdbcType=INTEGER},
       </if>
     </set>
-    where chaP_beH_id = #{chaP_beH_id,jdbcType=INTEGER}
+    where p_id = #{pId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.kkb.pojo.Pricepeople">
-    update pricepeople
-    set chaP_id = #{chaP_id,jdbcType=INTEGER},
-      beH_id = #{beH_id,jdbcType=INTEGER}
-    where chaP_beH_id = #{chaP_beH_id,jdbcType=INTEGER}
+  <update id="updateByPrimaryKey" parameterType="com.kkb.pojo.PricePeople">
+    update price_people
+    set chap_id = #{chapId,jdbcType=INTEGER},
+      beh_id = #{behId,jdbcType=INTEGER}
+    where p_id = #{pId,jdbcType=INTEGER}
   </update>
 </mapper>

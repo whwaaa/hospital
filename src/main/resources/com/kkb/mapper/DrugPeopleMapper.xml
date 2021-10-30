@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.kkb.mapper.DrugpeopleMapper">
-  <resultMap id="BaseResultMap" type="com.kkb.pojo.Drugpeople">
-    <id column="dr_p_id" jdbcType="INTEGER" property="dr_p_id" />
-    <result column="dr_id" jdbcType="INTEGER" property="dr_id" />
-    <result column="peopleId" jdbcType="INTEGER" property="peopleId" />
-    <result column="dr_number" jdbcType="INTEGER" property="dr_number" />
-    <result column="dr_give_number" jdbcType="INTEGER" property="dr_give_number" />
+<mapper namespace="com.kkb.mapper.DrugPeopleMapper">
+  <resultMap id="BaseResultMap" type="com.kkb.pojo.DrugPeople">
+    <id column="drbeh_id" jdbcType="INTEGER" property="drbehId" />
+    <result column="dr_id" jdbcType="INTEGER" property="drId" />
+    <result column="beh_id" jdbcType="INTEGER" property="behId" />
+    <result column="dr_number" jdbcType="INTEGER" property="drNumber" />
+    <result column="dr_give_number" jdbcType="INTEGER" property="drGiveNumber" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,15 +67,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    dr_p_id, dr_id, peopleId, dr_number, dr_give_number
+    drbeh_id, dr_id, beh_id, dr_number, dr_give_number
   </sql>
-  <select id="selectByExample" parameterType="com.kkb.pojo.DrugpeopleExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.kkb.pojo.DrugPeopleExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from drugpeople
+    from drug_people
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -86,85 +86,85 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from drugpeople
-    where dr_p_id = #{dr_p_id,jdbcType=INTEGER}
+    from drug_people
+    where drbeh_id = #{drbehId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from drugpeople
-    where dr_p_id = #{dr_p_id,jdbcType=INTEGER}
+    delete from drug_people
+    where drbeh_id = #{drbehId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.kkb.pojo.DrugpeopleExample">
-    delete from drugpeople
+  <delete id="deleteByExample" parameterType="com.kkb.pojo.DrugPeopleExample">
+    delete from drug_people
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.kkb.pojo.Drugpeople">
-    insert into drugpeople (dr_p_id, dr_id, peopleId, 
+  <insert id="insert" parameterType="com.kkb.pojo.DrugPeople">
+    insert into drug_people (drbeh_id, dr_id, beh_id, 
       dr_number, dr_give_number)
-    values (#{dr_p_id,jdbcType=INTEGER}, #{dr_id,jdbcType=INTEGER}, #{peopleId,jdbcType=INTEGER}, 
-      #{dr_number,jdbcType=INTEGER}, #{dr_give_number,jdbcType=INTEGER})
+    values (#{drbehId,jdbcType=INTEGER}, #{drId,jdbcType=INTEGER}, #{behId,jdbcType=INTEGER}, 
+      #{drNumber,jdbcType=INTEGER}, #{drGiveNumber,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.kkb.pojo.Drugpeople">
-    insert into drugpeople
+  <insert id="insertSelective" parameterType="com.kkb.pojo.DrugPeople">
+    insert into drug_people
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="dr_p_id != null">
-        dr_p_id,
+      <if test="drbehId != null">
+        drbeh_id,
       </if>
-      <if test="dr_id != null">
+      <if test="drId != null">
         dr_id,
       </if>
-      <if test="peopleId != null">
-        peopleId,
+      <if test="behId != null">
+        beh_id,
       </if>
-      <if test="dr_number != null">
+      <if test="drNumber != null">
         dr_number,
       </if>
-      <if test="dr_give_number != null">
+      <if test="drGiveNumber != null">
         dr_give_number,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="dr_p_id != null">
-        #{dr_p_id,jdbcType=INTEGER},
+      <if test="drbehId != null">
+        #{drbehId,jdbcType=INTEGER},
       </if>
-      <if test="dr_id != null">
-        #{dr_id,jdbcType=INTEGER},
+      <if test="drId != null">
+        #{drId,jdbcType=INTEGER},
       </if>
-      <if test="peopleId != null">
-        #{peopleId,jdbcType=INTEGER},
+      <if test="behId != null">
+        #{behId,jdbcType=INTEGER},
       </if>
-      <if test="dr_number != null">
-        #{dr_number,jdbcType=INTEGER},
+      <if test="drNumber != null">
+        #{drNumber,jdbcType=INTEGER},
       </if>
-      <if test="dr_give_number != null">
-        #{dr_give_number,jdbcType=INTEGER},
+      <if test="drGiveNumber != null">
+        #{drGiveNumber,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.kkb.pojo.DrugpeopleExample" resultType="java.lang.Long">
-    select count(*) from drugpeople
+  <select id="countByExample" parameterType="com.kkb.pojo.DrugPeopleExample" resultType="java.lang.Long">
+    select count(*) from drug_people
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update drugpeople
+    update drug_people
     <set>
-      <if test="record.dr_p_id != null">
-        dr_p_id = #{record.dr_p_id,jdbcType=INTEGER},
+      <if test="record.drbehId != null">
+        drbeh_id = #{record.drbehId,jdbcType=INTEGER},
       </if>
-      <if test="record.dr_id != null">
-        dr_id = #{record.dr_id,jdbcType=INTEGER},
+      <if test="record.drId != null">
+        dr_id = #{record.drId,jdbcType=INTEGER},
       </if>
-      <if test="record.peopleId != null">
-        peopleId = #{record.peopleId,jdbcType=INTEGER},
+      <if test="record.behId != null">
+        beh_id = #{record.behId,jdbcType=INTEGER},
       </if>
-      <if test="record.dr_number != null">
-        dr_number = #{record.dr_number,jdbcType=INTEGER},
+      <if test="record.drNumber != null">
+        dr_number = #{record.drNumber,jdbcType=INTEGER},
       </if>
-      <if test="record.dr_give_number != null">
-        dr_give_number = #{record.dr_give_number,jdbcType=INTEGER},
+      <if test="record.drGiveNumber != null">
+        dr_give_number = #{record.drGiveNumber,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -172,40 +172,40 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update drugpeople
-    set dr_p_id = #{record.dr_p_id,jdbcType=INTEGER},
-      dr_id = #{record.dr_id,jdbcType=INTEGER},
-      peopleId = #{record.peopleId,jdbcType=INTEGER},
-      dr_number = #{record.dr_number,jdbcType=INTEGER},
-      dr_give_number = #{record.dr_give_number,jdbcType=INTEGER}
+    update drug_people
+    set drbeh_id = #{record.drbehId,jdbcType=INTEGER},
+      dr_id = #{record.drId,jdbcType=INTEGER},
+      beh_id = #{record.behId,jdbcType=INTEGER},
+      dr_number = #{record.drNumber,jdbcType=INTEGER},
+      dr_give_number = #{record.drGiveNumber,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.kkb.pojo.Drugpeople">
-    update drugpeople
+  <update id="updateByPrimaryKeySelective" parameterType="com.kkb.pojo.DrugPeople">
+    update drug_people
     <set>
-      <if test="dr_id != null">
-        dr_id = #{dr_id,jdbcType=INTEGER},
+      <if test="drId != null">
+        dr_id = #{drId,jdbcType=INTEGER},
       </if>
-      <if test="peopleId != null">
-        peopleId = #{peopleId,jdbcType=INTEGER},
+      <if test="behId != null">
+        beh_id = #{behId,jdbcType=INTEGER},
       </if>
-      <if test="dr_number != null">
-        dr_number = #{dr_number,jdbcType=INTEGER},
+      <if test="drNumber != null">
+        dr_number = #{drNumber,jdbcType=INTEGER},
       </if>
-      <if test="dr_give_number != null">
-        dr_give_number = #{dr_give_number,jdbcType=INTEGER},
+      <if test="drGiveNumber != null">
+        dr_give_number = #{drGiveNumber,jdbcType=INTEGER},
       </if>
     </set>
-    where dr_p_id = #{dr_p_id,jdbcType=INTEGER}
+    where drbeh_id = #{drbehId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.kkb.pojo.Drugpeople">
-    update drugpeople
-    set dr_id = #{dr_id,jdbcType=INTEGER},
-      peopleId = #{peopleId,jdbcType=INTEGER},
-      dr_number = #{dr_number,jdbcType=INTEGER},
-      dr_give_number = #{dr_give_number,jdbcType=INTEGER}
-    where dr_p_id = #{dr_p_id,jdbcType=INTEGER}
+  <update id="updateByPrimaryKey" parameterType="com.kkb.pojo.DrugPeople">
+    update drug_people
+    set dr_id = #{drId,jdbcType=INTEGER},
+      beh_id = #{behId,jdbcType=INTEGER},
+      dr_number = #{drNumber,jdbcType=INTEGER},
+      dr_give_number = #{drGiveNumber,jdbcType=INTEGER}
+    where drbeh_id = #{drbehId,jdbcType=INTEGER}
   </update>
 </mapper>

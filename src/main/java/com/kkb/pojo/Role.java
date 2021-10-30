@@ -3,77 +3,73 @@ package com.kkb.pojo;
 import java.util.Date;
 
 public class Role {
-    private Integer r_id;
+    private Integer rId;
 
-    private String r_name;
+    private String rName;
 
-    private Integer r_state;
+    private Integer rState;
 
-    private Integer r_isDel;
+    private Integer rIsDel;
 
-    private Date r_create_time;
+    private Date rCreateTime;
 
-    private Date _update_time;
+    private Date rUpdateTime;
 
-    private Integer u_id;
+    private Integer uId;
 
-    public Role(){
-        r_isDel = 0;
+    public Integer getrId() {
+        return rId;
     }
 
-    public Integer getR_id() {
-        return r_id;
+    public void setrId(Integer rId) {
+        this.rId = rId;
     }
 
-    public void setR_id(Integer r_id) {
-        this.r_id = r_id;
+    public String getrName() {
+        return rName;
     }
 
-    public String getR_name() {
-        return r_name;
+    public void setrName(String rName) {
+        this.rName = rName == null ? null : rName.trim();
     }
 
-    public void setR_name(String r_name) {
-        this.r_name = r_name == null ? null : r_name.trim();
+    public Integer getrState() {
+        return rState;
     }
 
-    public Integer getR_state() {
-        return r_state;
+    public void setrState(Integer rState) {
+        this.rState = rState;
     }
 
-    public void setR_state(Integer r_state) {
-        this.r_state = r_state;
+    public Integer getrIsDel() {
+        return rIsDel;
     }
 
-    public Integer getR_isDel() {
-        return r_isDel;
+    public void setrIsDel(Integer rIsDel) {
+        this.rIsDel = rIsDel;
     }
 
-    public void setR_isDel(Integer r_isDel) {
-        this.r_isDel = r_isDel;
+    public Date getrCreateTime() {
+        return rCreateTime;
     }
 
-    public Date getR_create_time() {
-        return r_create_time;
+    public void setrCreateTime(Date rCreateTime) {
+        this.rCreateTime = rCreateTime;
     }
 
-    public void setR_create_time(Date r_create_time) {
-        this.r_create_time = r_create_time;
+    public Date getrUpdateTime() {
+        return rUpdateTime;
     }
 
-    public Date get_update_time() {
-        return _update_time;
+    public void setrUpdateTime(Date rUpdateTime) {
+        this.rUpdateTime = rUpdateTime;
     }
 
-    public void set_update_time(Date _update_time) {
-        this._update_time = _update_time;
+    public Integer getuId() {
+        return uId;
     }
 
-    public Integer getU_id() {
-        return u_id;
-    }
-
-    public void setU_id(Integer u_id) {
-        this.u_id = u_id;
+    public void setuId(Integer uId) {
+        this.uId = uId;
     }
 }

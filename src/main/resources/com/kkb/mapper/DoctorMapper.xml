@@ -2,23 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kkb.mapper.DoctorMapper">
   <resultMap id="BaseResultMap" type="com.kkb.pojo.Doctor">
-    <id column="d_id" jdbcType="INTEGER" property="d_id" />
-    <result column="d_idCar" jdbcType="VARCHAR" property="d_idCar" />
-    <result column="d_phone" jdbcType="VARCHAR" property="d_phone" />
-    <result column="d_telPhone" jdbcType="VARCHAR" property="d_telPhone" />
-    <result column="d_sex" jdbcType="INTEGER" property="d_sex" />
-    <result column="d_birthday" jdbcType="DATE" property="d_birthday" />
-    <result column="d_age" jdbcType="INTEGER" property="d_age" />
-    <result column="d_email" jdbcType="VARCHAR" property="d_email" />
-    <result column="d_keshi" jdbcType="VARCHAR" property="d_keshi" />
-    <result column="d_xueli" jdbcType="VARCHAR" property="d_xueli" />
-    <result column="d_desc" jdbcType="VARCHAR" property="d_desc" />
-    <result column="d_inTime" jdbcType="DATE" property="d_inTime" />
-    <result column="d_state" jdbcType="INTEGER" property="d_state" />
-    <result column="d_isDel" jdbcType="INTEGER" property="d_isDel" />
-    <result column="d_create_time" jdbcType="TIMESTAMP" property="d_create_time" />
-    <result column="d_update_time" jdbcType="TIMESTAMP" property="d_update_time" />
-    <result column="u_id" jdbcType="INTEGER" property="u_id" />
+    <id column="d_id" jdbcType="INTEGER" property="dId" />
+    <result column="d_id_car" jdbcType="VARCHAR" property="dIdCar" />
+    <result column="d_phone" jdbcType="VARCHAR" property="dPhone" />
+    <result column="d_telphone" jdbcType="VARCHAR" property="dTelphone" />
+    <result column="d_sex" jdbcType="INTEGER" property="dSex" />
+    <result column="d_birthday" jdbcType="DATE" property="dBirthday" />
+    <result column="d_age" jdbcType="INTEGER" property="dAge" />
+    <result column="d_email" jdbcType="VARCHAR" property="dEmail" />
+    <result column="d_keshi" jdbcType="VARCHAR" property="dKeshi" />
+    <result column="d_xueli" jdbcType="VARCHAR" property="dXueli" />
+    <result column="d_desc" jdbcType="VARCHAR" property="dDesc" />
+    <result column="d_intime" jdbcType="DATE" property="dIntime" />
+    <result column="d_state" jdbcType="INTEGER" property="dState" />
+    <result column="d_is_del" jdbcType="INTEGER" property="dIsDel" />
+    <result column="d_create_time" jdbcType="TIMESTAMP" property="dCreateTime" />
+    <result column="d_update_time" jdbcType="TIMESTAMP" property="dUpdateTime" />
+    <result column="u_id" jdbcType="INTEGER" property="uId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -79,8 +79,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    d_id, d_idCar, d_phone, d_telPhone, d_sex, d_birthday, d_age, d_email, d_keshi, d_xueli, 
-    d_desc, d_inTime, d_state, d_isDel, d_create_time, d_update_time, u_id
+    d_id, d_id_car, d_phone, d_telphone, d_sex, d_birthday, d_age, d_email, d_keshi, 
+    d_xueli, d_desc, d_intime, d_state, d_is_del, d_create_time, d_update_time, u_id
   </sql>
   <select id="selectByExample" parameterType="com.kkb.pojo.DoctorExample" resultMap="BaseResultMap">
     select
@@ -100,11 +100,11 @@
     select 
     <include refid="Base_Column_List" />
     from doctor
-    where d_id = #{d_id,jdbcType=INTEGER}
+    where d_id = #{dId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from doctor
-    where d_id = #{d_id,jdbcType=INTEGER}
+    where d_id = #{dId,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.kkb.pojo.DoctorExample">
     delete from doctor
@@ -113,125 +113,125 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.kkb.pojo.Doctor">
-    insert into doctor (d_id, d_idCar, d_phone, 
-      d_telPhone, d_sex, d_birthday, 
+    insert into doctor (d_id, d_id_car, d_phone, 
+      d_telphone, d_sex, d_birthday, 
       d_age, d_email, d_keshi, 
-      d_xueli, d_desc, d_inTime, 
-      d_state, d_isDel, d_create_time, 
+      d_xueli, d_desc, d_intime, 
+      d_state, d_is_del, d_create_time, 
       d_update_time, u_id)
-    values (#{d_id,jdbcType=INTEGER}, #{d_idCar,jdbcType=VARCHAR}, #{d_phone,jdbcType=VARCHAR}, 
-      #{d_telPhone,jdbcType=VARCHAR}, #{d_sex,jdbcType=INTEGER}, #{d_birthday,jdbcType=DATE}, 
-      #{d_age,jdbcType=INTEGER}, #{d_email,jdbcType=VARCHAR}, #{d_keshi,jdbcType=VARCHAR}, 
-      #{d_xueli,jdbcType=VARCHAR}, #{d_desc,jdbcType=VARCHAR}, #{d_inTime,jdbcType=DATE}, 
-      #{d_state,jdbcType=INTEGER}, #{d_isDel,jdbcType=INTEGER}, #{d_create_time,jdbcType=TIMESTAMP}, 
-      #{d_update_time,jdbcType=TIMESTAMP}, #{u_id,jdbcType=INTEGER})
+    values (#{dId,jdbcType=INTEGER}, #{dIdCar,jdbcType=VARCHAR}, #{dPhone,jdbcType=VARCHAR}, 
+      #{dTelphone,jdbcType=VARCHAR}, #{dSex,jdbcType=INTEGER}, #{dBirthday,jdbcType=DATE}, 
+      #{dAge,jdbcType=INTEGER}, #{dEmail,jdbcType=VARCHAR}, #{dKeshi,jdbcType=VARCHAR}, 
+      #{dXueli,jdbcType=VARCHAR}, #{dDesc,jdbcType=VARCHAR}, #{dIntime,jdbcType=DATE}, 
+      #{dState,jdbcType=INTEGER}, #{dIsDel,jdbcType=INTEGER}, #{dCreateTime,jdbcType=TIMESTAMP}, 
+      #{dUpdateTime,jdbcType=TIMESTAMP}, #{uId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.kkb.pojo.Doctor">
     insert into doctor
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="d_id != null">
+      <if test="dId != null">
         d_id,
       </if>
-      <if test="d_idCar != null">
-        d_idCar,
+      <if test="dIdCar != null">
+        d_id_car,
       </if>
-      <if test="d_phone != null">
+      <if test="dPhone != null">
         d_phone,
       </if>
-      <if test="d_telPhone != null">
-        d_telPhone,
+      <if test="dTelphone != null">
+        d_telphone,
       </if>
-      <if test="d_sex != null">
+      <if test="dSex != null">
         d_sex,
       </if>
-      <if test="d_birthday != null">
+      <if test="dBirthday != null">
         d_birthday,
       </if>
-      <if test="d_age != null">
+      <if test="dAge != null">
         d_age,
       </if>
-      <if test="d_email != null">
+      <if test="dEmail != null">
         d_email,
       </if>
-      <if test="d_keshi != null">
+      <if test="dKeshi != null">
         d_keshi,
       </if>
-      <if test="d_xueli != null">
+      <if test="dXueli != null">
         d_xueli,
       </if>
-      <if test="d_desc != null">
+      <if test="dDesc != null">
         d_desc,
       </if>
-      <if test="d_inTime != null">
-        d_inTime,
+      <if test="dIntime != null">
+        d_intime,
       </if>
-      <if test="d_state != null">
+      <if test="dState != null">
         d_state,
       </if>
-      <if test="d_isDel != null">
-        d_isDel,
+      <if test="dIsDel != null">
+        d_is_del,
       </if>
-      <if test="d_create_time != null">
+      <if test="dCreateTime != null">
         d_create_time,
       </if>
-      <if test="d_update_time != null">
+      <if test="dUpdateTime != null">
         d_update_time,
       </if>
-      <if test="u_id != null">
+      <if test="uId != null">
         u_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="d_id != null">
-        #{d_id,jdbcType=INTEGER},
+      <if test="dId != null">
+        #{dId,jdbcType=INTEGER},
       </if>
-      <if test="d_idCar != null">
-        #{d_idCar,jdbcType=VARCHAR},
+      <if test="dIdCar != null">
+        #{dIdCar,jdbcType=VARCHAR},
       </if>
-      <if test="d_phone != null">
-        #{d_phone,jdbcType=VARCHAR},
+      <if test="dPhone != null">
+        #{dPhone,jdbcType=VARCHAR},
       </if>
-      <if test="d_telPhone != null">
-        #{d_telPhone,jdbcType=VARCHAR},
+      <if test="dTelphone != null">
+        #{dTelphone,jdbcType=VARCHAR},
       </if>
-      <if test="d_sex != null">
-        #{d_sex,jdbcType=INTEGER},
+      <if test="dSex != null">
+        #{dSex,jdbcType=INTEGER},
       </if>
-      <if test="d_birthday != null">
-        #{d_birthday,jdbcType=DATE},
+      <if test="dBirthday != null">
+        #{dBirthday,jdbcType=DATE},
       </if>
-      <if test="d_age != null">
-        #{d_age,jdbcType=INTEGER},
+      <if test="dAge != null">
+        #{dAge,jdbcType=INTEGER},
       </if>
-      <if test="d_email != null">
-        #{d_email,jdbcType=VARCHAR},
+      <if test="dEmail != null">
+        #{dEmail,jdbcType=VARCHAR},
       </if>
-      <if test="d_keshi != null">
-        #{d_keshi,jdbcType=VARCHAR},
+      <if test="dKeshi != null">
+        #{dKeshi,jdbcType=VARCHAR},
       </if>
-      <if test="d_xueli != null">
-        #{d_xueli,jdbcType=VARCHAR},
+      <if test="dXueli != null">
+        #{dXueli,jdbcType=VARCHAR},
       </if>
-      <if test="d_desc != null">
-        #{d_desc,jdbcType=VARCHAR},
+      <if test="dDesc != null">
+        #{dDesc,jdbcType=VARCHAR},
       </if>
-      <if test="d_inTime != null">
-        #{d_inTime,jdbcType=DATE},
+      <if test="dIntime != null">
+        #{dIntime,jdbcType=DATE},
       </if>
-      <if test="d_state != null">
-        #{d_state,jdbcType=INTEGER},
+      <if test="dState != null">
+        #{dState,jdbcType=INTEGER},
       </if>
-      <if test="d_isDel != null">
-        #{d_isDel,jdbcType=INTEGER},
+      <if test="dIsDel != null">
+        #{dIsDel,jdbcType=INTEGER},
       </if>
-      <if test="d_create_time != null">
-        #{d_create_time,jdbcType=TIMESTAMP},
+      <if test="dCreateTime != null">
+        #{dCreateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="d_update_time != null">
-        #{d_update_time,jdbcType=TIMESTAMP},
+      <if test="dUpdateTime != null">
+        #{dUpdateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="u_id != null">
-        #{u_id,jdbcType=INTEGER},
+      <if test="uId != null">
+        #{uId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -244,56 +244,56 @@
   <update id="updateByExampleSelective" parameterType="map">
     update doctor
     <set>
-      <if test="record.d_id != null">
-        d_id = #{record.d_id,jdbcType=INTEGER},
+      <if test="record.dId != null">
+        d_id = #{record.dId,jdbcType=INTEGER},
       </if>
-      <if test="record.d_idCar != null">
-        d_idCar = #{record.d_idCar,jdbcType=VARCHAR},
+      <if test="record.dIdCar != null">
+        d_id_car = #{record.dIdCar,jdbcType=VARCHAR},
       </if>
-      <if test="record.d_phone != null">
-        d_phone = #{record.d_phone,jdbcType=VARCHAR},
+      <if test="record.dPhone != null">
+        d_phone = #{record.dPhone,jdbcType=VARCHAR},
       </if>
-      <if test="record.d_telPhone != null">
-        d_telPhone = #{record.d_telPhone,jdbcType=VARCHAR},
+      <if test="record.dTelphone != null">
+        d_telphone = #{record.dTelphone,jdbcType=VARCHAR},
       </if>
-      <if test="record.d_sex != null">
-        d_sex = #{record.d_sex,jdbcType=INTEGER},
+      <if test="record.dSex != null">
+        d_sex = #{record.dSex,jdbcType=INTEGER},
       </if>
-      <if test="record.d_birthday != null">
-        d_birthday = #{record.d_birthday,jdbcType=DATE},
+      <if test="record.dBirthday != null">
+        d_birthday = #{record.dBirthday,jdbcType=DATE},
       </if>
-      <if test="record.d_age != null">
-        d_age = #{record.d_age,jdbcType=INTEGER},
+      <if test="record.dAge != null">
+        d_age = #{record.dAge,jdbcType=INTEGER},
       </if>
-      <if test="record.d_email != null">
-        d_email = #{record.d_email,jdbcType=VARCHAR},
+      <if test="record.dEmail != null">
+        d_email = #{record.dEmail,jdbcType=VARCHAR},
       </if>
-      <if test="record.d_keshi != null">
-        d_keshi = #{record.d_keshi,jdbcType=VARCHAR},
+      <if test="record.dKeshi != null">
+        d_keshi = #{record.dKeshi,jdbcType=VARCHAR},
       </if>
-      <if test="record.d_xueli != null">
-        d_xueli = #{record.d_xueli,jdbcType=VARCHAR},
+      <if test="record.dXueli != null">
+        d_xueli = #{record.dXueli,jdbcType=VARCHAR},
       </if>
-      <if test="record.d_desc != null">
-        d_desc = #{record.d_desc,jdbcType=VARCHAR},
+      <if test="record.dDesc != null">
+        d_desc = #{record.dDesc,jdbcType=VARCHAR},
       </if>
-      <if test="record.d_inTime != null">
-        d_inTime = #{record.d_inTime,jdbcType=DATE},
+      <if test="record.dIntime != null">
+        d_intime = #{record.dIntime,jdbcType=DATE},
       </if>
-      <if test="record.d_state != null">
-        d_state = #{record.d_state,jdbcType=INTEGER},
+      <if test="record.dState != null">
+        d_state = #{record.dState,jdbcType=INTEGER},
       </if>
-      <if test="record.d_isDel != null">
-        d_isDel = #{record.d_isDel,jdbcType=INTEGER},
+      <if test="record.dIsDel != null">
+        d_is_del = #{record.dIsDel,jdbcType=INTEGER},
       </if>
-      <if test="record.d_create_time != null">
-        d_create_time = #{record.d_create_time,jdbcType=TIMESTAMP},
+      <if test="record.dCreateTime != null">
+        d_create_time = #{record.dCreateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.d_update_time != null">
-        d_update_time = #{record.d_update_time,jdbcType=TIMESTAMP},
+      <if test="record.dUpdateTime != null">
+        d_update_time = #{record.dUpdateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.u_id != null">
-        u_id = #{record.u_id,jdbcType=INTEGER},
+      <if test="record.uId != null">
+        u_id = #{record.uId,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -302,23 +302,23 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update doctor
-    set d_id = #{record.d_id,jdbcType=INTEGER},
-      d_idCar = #{record.d_idCar,jdbcType=VARCHAR},
-      d_phone = #{record.d_phone,jdbcType=VARCHAR},
-      d_telPhone = #{record.d_telPhone,jdbcType=VARCHAR},
-      d_sex = #{record.d_sex,jdbcType=INTEGER},
-      d_birthday = #{record.d_birthday,jdbcType=DATE},
-      d_age = #{record.d_age,jdbcType=INTEGER},
-      d_email = #{record.d_email,jdbcType=VARCHAR},
-      d_keshi = #{record.d_keshi,jdbcType=VARCHAR},
-      d_xueli = #{record.d_xueli,jdbcType=VARCHAR},
-      d_desc = #{record.d_desc,jdbcType=VARCHAR},
-      d_inTime = #{record.d_inTime,jdbcType=DATE},
-      d_state = #{record.d_state,jdbcType=INTEGER},
-      d_isDel = #{record.d_isDel,jdbcType=INTEGER},
-      d_create_time = #{record.d_create_time,jdbcType=TIMESTAMP},
-      d_update_time = #{record.d_update_time,jdbcType=TIMESTAMP},
-      u_id = #{record.u_id,jdbcType=INTEGER}
+    set d_id = #{record.dId,jdbcType=INTEGER},
+      d_id_car = #{record.dIdCar,jdbcType=VARCHAR},
+      d_phone = #{record.dPhone,jdbcType=VARCHAR},
+      d_telphone = #{record.dTelphone,jdbcType=VARCHAR},
+      d_sex = #{record.dSex,jdbcType=INTEGER},
+      d_birthday = #{record.dBirthday,jdbcType=DATE},
+      d_age = #{record.dAge,jdbcType=INTEGER},
+      d_email = #{record.dEmail,jdbcType=VARCHAR},
+      d_keshi = #{record.dKeshi,jdbcType=VARCHAR},
+      d_xueli = #{record.dXueli,jdbcType=VARCHAR},
+      d_desc = #{record.dDesc,jdbcType=VARCHAR},
+      d_intime = #{record.dIntime,jdbcType=DATE},
+      d_state = #{record.dState,jdbcType=INTEGER},
+      d_is_del = #{record.dIsDel,jdbcType=INTEGER},
+      d_create_time = #{record.dCreateTime,jdbcType=TIMESTAMP},
+      d_update_time = #{record.dUpdateTime,jdbcType=TIMESTAMP},
+      u_id = #{record.uId,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -326,75 +326,75 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.kkb.pojo.Doctor">
     update doctor
     <set>
-      <if test="d_idCar != null">
-        d_idCar = #{d_idCar,jdbcType=VARCHAR},
+      <if test="dIdCar != null">
+        d_id_car = #{dIdCar,jdbcType=VARCHAR},
       </if>
-      <if test="d_phone != null">
-        d_phone = #{d_phone,jdbcType=VARCHAR},
+      <if test="dPhone != null">
+        d_phone = #{dPhone,jdbcType=VARCHAR},
       </if>
-      <if test="d_telPhone != null">
-        d_telPhone = #{d_telPhone,jdbcType=VARCHAR},
+      <if test="dTelphone != null">
+        d_telphone = #{dTelphone,jdbcType=VARCHAR},
       </if>
-      <if test="d_sex != null">
-        d_sex = #{d_sex,jdbcType=INTEGER},
+      <if test="dSex != null">
+        d_sex = #{dSex,jdbcType=INTEGER},
       </if>
-      <if test="d_birthday != null">
-        d_birthday = #{d_birthday,jdbcType=DATE},
+      <if test="dBirthday != null">
+        d_birthday = #{dBirthday,jdbcType=DATE},
       </if>
-      <if test="d_age != null">
-        d_age = #{d_age,jdbcType=INTEGER},
+      <if test="dAge != null">
+        d_age = #{dAge,jdbcType=INTEGER},
       </if>
-      <if test="d_email != null">
-        d_email = #{d_email,jdbcType=VARCHAR},
+      <if test="dEmail != null">
+        d_email = #{dEmail,jdbcType=VARCHAR},
       </if>
-      <if test="d_keshi != null">
-        d_keshi = #{d_keshi,jdbcType=VARCHAR},
+      <if test="dKeshi != null">
+        d_keshi = #{dKeshi,jdbcType=VARCHAR},
       </if>
-      <if test="d_xueli != null">
-        d_xueli = #{d_xueli,jdbcType=VARCHAR},
+      <if test="dXueli != null">
+        d_xueli = #{dXueli,jdbcType=VARCHAR},
       </if>
-      <if test="d_desc != null">
-        d_desc = #{d_desc,jdbcType=VARCHAR},
+      <if test="dDesc != null">
+        d_desc = #{dDesc,jdbcType=VARCHAR},
       </if>
-      <if test="d_inTime != null">
-        d_inTime = #{d_inTime,jdbcType=DATE},
+      <if test="dIntime != null">
+        d_intime = #{dIntime,jdbcType=DATE},
       </if>
-      <if test="d_state != null">
-        d_state = #{d_state,jdbcType=INTEGER},
+      <if test="dState != null">
+        d_state = #{dState,jdbcType=INTEGER},
       </if>
-      <if test="d_isDel != null">
-        d_isDel = #{d_isDel,jdbcType=INTEGER},
+      <if test="dIsDel != null">
+        d_is_del = #{dIsDel,jdbcType=INTEGER},
       </if>
-      <if test="d_create_time != null">
-        d_create_time = #{d_create_time,jdbcType=TIMESTAMP},
+      <if test="dCreateTime != null">
+        d_create_time = #{dCreateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="d_update_time != null">
-        d_update_time = #{d_update_time,jdbcType=TIMESTAMP},
+      <if test="dUpdateTime != null">
+        d_update_time = #{dUpdateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="u_id != null">
-        u_id = #{u_id,jdbcType=INTEGER},
+      <if test="uId != null">
+        u_id = #{uId,jdbcType=INTEGER},
       </if>
     </set>
-    where d_id = #{d_id,jdbcType=INTEGER}
+    where d_id = #{dId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.kkb.pojo.Doctor">
     update doctor
-    set d_idCar = #{d_idCar,jdbcType=VARCHAR},
-      d_phone = #{d_phone,jdbcType=VARCHAR},
-      d_telPhone = #{d_telPhone,jdbcType=VARCHAR},
-      d_sex = #{d_sex,jdbcType=INTEGER},
-      d_birthday = #{d_birthday,jdbcType=DATE},
-      d_age = #{d_age,jdbcType=INTEGER},
-      d_email = #{d_email,jdbcType=VARCHAR},
-      d_keshi = #{d_keshi,jdbcType=VARCHAR},
-      d_xueli = #{d_xueli,jdbcType=VARCHAR},
-      d_desc = #{d_desc,jdbcType=VARCHAR},
-      d_inTime = #{d_inTime,jdbcType=DATE},
-      d_state = #{d_state,jdbcType=INTEGER},
-      d_isDel = #{d_isDel,jdbcType=INTEGER},
-      d_create_time = #{d_create_time,jdbcType=TIMESTAMP},
-      d_update_time = #{d_update_time,jdbcType=TIMESTAMP},
-      u_id = #{u_id,jdbcType=INTEGER}
-    where d_id = #{d_id,jdbcType=INTEGER}
+    set d_id_car = #{dIdCar,jdbcType=VARCHAR},
+      d_phone = #{dPhone,jdbcType=VARCHAR},
+      d_telphone = #{dTelphone,jdbcType=VARCHAR},
+      d_sex = #{dSex,jdbcType=INTEGER},
+      d_birthday = #{dBirthday,jdbcType=DATE},
+      d_age = #{dAge,jdbcType=INTEGER},
+      d_email = #{dEmail,jdbcType=VARCHAR},
+      d_keshi = #{dKeshi,jdbcType=VARCHAR},
+      d_xueli = #{dXueli,jdbcType=VARCHAR},
+      d_desc = #{dDesc,jdbcType=VARCHAR},
+      d_intime = #{dIntime,jdbcType=DATE},
+      d_state = #{dState,jdbcType=INTEGER},
+      d_is_del = #{dIsDel,jdbcType=INTEGER},
+      d_create_time = #{dCreateTime,jdbcType=TIMESTAMP},
+      d_update_time = #{dUpdateTime,jdbcType=TIMESTAMP},
+      u_id = #{uId,jdbcType=INTEGER}
+    where d_id = #{dId,jdbcType=INTEGER}
   </update>
 </mapper>
