@@ -3,14 +3,14 @@ package com.kkb.pojo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DrugpeopleExample {
+public class DrugPeopleExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public DrugpeopleExample() {
+    public DrugPeopleExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -104,303 +104,303 @@ public class DrugpeopleExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andDr_p_idIsNull() {
-            addCriterion("dr_p_id is null");
+        public Criteria andDrbehIdIsNull() {
+            addCriterion("drbeh_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andDr_p_idIsNotNull() {
-            addCriterion("dr_p_id is not null");
+        public Criteria andDrbehIdIsNotNull() {
+            addCriterion("drbeh_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDr_p_idEqualTo(Integer value) {
-            addCriterion("dr_p_id =", value, "dr_p_id");
+        public Criteria andDrbehIdEqualTo(Integer value) {
+            addCriterion("drbeh_id =", value, "drbehId");
             return (Criteria) this;
         }
 
-        public Criteria andDr_p_idNotEqualTo(Integer value) {
-            addCriterion("dr_p_id <>", value, "dr_p_id");
+        public Criteria andDrbehIdNotEqualTo(Integer value) {
+            addCriterion("drbeh_id <>", value, "drbehId");
             return (Criteria) this;
         }
 
-        public Criteria andDr_p_idGreaterThan(Integer value) {
-            addCriterion("dr_p_id >", value, "dr_p_id");
+        public Criteria andDrbehIdGreaterThan(Integer value) {
+            addCriterion("drbeh_id >", value, "drbehId");
             return (Criteria) this;
         }
 
-        public Criteria andDr_p_idGreaterThanOrEqualTo(Integer value) {
-            addCriterion("dr_p_id >=", value, "dr_p_id");
+        public Criteria andDrbehIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("drbeh_id >=", value, "drbehId");
             return (Criteria) this;
         }
 
-        public Criteria andDr_p_idLessThan(Integer value) {
-            addCriterion("dr_p_id <", value, "dr_p_id");
+        public Criteria andDrbehIdLessThan(Integer value) {
+            addCriterion("drbeh_id <", value, "drbehId");
             return (Criteria) this;
         }
 
-        public Criteria andDr_p_idLessThanOrEqualTo(Integer value) {
-            addCriterion("dr_p_id <=", value, "dr_p_id");
+        public Criteria andDrbehIdLessThanOrEqualTo(Integer value) {
+            addCriterion("drbeh_id <=", value, "drbehId");
             return (Criteria) this;
         }
 
-        public Criteria andDr_p_idIn(List<Integer> values) {
-            addCriterion("dr_p_id in", values, "dr_p_id");
+        public Criteria andDrbehIdIn(List<Integer> values) {
+            addCriterion("drbeh_id in", values, "drbehId");
             return (Criteria) this;
         }
 
-        public Criteria andDr_p_idNotIn(List<Integer> values) {
-            addCriterion("dr_p_id not in", values, "dr_p_id");
+        public Criteria andDrbehIdNotIn(List<Integer> values) {
+            addCriterion("drbeh_id not in", values, "drbehId");
             return (Criteria) this;
         }
 
-        public Criteria andDr_p_idBetween(Integer value1, Integer value2) {
-            addCriterion("dr_p_id between", value1, value2, "dr_p_id");
+        public Criteria andDrbehIdBetween(Integer value1, Integer value2) {
+            addCriterion("drbeh_id between", value1, value2, "drbehId");
             return (Criteria) this;
         }
 
-        public Criteria andDr_p_idNotBetween(Integer value1, Integer value2) {
-            addCriterion("dr_p_id not between", value1, value2, "dr_p_id");
+        public Criteria andDrbehIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("drbeh_id not between", value1, value2, "drbehId");
             return (Criteria) this;
         }
 
-        public Criteria andDr_idIsNull() {
+        public Criteria andDrIdIsNull() {
             addCriterion("dr_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andDr_idIsNotNull() {
+        public Criteria andDrIdIsNotNull() {
             addCriterion("dr_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDr_idEqualTo(Integer value) {
-            addCriterion("dr_id =", value, "dr_id");
+        public Criteria andDrIdEqualTo(Integer value) {
+            addCriterion("dr_id =", value, "drId");
             return (Criteria) this;
         }
 
-        public Criteria andDr_idNotEqualTo(Integer value) {
-            addCriterion("dr_id <>", value, "dr_id");
+        public Criteria andDrIdNotEqualTo(Integer value) {
+            addCriterion("dr_id <>", value, "drId");
             return (Criteria) this;
         }
 
-        public Criteria andDr_idGreaterThan(Integer value) {
-            addCriterion("dr_id >", value, "dr_id");
+        public Criteria andDrIdGreaterThan(Integer value) {
+            addCriterion("dr_id >", value, "drId");
             return (Criteria) this;
         }
 
-        public Criteria andDr_idGreaterThanOrEqualTo(Integer value) {
-            addCriterion("dr_id >=", value, "dr_id");
+        public Criteria andDrIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("dr_id >=", value, "drId");
             return (Criteria) this;
         }
 
-        public Criteria andDr_idLessThan(Integer value) {
-            addCriterion("dr_id <", value, "dr_id");
+        public Criteria andDrIdLessThan(Integer value) {
+            addCriterion("dr_id <", value, "drId");
             return (Criteria) this;
         }
 
-        public Criteria andDr_idLessThanOrEqualTo(Integer value) {
-            addCriterion("dr_id <=", value, "dr_id");
+        public Criteria andDrIdLessThanOrEqualTo(Integer value) {
+            addCriterion("dr_id <=", value, "drId");
             return (Criteria) this;
         }
 
-        public Criteria andDr_idIn(List<Integer> values) {
-            addCriterion("dr_id in", values, "dr_id");
+        public Criteria andDrIdIn(List<Integer> values) {
+            addCriterion("dr_id in", values, "drId");
             return (Criteria) this;
         }
 
-        public Criteria andDr_idNotIn(List<Integer> values) {
-            addCriterion("dr_id not in", values, "dr_id");
+        public Criteria andDrIdNotIn(List<Integer> values) {
+            addCriterion("dr_id not in", values, "drId");
             return (Criteria) this;
         }
 
-        public Criteria andDr_idBetween(Integer value1, Integer value2) {
-            addCriterion("dr_id between", value1, value2, "dr_id");
+        public Criteria andDrIdBetween(Integer value1, Integer value2) {
+            addCriterion("dr_id between", value1, value2, "drId");
             return (Criteria) this;
         }
 
-        public Criteria andDr_idNotBetween(Integer value1, Integer value2) {
-            addCriterion("dr_id not between", value1, value2, "dr_id");
+        public Criteria andDrIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("dr_id not between", value1, value2, "drId");
             return (Criteria) this;
         }
 
-        public Criteria andPeopleIdIsNull() {
-            addCriterion("peopleId is null");
+        public Criteria andBehIdIsNull() {
+            addCriterion("beh_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andPeopleIdIsNotNull() {
-            addCriterion("peopleId is not null");
+        public Criteria andBehIdIsNotNull() {
+            addCriterion("beh_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPeopleIdEqualTo(Integer value) {
-            addCriterion("peopleId =", value, "peopleId");
+        public Criteria andBehIdEqualTo(Integer value) {
+            addCriterion("beh_id =", value, "behId");
             return (Criteria) this;
         }
 
-        public Criteria andPeopleIdNotEqualTo(Integer value) {
-            addCriterion("peopleId <>", value, "peopleId");
+        public Criteria andBehIdNotEqualTo(Integer value) {
+            addCriterion("beh_id <>", value, "behId");
             return (Criteria) this;
         }
 
-        public Criteria andPeopleIdGreaterThan(Integer value) {
-            addCriterion("peopleId >", value, "peopleId");
+        public Criteria andBehIdGreaterThan(Integer value) {
+            addCriterion("beh_id >", value, "behId");
             return (Criteria) this;
         }
 
-        public Criteria andPeopleIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("peopleId >=", value, "peopleId");
+        public Criteria andBehIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("beh_id >=", value, "behId");
             return (Criteria) this;
         }
 
-        public Criteria andPeopleIdLessThan(Integer value) {
-            addCriterion("peopleId <", value, "peopleId");
+        public Criteria andBehIdLessThan(Integer value) {
+            addCriterion("beh_id <", value, "behId");
             return (Criteria) this;
         }
 
-        public Criteria andPeopleIdLessThanOrEqualTo(Integer value) {
-            addCriterion("peopleId <=", value, "peopleId");
+        public Criteria andBehIdLessThanOrEqualTo(Integer value) {
+            addCriterion("beh_id <=", value, "behId");
             return (Criteria) this;
         }
 
-        public Criteria andPeopleIdIn(List<Integer> values) {
-            addCriterion("peopleId in", values, "peopleId");
+        public Criteria andBehIdIn(List<Integer> values) {
+            addCriterion("beh_id in", values, "behId");
             return (Criteria) this;
         }
 
-        public Criteria andPeopleIdNotIn(List<Integer> values) {
-            addCriterion("peopleId not in", values, "peopleId");
+        public Criteria andBehIdNotIn(List<Integer> values) {
+            addCriterion("beh_id not in", values, "behId");
             return (Criteria) this;
         }
 
-        public Criteria andPeopleIdBetween(Integer value1, Integer value2) {
-            addCriterion("peopleId between", value1, value2, "peopleId");
+        public Criteria andBehIdBetween(Integer value1, Integer value2) {
+            addCriterion("beh_id between", value1, value2, "behId");
             return (Criteria) this;
         }
 
-        public Criteria andPeopleIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("peopleId not between", value1, value2, "peopleId");
+        public Criteria andBehIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("beh_id not between", value1, value2, "behId");
             return (Criteria) this;
         }
 
-        public Criteria andDr_numberIsNull() {
+        public Criteria andDrNumberIsNull() {
             addCriterion("dr_number is null");
             return (Criteria) this;
         }
 
-        public Criteria andDr_numberIsNotNull() {
+        public Criteria andDrNumberIsNotNull() {
             addCriterion("dr_number is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDr_numberEqualTo(Integer value) {
-            addCriterion("dr_number =", value, "dr_number");
+        public Criteria andDrNumberEqualTo(Integer value) {
+            addCriterion("dr_number =", value, "drNumber");
             return (Criteria) this;
         }
 
-        public Criteria andDr_numberNotEqualTo(Integer value) {
-            addCriterion("dr_number <>", value, "dr_number");
+        public Criteria andDrNumberNotEqualTo(Integer value) {
+            addCriterion("dr_number <>", value, "drNumber");
             return (Criteria) this;
         }
 
-        public Criteria andDr_numberGreaterThan(Integer value) {
-            addCriterion("dr_number >", value, "dr_number");
+        public Criteria andDrNumberGreaterThan(Integer value) {
+            addCriterion("dr_number >", value, "drNumber");
             return (Criteria) this;
         }
 
-        public Criteria andDr_numberGreaterThanOrEqualTo(Integer value) {
-            addCriterion("dr_number >=", value, "dr_number");
+        public Criteria andDrNumberGreaterThanOrEqualTo(Integer value) {
+            addCriterion("dr_number >=", value, "drNumber");
             return (Criteria) this;
         }
 
-        public Criteria andDr_numberLessThan(Integer value) {
-            addCriterion("dr_number <", value, "dr_number");
+        public Criteria andDrNumberLessThan(Integer value) {
+            addCriterion("dr_number <", value, "drNumber");
             return (Criteria) this;
         }
 
-        public Criteria andDr_numberLessThanOrEqualTo(Integer value) {
-            addCriterion("dr_number <=", value, "dr_number");
+        public Criteria andDrNumberLessThanOrEqualTo(Integer value) {
+            addCriterion("dr_number <=", value, "drNumber");
             return (Criteria) this;
         }
 
-        public Criteria andDr_numberIn(List<Integer> values) {
-            addCriterion("dr_number in", values, "dr_number");
+        public Criteria andDrNumberIn(List<Integer> values) {
+            addCriterion("dr_number in", values, "drNumber");
             return (Criteria) this;
         }
 
-        public Criteria andDr_numberNotIn(List<Integer> values) {
-            addCriterion("dr_number not in", values, "dr_number");
+        public Criteria andDrNumberNotIn(List<Integer> values) {
+            addCriterion("dr_number not in", values, "drNumber");
             return (Criteria) this;
         }
 
-        public Criteria andDr_numberBetween(Integer value1, Integer value2) {
-            addCriterion("dr_number between", value1, value2, "dr_number");
+        public Criteria andDrNumberBetween(Integer value1, Integer value2) {
+            addCriterion("dr_number between", value1, value2, "drNumber");
             return (Criteria) this;
         }
 
-        public Criteria andDr_numberNotBetween(Integer value1, Integer value2) {
-            addCriterion("dr_number not between", value1, value2, "dr_number");
+        public Criteria andDrNumberNotBetween(Integer value1, Integer value2) {
+            addCriterion("dr_number not between", value1, value2, "drNumber");
             return (Criteria) this;
         }
 
-        public Criteria andDr_give_numberIsNull() {
+        public Criteria andDrGiveNumberIsNull() {
             addCriterion("dr_give_number is null");
             return (Criteria) this;
         }
 
-        public Criteria andDr_give_numberIsNotNull() {
+        public Criteria andDrGiveNumberIsNotNull() {
             addCriterion("dr_give_number is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDr_give_numberEqualTo(Integer value) {
-            addCriterion("dr_give_number =", value, "dr_give_number");
+        public Criteria andDrGiveNumberEqualTo(Integer value) {
+            addCriterion("dr_give_number =", value, "drGiveNumber");
             return (Criteria) this;
         }
 
-        public Criteria andDr_give_numberNotEqualTo(Integer value) {
-            addCriterion("dr_give_number <>", value, "dr_give_number");
+        public Criteria andDrGiveNumberNotEqualTo(Integer value) {
+            addCriterion("dr_give_number <>", value, "drGiveNumber");
             return (Criteria) this;
         }
 
-        public Criteria andDr_give_numberGreaterThan(Integer value) {
-            addCriterion("dr_give_number >", value, "dr_give_number");
+        public Criteria andDrGiveNumberGreaterThan(Integer value) {
+            addCriterion("dr_give_number >", value, "drGiveNumber");
             return (Criteria) this;
         }
 
-        public Criteria andDr_give_numberGreaterThanOrEqualTo(Integer value) {
-            addCriterion("dr_give_number >=", value, "dr_give_number");
+        public Criteria andDrGiveNumberGreaterThanOrEqualTo(Integer value) {
+            addCriterion("dr_give_number >=", value, "drGiveNumber");
             return (Criteria) this;
         }
 
-        public Criteria andDr_give_numberLessThan(Integer value) {
-            addCriterion("dr_give_number <", value, "dr_give_number");
+        public Criteria andDrGiveNumberLessThan(Integer value) {
+            addCriterion("dr_give_number <", value, "drGiveNumber");
             return (Criteria) this;
         }
 
-        public Criteria andDr_give_numberLessThanOrEqualTo(Integer value) {
-            addCriterion("dr_give_number <=", value, "dr_give_number");
+        public Criteria andDrGiveNumberLessThanOrEqualTo(Integer value) {
+            addCriterion("dr_give_number <=", value, "drGiveNumber");
             return (Criteria) this;
         }
 
-        public Criteria andDr_give_numberIn(List<Integer> values) {
-            addCriterion("dr_give_number in", values, "dr_give_number");
+        public Criteria andDrGiveNumberIn(List<Integer> values) {
+            addCriterion("dr_give_number in", values, "drGiveNumber");
             return (Criteria) this;
         }
 
-        public Criteria andDr_give_numberNotIn(List<Integer> values) {
-            addCriterion("dr_give_number not in", values, "dr_give_number");
+        public Criteria andDrGiveNumberNotIn(List<Integer> values) {
+            addCriterion("dr_give_number not in", values, "drGiveNumber");
             return (Criteria) this;
         }
 
-        public Criteria andDr_give_numberBetween(Integer value1, Integer value2) {
-            addCriterion("dr_give_number between", value1, value2, "dr_give_number");
+        public Criteria andDrGiveNumberBetween(Integer value1, Integer value2) {
+            addCriterion("dr_give_number between", value1, value2, "drGiveNumber");
             return (Criteria) this;
         }
 
-        public Criteria andDr_give_numberNotBetween(Integer value1, Integer value2) {
-            addCriterion("dr_give_number not between", value1, value2, "dr_give_number");
+        public Criteria andDrGiveNumberNotBetween(Integer value1, Integer value2) {
+            addCriterion("dr_give_number not between", value1, value2, "drGiveNumber");
             return (Criteria) this;
         }
     }

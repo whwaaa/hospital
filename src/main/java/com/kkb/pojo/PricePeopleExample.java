@@ -3,14 +3,14 @@ package com.kkb.pojo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PricepeopleExample {
+public class PricePeopleExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public PricepeopleExample() {
+    public PricePeopleExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -104,183 +104,183 @@ public class PricepeopleExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andChaP_beH_idIsNull() {
-            addCriterion("chaP_beH_id is null");
+        public Criteria andPIdIsNull() {
+            addCriterion("p_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_beH_idIsNotNull() {
-            addCriterion("chaP_beH_id is not null");
+        public Criteria andPIdIsNotNull() {
+            addCriterion("p_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_beH_idEqualTo(Integer value) {
-            addCriterion("chaP_beH_id =", value, "chaP_beH_id");
+        public Criteria andPIdEqualTo(Integer value) {
+            addCriterion("p_id =", value, "pId");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_beH_idNotEqualTo(Integer value) {
-            addCriterion("chaP_beH_id <>", value, "chaP_beH_id");
+        public Criteria andPIdNotEqualTo(Integer value) {
+            addCriterion("p_id <>", value, "pId");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_beH_idGreaterThan(Integer value) {
-            addCriterion("chaP_beH_id >", value, "chaP_beH_id");
+        public Criteria andPIdGreaterThan(Integer value) {
+            addCriterion("p_id >", value, "pId");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_beH_idGreaterThanOrEqualTo(Integer value) {
-            addCriterion("chaP_beH_id >=", value, "chaP_beH_id");
+        public Criteria andPIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("p_id >=", value, "pId");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_beH_idLessThan(Integer value) {
-            addCriterion("chaP_beH_id <", value, "chaP_beH_id");
+        public Criteria andPIdLessThan(Integer value) {
+            addCriterion("p_id <", value, "pId");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_beH_idLessThanOrEqualTo(Integer value) {
-            addCriterion("chaP_beH_id <=", value, "chaP_beH_id");
+        public Criteria andPIdLessThanOrEqualTo(Integer value) {
+            addCriterion("p_id <=", value, "pId");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_beH_idIn(List<Integer> values) {
-            addCriterion("chaP_beH_id in", values, "chaP_beH_id");
+        public Criteria andPIdIn(List<Integer> values) {
+            addCriterion("p_id in", values, "pId");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_beH_idNotIn(List<Integer> values) {
-            addCriterion("chaP_beH_id not in", values, "chaP_beH_id");
+        public Criteria andPIdNotIn(List<Integer> values) {
+            addCriterion("p_id not in", values, "pId");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_beH_idBetween(Integer value1, Integer value2) {
-            addCriterion("chaP_beH_id between", value1, value2, "chaP_beH_id");
+        public Criteria andPIdBetween(Integer value1, Integer value2) {
+            addCriterion("p_id between", value1, value2, "pId");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_beH_idNotBetween(Integer value1, Integer value2) {
-            addCriterion("chaP_beH_id not between", value1, value2, "chaP_beH_id");
+        public Criteria andPIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("p_id not between", value1, value2, "pId");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_idIsNull() {
-            addCriterion("chaP_id is null");
+        public Criteria andChapIdIsNull() {
+            addCriterion("chap_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_idIsNotNull() {
-            addCriterion("chaP_id is not null");
+        public Criteria andChapIdIsNotNull() {
+            addCriterion("chap_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_idEqualTo(Integer value) {
-            addCriterion("chaP_id =", value, "chaP_id");
+        public Criteria andChapIdEqualTo(Integer value) {
+            addCriterion("chap_id =", value, "chapId");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_idNotEqualTo(Integer value) {
-            addCriterion("chaP_id <>", value, "chaP_id");
+        public Criteria andChapIdNotEqualTo(Integer value) {
+            addCriterion("chap_id <>", value, "chapId");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_idGreaterThan(Integer value) {
-            addCriterion("chaP_id >", value, "chaP_id");
+        public Criteria andChapIdGreaterThan(Integer value) {
+            addCriterion("chap_id >", value, "chapId");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_idGreaterThanOrEqualTo(Integer value) {
-            addCriterion("chaP_id >=", value, "chaP_id");
+        public Criteria andChapIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("chap_id >=", value, "chapId");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_idLessThan(Integer value) {
-            addCriterion("chaP_id <", value, "chaP_id");
+        public Criteria andChapIdLessThan(Integer value) {
+            addCriterion("chap_id <", value, "chapId");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_idLessThanOrEqualTo(Integer value) {
-            addCriterion("chaP_id <=", value, "chaP_id");
+        public Criteria andChapIdLessThanOrEqualTo(Integer value) {
+            addCriterion("chap_id <=", value, "chapId");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_idIn(List<Integer> values) {
-            addCriterion("chaP_id in", values, "chaP_id");
+        public Criteria andChapIdIn(List<Integer> values) {
+            addCriterion("chap_id in", values, "chapId");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_idNotIn(List<Integer> values) {
-            addCriterion("chaP_id not in", values, "chaP_id");
+        public Criteria andChapIdNotIn(List<Integer> values) {
+            addCriterion("chap_id not in", values, "chapId");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_idBetween(Integer value1, Integer value2) {
-            addCriterion("chaP_id between", value1, value2, "chaP_id");
+        public Criteria andChapIdBetween(Integer value1, Integer value2) {
+            addCriterion("chap_id between", value1, value2, "chapId");
             return (Criteria) this;
         }
 
-        public Criteria andChaP_idNotBetween(Integer value1, Integer value2) {
-            addCriterion("chaP_id not between", value1, value2, "chaP_id");
+        public Criteria andChapIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("chap_id not between", value1, value2, "chapId");
             return (Criteria) this;
         }
 
-        public Criteria andBeH_idIsNull() {
-            addCriterion("beH_id is null");
+        public Criteria andBehIdIsNull() {
+            addCriterion("beh_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andBeH_idIsNotNull() {
-            addCriterion("beH_id is not null");
+        public Criteria andBehIdIsNotNull() {
+            addCriterion("beh_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andBeH_idEqualTo(Integer value) {
-            addCriterion("beH_id =", value, "beH_id");
+        public Criteria andBehIdEqualTo(Integer value) {
+            addCriterion("beh_id =", value, "behId");
             return (Criteria) this;
         }
 
-        public Criteria andBeH_idNotEqualTo(Integer value) {
-            addCriterion("beH_id <>", value, "beH_id");
+        public Criteria andBehIdNotEqualTo(Integer value) {
+            addCriterion("beh_id <>", value, "behId");
             return (Criteria) this;
         }
 
-        public Criteria andBeH_idGreaterThan(Integer value) {
-            addCriterion("beH_id >", value, "beH_id");
+        public Criteria andBehIdGreaterThan(Integer value) {
+            addCriterion("beh_id >", value, "behId");
             return (Criteria) this;
         }
 
-        public Criteria andBeH_idGreaterThanOrEqualTo(Integer value) {
-            addCriterion("beH_id >=", value, "beH_id");
+        public Criteria andBehIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("beh_id >=", value, "behId");
             return (Criteria) this;
         }
 
-        public Criteria andBeH_idLessThan(Integer value) {
-            addCriterion("beH_id <", value, "beH_id");
+        public Criteria andBehIdLessThan(Integer value) {
+            addCriterion("beh_id <", value, "behId");
             return (Criteria) this;
         }
 
-        public Criteria andBeH_idLessThanOrEqualTo(Integer value) {
-            addCriterion("beH_id <=", value, "beH_id");
+        public Criteria andBehIdLessThanOrEqualTo(Integer value) {
+            addCriterion("beh_id <=", value, "behId");
             return (Criteria) this;
         }
 
-        public Criteria andBeH_idIn(List<Integer> values) {
-            addCriterion("beH_id in", values, "beH_id");
+        public Criteria andBehIdIn(List<Integer> values) {
+            addCriterion("beh_id in", values, "behId");
             return (Criteria) this;
         }
 
-        public Criteria andBeH_idNotIn(List<Integer> values) {
-            addCriterion("beH_id not in", values, "beH_id");
+        public Criteria andBehIdNotIn(List<Integer> values) {
+            addCriterion("beh_id not in", values, "behId");
             return (Criteria) this;
         }
 
-        public Criteria andBeH_idBetween(Integer value1, Integer value2) {
-            addCriterion("beH_id between", value1, value2, "beH_id");
+        public Criteria andBehIdBetween(Integer value1, Integer value2) {
+            addCriterion("beh_id between", value1, value2, "behId");
             return (Criteria) this;
         }
 
-        public Criteria andBeH_idNotBetween(Integer value1, Integer value2) {
-            addCriterion("beH_id not between", value1, value2, "beH_id");
+        public Criteria andBehIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("beh_id not between", value1, value2, "behId");
             return (Criteria) this;
         }
     }

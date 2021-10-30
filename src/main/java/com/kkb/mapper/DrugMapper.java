@@ -10,7 +10,7 @@ public interface DrugMapper {
 
     int deleteByExample(DrugExample example);
 
-    int deleteByPrimaryKey(Integer dr_id);
+    int deleteByPrimaryKey(Integer drId);
 
     int insert(Drug record);
 
@@ -18,7 +18,7 @@ public interface DrugMapper {
 
     List<Drug> selectByExample(DrugExample example);
 
-    Drug selectByPrimaryKey(Integer dr_id);
+    Drug selectByPrimaryKey(Integer drId);
 
     int updateByExampleSelective(@Param("record") Drug record, @Param("example") DrugExample example);
 
