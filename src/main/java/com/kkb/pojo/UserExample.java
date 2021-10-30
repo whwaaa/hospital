@@ -305,73 +305,73 @@ public class UserExample {
             return (Criteria) this;
         }
 
-        public Criteria andUTrunAmeIsNull() {
-            addCriterion("u_trun_ame is null");
+        public Criteria andUTrueNameIsNull() {
+            addCriterion("u_true_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andUTrunAmeIsNotNull() {
-            addCriterion("u_trun_ame is not null");
+        public Criteria andUTrueNameIsNotNull() {
+            addCriterion("u_true_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andUTrunAmeEqualTo(String value) {
-            addCriterion("u_trun_ame =", value, "uTrunAme");
+        public Criteria andUTrueNameEqualTo(String value) {
+            addCriterion("u_true_name =", value, "uTrueName");
             return (Criteria) this;
         }
 
-        public Criteria andUTrunAmeNotEqualTo(String value) {
-            addCriterion("u_trun_ame <>", value, "uTrunAme");
+        public Criteria andUTrueNameNotEqualTo(String value) {
+            addCriterion("u_true_name <>", value, "uTrueName");
             return (Criteria) this;
         }
 
-        public Criteria andUTrunAmeGreaterThan(String value) {
-            addCriterion("u_trun_ame >", value, "uTrunAme");
+        public Criteria andUTrueNameGreaterThan(String value) {
+            addCriterion("u_true_name >", value, "uTrueName");
             return (Criteria) this;
         }
 
-        public Criteria andUTrunAmeGreaterThanOrEqualTo(String value) {
-            addCriterion("u_trun_ame >=", value, "uTrunAme");
+        public Criteria andUTrueNameGreaterThanOrEqualTo(String value) {
+            addCriterion("u_true_name >=", value, "uTrueName");
             return (Criteria) this;
         }
 
-        public Criteria andUTrunAmeLessThan(String value) {
-            addCriterion("u_trun_ame <", value, "uTrunAme");
+        public Criteria andUTrueNameLessThan(String value) {
+            addCriterion("u_true_name <", value, "uTrueName");
             return (Criteria) this;
         }
 
-        public Criteria andUTrunAmeLessThanOrEqualTo(String value) {
-            addCriterion("u_trun_ame <=", value, "uTrunAme");
+        public Criteria andUTrueNameLessThanOrEqualTo(String value) {
+            addCriterion("u_true_name <=", value, "uTrueName");
             return (Criteria) this;
         }
 
-        public Criteria andUTrunAmeLike(String value) {
-            addCriterion("u_trun_ame like", value, "uTrunAme");
+        public Criteria andUTrueNameLike(String value) {
+            addCriterion("u_true_name like", value, "uTrueName");
             return (Criteria) this;
         }
 
-        public Criteria andUTrunAmeNotLike(String value) {
-            addCriterion("u_trun_ame not like", value, "uTrunAme");
+        public Criteria andUTrueNameNotLike(String value) {
+            addCriterion("u_true_name not like", value, "uTrueName");
             return (Criteria) this;
         }
 
-        public Criteria andUTrunAmeIn(List<String> values) {
-            addCriterion("u_trun_ame in", values, "uTrunAme");
+        public Criteria andUTrueNameIn(List<String> values) {
+            addCriterion("u_true_name in", values, "uTrueName");
             return (Criteria) this;
         }
 
-        public Criteria andUTrunAmeNotIn(List<String> values) {
-            addCriterion("u_trun_ame not in", values, "uTrunAme");
+        public Criteria andUTrueNameNotIn(List<String> values) {
+            addCriterion("u_true_name not in", values, "uTrueName");
             return (Criteria) this;
         }
 
-        public Criteria andUTrunAmeBetween(String value1, String value2) {
-            addCriterion("u_trun_ame between", value1, value2, "uTrunAme");
+        public Criteria andUTrueNameBetween(String value1, String value2) {
+            addCriterion("u_true_name between", value1, value2, "uTrueName");
             return (Criteria) this;
         }
 
-        public Criteria andUTrunAmeNotBetween(String value1, String value2) {
-            addCriterion("u_trun_ame not between", value1, value2, "uTrunAme");
+        public Criteria andUTrueNameNotBetween(String value1, String value2) {
+            addCriterion("u_true_name not between", value1, value2, "uTrueName");
             return (Criteria) this;
         }
 

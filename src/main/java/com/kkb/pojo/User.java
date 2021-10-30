@@ -9,7 +9,7 @@ public class User {
 
     private String uPassword;
 
-    private String uTrunAme;
+    private String uTrueName;
 
     private String uEmail;
 
@@ -47,12 +47,12 @@ public class User {
         this.uPassword = uPassword == null ? null : uPassword.trim();
     }
 
-    public String getuTrunAme() {
-        return uTrunAme;
+    public String getuTrueName() {
+        return uTrueName;
     }
 
-    public void setuTrunAme(String uTrunAme) {
-        this.uTrunAme = uTrunAme == null ? null : uTrunAme.trim();
+    public void setuTrueName(String uTrueName) {
+        this.uTrueName = uTrueName == null ? null : uTrueName.trim();
     }
 
     public String getuEmail() {

@@ -5,7 +5,7 @@
     <id column="u_id" jdbcType="INTEGER" property="uId" />
     <result column="u_login_name" jdbcType="VARCHAR" property="uLoginName" />
     <result column="u_password" jdbcType="VARCHAR" property="uPassword" />
-    <result column="u_trun_ame" jdbcType="VARCHAR" property="uTrunAme" />
+    <result column="u_true_name" jdbcType="VARCHAR" property="uTrueName" />
     <result column="u_email" jdbcType="VARCHAR" property="uEmail" />
     <result column="u_state" jdbcType="INTEGER" property="uState" />
     <result column="r_id" jdbcType="INTEGER" property="rId" />
@@ -72,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    u_id, u_login_name, u_password, u_trun_ame, u_email, u_state, r_id, u_is_del, u_create_time, 
+    u_id, u_login_name, u_password, u_true_name, u_email, u_state, r_id, u_is_del, u_create_time, 
     u_update_time
   </sql>
   <select id="selectByExample" parameterType="com.kkb.pojo.UserExample" resultMap="BaseResultMap">
@@ -107,11 +107,11 @@
   </delete>
   <insert id="insert" parameterType="com.kkb.pojo.User">
     insert into user (u_id, u_login_name, u_password, 
-      u_trun_ame, u_email, u_state, 
+      u_true_name, u_email, u_state, 
       r_id, u_is_del, u_create_time, 
       u_update_time)
     values (#{uId,jdbcType=INTEGER}, #{uLoginName,jdbcType=VARCHAR}, #{uPassword,jdbcType=VARCHAR}, 
-      #{uTrunAme,jdbcType=VARCHAR}, #{uEmail,jdbcType=VARCHAR}, #{uState,jdbcType=INTEGER}, 
+      #{uTrueName,jdbcType=VARCHAR}, #{uEmail,jdbcType=VARCHAR}, #{uState,jdbcType=INTEGER}, 
       #{rId,jdbcType=INTEGER}, #{uIsDel,jdbcType=INTEGER}, #{uCreateTime,jdbcType=TIMESTAMP}, 
       #{uUpdateTime,jdbcType=TIMESTAMP})
   </insert>
@@ -127,8 +127,8 @@
       <if test="uPassword != null">
         u_password,
       </if>
-      <if test="uTrunAme != null">
-        u_trun_ame,
+      <if test="uTrueName != null">
+        u_true_name,
       </if>
       <if test="uEmail != null">
         u_email,
@@ -159,8 +159,8 @@
       <if test="uPassword != null">
         #{uPassword,jdbcType=VARCHAR},
       </if>
-      <if test="uTrunAme != null">
-        #{uTrunAme,jdbcType=VARCHAR},
+      <if test="uTrueName != null">
+        #{uTrueName,jdbcType=VARCHAR},
       </if>
       <if test="uEmail != null">
         #{uEmail,jdbcType=VARCHAR},
@@ -200,8 +200,8 @@
       <if test="record.uPassword != null">
         u_password = #{record.uPassword,jdbcType=VARCHAR},
       </if>
-      <if test="record.uTrunAme != null">
-        u_trun_ame = #{record.uTrunAme,jdbcType=VARCHAR},
+      <if test="record.uTrueName != null">
+        u_true_name = #{record.uTrueName,jdbcType=VARCHAR},
       </if>
       <if test="record.uEmail != null">
         u_email = #{record.uEmail,jdbcType=VARCHAR},
@@ -231,7 +231,7 @@
     set u_id = #{record.uId,jdbcType=INTEGER},
       u_login_name = #{record.uLoginName,jdbcType=VARCHAR},
       u_password = #{record.uPassword,jdbcType=VARCHAR},
-      u_trun_ame = #{record.uTrunAme,jdbcType=VARCHAR},
+      u_true_name = #{record.uTrueName,jdbcType=VARCHAR},
       u_email = #{record.uEmail,jdbcType=VARCHAR},
       u_state = #{record.uState,jdbcType=INTEGER},
       r_id = #{record.rId,jdbcType=INTEGER},
@@ -251,8 +251,8 @@
       <if test="uPassword != null">
         u_password = #{uPassword,jdbcType=VARCHAR},
       </if>
-      <if test="uTrunAme != null">
-        u_trun_ame = #{uTrunAme,jdbcType=VARCHAR},
+      <if test="uTrueName != null">
+        u_true_name = #{uTrueName,jdbcType=VARCHAR},
       </if>
       <if test="uEmail != null">
         u_email = #{uEmail,jdbcType=VARCHAR},
@@ -279,7 +279,7 @@
     update user
     set u_login_name = #{uLoginName,jdbcType=VARCHAR},
       u_password = #{uPassword,jdbcType=VARCHAR},
-      u_trun_ame = #{uTrunAme,jdbcType=VARCHAR},
+      u_true_name = #{uTrueName,jdbcType=VARCHAR},
       u_email = #{uEmail,jdbcType=VARCHAR},
       u_state = #{uState,jdbcType=INTEGER},
       r_id = #{rId,jdbcType=INTEGER},
