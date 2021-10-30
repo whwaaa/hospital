@@ -135,7 +135,7 @@
         //     }
         // })
         // TODO: 等待角色查询启用上面代码, 下面代码暂时替代
-        roles = [{"rId":1,"rIsDel":0,"rName":"管理员","rState":1},{"rId":2,"rIsDel":0,"rName":"院长","rState":1},{"rId":3,"rIsDel":0,"rName":"医生护士","rState":1},{"rId":4,"rIsDel":0,"rName":"药品管理员","rState":1}]
+        roles = [{"rId":1,"r_isDel":0,"rName":"管理员","r_state":1},{"rId":2,"r_isDel":0,"rName":"院长","r_state":1},{"rId":3,"r_isDel":0,"rName":"医生护士","r_state":1},{"rId":4,"r_isDel":0,"rName":"药品管理员","r_state":1}]
         $.each(roles, function(){
             $("#rId").append("<option value='"+ this.rId +"'>" + this.rName);
         })

@@ -126,15 +126,15 @@
         }
     }
     // 角色非空验证
-    function roleCheck(rId){
-        if(rId.value === "" || rId.value === undefined){
+    function roleCheck(uId){
+        if(uId.value === "" || uId.value === undefined){
             layer.msg("必须选择一个角色", function(){})
             roleCheckFlag = false;
-            $("#rId").addClass("warning")
+            $("#uId").addClass("warning")
 
         }else{
             roleCheckFlag = true;
-            $("#rId").removeClass("warning")
+            $("#uId").removeClass("warning")
         }
     }
 
@@ -146,14 +146,14 @@
     // 回调地址参数
     let pageNum = document.location.toString().GetValue("pageNum");
     let pageSize = document.location.toString().GetValue("pageSize");
-    let rId = document.location.toString().GetValue("rId");
+    let uId = document.location.toString().GetValue("uId");
 
     function queryUser(){
         layer.load(0)
-        // 通过rId查询用户信息
+        // 通过uId查询用户信息
         $.ajax({
             type: "GET",
-            url: "/user/"+ rId,
+            url: "/user/"+ uId,
             data: {jwtToken:jwtToken},
             success: function (data) {
                 layer.closeAll();
@@ -182,7 +182,7 @@
         //     success: function (data) {
         //         if(data.code === 200){
         //             $.each(data.obj, function(){
-        //                 $("#rId").append("<option value='"+ this.rId +"'>" + this.r_name);
+        //                 $("#uId").append("<option value='"+ this.uId +"'>" + this.r_name);
         //             })
         //             // 查询用户信息
         //             queryUser();
@@ -193,9 +193,9 @@
         //     }
         // })
         // TODO: 等待角色查询启用上面代码, 下面代码暂时替代
-        roles = [{"rId":1,"r_isDel":0,"r_name":"管理员","r_state":1},{"rId":2,"r_isDel":0,"r_name":"院长","r_state":1},{"rId":3,"r_isDel":0,"r_name":"医生护士","r_state":1},{"rId":4,"r_isDel":0,"r_name":"药品管理员","r_state":1}]
+        roles = [{"rId":1,"r_isDel":0,"rName":"管理员","r_state":1},{"rId":2,"r_isDel":0,"rName":"院长","r_state":1},{"rId":3,"r_isDel":0,"rName":"医生护士","r_state":1},{"rId":4,"r_isDel":0,"rName":"药品管理员","r_state":1}]
         $.each(roles, function(){
-            $("#rId").append("<option value='"+ this.rId +"'>" + this.r_name);
+            $("#rId").append("<option value='"+ this.rId +"'>" + this.rName);
         })
         setTimeout(function(){
             // 查询用户信息
@@ -235,7 +235,7 @@
             layer.load(0)
             $.ajax({
                 type: "POST",
-                url: "/user/" + rId,
+                url: "/user/" + uId,
                 data: {_method:"PUT",jwtToken:jwtToken,rId:rId,uEmail:uEmail,uTrueName:uTrueName,
                     uPassword:uPassword,uState:uState},
                 dataType: "json",

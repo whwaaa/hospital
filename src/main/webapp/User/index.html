@@ -93,7 +93,7 @@
     }
 
     // 修改用户state
-    function updateState(rId, uState){
+    function updateState(uId, uState){
         console.log("原 uState 为 : " + uState)
         if(uState == 0){
             uState = 1;
@@ -104,7 +104,7 @@
         layer.load(0)
         $.ajax({
             type: "POST",
-            url: "/user/" + rId,
+            url: "/user/" + uId,
             data: {jwtToken:jwtToken,uState:uState,_method:"PUT"},
             dataType: "json",
             success: function (data) {
@@ -112,13 +112,13 @@
                 if (data.code == 200){
                     if(uState == 0){
                         layer.msg("启用成功")
-                        $("#uid_"+ rId).text("启用")
+                        $("#uid_"+ uId).text("启用")
                     }else{
                         layer.msg("已禁用")
-                        $("#uid_"+ rId).text("禁用")
+                        $("#uid_"+ uId).text("禁用")
                     }
-                    $("#uid_"+ rId).attr("onclick","")
-                    $("#uid_"+ rId).attr("onclick","updateState("+ rId +","+ uState +")")
+                    $("#uid_"+ uId).attr("onclick","")
+                    $("#uid_"+ uId).attr("onclick","updateState("+ uId +","+ uState +")")
                 }else{
                     layer.msg(data.msg,function(){})
                 }
@@ -136,13 +136,13 @@
          $.each(pageInfo.list, function(){
              let ustate = this.uState==0?'启用':'禁用'
              let con = "<tr>\n" +
-                 "             <td style='vertical-align:middle;'><input type='checkbox' name='check' value='"+ this.rId +"'></td>\n" +
+                 "             <td style='vertical-align:middle;'><input type='checkbox' name='check' value='"+ this.uId +"'></td>\n" +
                  "             <td>"+ this.uLoginName +"</td>\n" +
                  "             <td>"+ this.uTrueName +"</td>\n" +
                  "             <td>"+ this.role.rName +"</td>\n" +
-                 "             <td><a id='uid_"+ this.rId +"' onclick='updateState("+ this.rId +", "+ this.uState +")' href='javascript:void(0);'>"+ ustate +"</a></td>\n" +
+                 "             <td><a id='uid_"+ this.uId +"' onclick='updateState("+ this.uId +", "+ this.uState +")' href='javascript:void(0);'>"+ ustate +"</a></td>\n" +
                  "             <td>\n" +
-                 "                 <a href='editUser.html?pageNum="+ pageInfo.pageNum +"&pageSize="+ pageInfo.pageSize +"&rId="+ this.rId +"'>编辑</a>&nbsp;&nbsp;&nbsp;<a href='javascript:deleteUserById("+this.rId+");'>删除</a>\n" +
+                 "                 <a href='editUser.html?pageNum="+ pageInfo.pageNum +"&pageSize="+ pageInfo.pageSize +"&uId="+ this.uId +"'>编辑</a>&nbsp;&nbsp;&nbsp;<a href='javascript:deleteUserById("+this.uId+");'>删除</a>\n" +
                  "             </td>\n" +
                  "         </tr>"
              $("#mycon").find("tbody").append($(con))
@@ -150,12 +150,12 @@
      }
 
      // 删除用户
-     function deleteUserById(rId){
+     function deleteUserById(uId){
         if(confirm("确认删除?")){
             layer.load(0);
             $.ajax({
                 type: "POST",
-                url: "/user/"+ rId,
+                url: "/user/"+ uId,
                 data: {_method:"DELETE",jwtToken:jwtToken},
                 success: function (data) {
                     layer.closeAll();

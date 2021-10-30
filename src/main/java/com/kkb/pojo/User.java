@@ -26,7 +26,7 @@ public class User {
     private Role role;
 
     public User(){
-        uId = 0;
+        uIsDel = 0;
     }
 
     public Role getRole() {
