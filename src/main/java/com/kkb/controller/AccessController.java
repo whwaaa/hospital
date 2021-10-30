@@ -53,7 +53,7 @@ public class AccessController {
     }
 
 
-    // 获取用户名信息, 前端jwtToken已经保存用户名信息,
+    // 获取用户名信息, 并判断用户是否登录 前端jwtToken已经保存用户名信息,
     // 再次通过后端解析jwtToken可经过拦截器, 判断jwtToken是否过期
     @RequestMapping(value = "/access/login", method = RequestMethod.GET)
     public AjaxResultVo isLogin(@RequestParam(value = "jwtToken", required = false) String jwtToken) throws JWTTokenInvalidException {

@@ -36,20 +36,7 @@
     let passwordCheckFlag = false;
     let trueNameCheckFlag = false;
     let emailCheckFlag = false;
-    // let jwtToken = $.cookie("jwtToken")
 
-    // 角色非空验证
-    function roleCheck(r_id){
-        if(r_id.value === "" || r_id.value === undefined){
-            layer.msg("必须选择一个角色", function(){})
-            roleCheckFlag = false;
-            $("#r_id").addClass("warning")
-
-        }else{
-            roleCheckFlag = true;
-            $("#r_id").removeClass("warning")
-        }
-    }
     // 登录名的唯一性验证, 非空
     function loginNameCheck(u_loginName){
         if(u_loginName.value == null || u_loginName.value === "" || u_loginName.value === undefined){
@@ -75,14 +62,7 @@
                 }
                 // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
                 ,complete : function(xhr, status) {
-                    // 通过xhr取得响应头
-                    var REDIRECT = xhr.getResponseHeader("REDIRECT");
-                    // 如果响应头中包含 REDIRECT 则说明是拦截器返回的
-                    if(REDIRECT == "REDIRECT"){
-                        // 跳到登陆界面, 传入当前URL作为参数, 登陆成功再跳回来
-                        let callBackUrL = window.location.href;
-                        window.location.href = xhr.getResponseHeader("CONTENTPATH") + "?callBackUrL=" + callBackUrL;
-                    }
+                    myComplete(xhr, status);
                 }
             })
         }
@@ -123,8 +103,42 @@
             $("input[name='u_email']").addClass("warning")
         }
     }
+    // 角色非空验证
+    function roleCheck(r_id){
+        if(r_id.value === "" || r_id.value === undefined){
+            layer.msg("必须选择一个角色", function(){})
+            roleCheckFlag = false;
+            $("#r_id").addClass("warning")
+
+        }else{
+            roleCheckFlag = true;
+            $("#r_id").removeClass("warning")
+        }
+    }
 
     $(function () {
+        // // 角色查询
+        // $.ajax({
+        //     type: "GET",
+        //     url: "/role/list",
+        //     data: {jwtToken:jwtToken},
+        //     dataType: "json",
+        //     success: function (data) {
+        //         if(data.code === 200){
+        //             $.each(data.obj, function(){
+        //                 $("#r_id").append("<option value='"+ this.r_id +"'>" + this.r_name);
+        //             })
+        //         }
+        //     },
+        //     complete : function(xhr, status) {
+        //         myComplete(xhr, status);
+        //     }
+        // })
+        // TODO: 等待角色查询启用上面代码, 下面代码暂时替代
+        roles = [{"r_id":1,"r_isDel":0,"r_name":"管理员","r_state":1},{"r_id":2,"r_isDel":0,"r_name":"院长","r_state":1},{"r_id":3,"r_isDel":0,"r_name":"医生护士","r_state":1},{"r_id":4,"r_isDel":0,"r_name":"药品管理员","r_state":1}]
+        $.each(roles, function(){
+            $("#r_id").append("<option value='"+ this.r_id +"'>" + this.r_name);
+        })
 
         $('#backid').click(function(){
             window.location.href="index.html";
@@ -176,6 +190,9 @@
                     }else{
                         layer.msg(data.msg,function(){})
                     }
+                },
+                complete : function(xhr, status) {
+                    myComplete(xhr, status);
                 }
             })
         })
@@ -205,7 +222,7 @@
             <td class="tableleft">状态</td>
             <td>
                 <input type="radio" name="u_state" value="0" checked/> 启用
-              <input type="radio" name="u_state" value="1" /> 禁用
+                <input type="radio" name="u_state" value="1" /> 禁用
             </td>
         </tr>
         <tr>
@@ -213,9 +230,9 @@
             <td>
             	<select onblur="roleCheck(this)" id="r_id" name="r_id">
         			<option value="">--请选择--
-        			<option value="1">管理员
-        			<option value="2">院长
-            		<option value="3">医生护士
+<!--        			<option value="1">管理员-->
+<!--        			<option value="2">院长-->
+<!--            		<option value="3">医生护士-->
        			 </select>
         	</td>
         </tr>
