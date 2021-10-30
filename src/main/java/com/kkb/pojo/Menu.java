@@ -9,6 +9,16 @@ public class Menu {
 
     private Integer m_state;
 
+    @Override
+    public String toString() {
+        return "Menu{" +
+                "m_id=" + m_id +
+                ", m_url='" + m_url + '\'' +
+                ", m_name='" + m_name + '\'' +
+                ", m_state=" + m_state +
+                '}';
+    }
+
     public Menu(){
         m_state = 0;
     }
