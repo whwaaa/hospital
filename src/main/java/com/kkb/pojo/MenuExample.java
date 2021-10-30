@@ -164,6 +164,76 @@ public class MenuExample {
             return (Criteria) this;
         }
 
+        public Criteria andM_urlIsNull() {
+            addCriterion("m_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andM_urlIsNotNull() {
+            addCriterion("m_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andM_urlEqualTo(String value) {
+            addCriterion("m_url =", value, "m_url");
+            return (Criteria) this;
+        }
+
+        public Criteria andM_urlNotEqualTo(String value) {
+            addCriterion("m_url <>", value, "m_url");
+            return (Criteria) this;
+        }
+
+        public Criteria andM_urlGreaterThan(String value) {
+            addCriterion("m_url >", value, "m_url");
+            return (Criteria) this;
+        }
+
+        public Criteria andM_urlGreaterThanOrEqualTo(String value) {
+            addCriterion("m_url >=", value, "m_url");
+            return (Criteria) this;
+        }
+
+        public Criteria andM_urlLessThan(String value) {
+            addCriterion("m_url <", value, "m_url");
+            return (Criteria) this;
+        }
+
+        public Criteria andM_urlLessThanOrEqualTo(String value) {
+            addCriterion("m_url <=", value, "m_url");
+            return (Criteria) this;
+        }
+
+        public Criteria andM_urlLike(String value) {
+            addCriterion("m_url like", value, "m_url");
+            return (Criteria) this;
+        }
+
+        public Criteria andM_urlNotLike(String value) {
+            addCriterion("m_url not like", value, "m_url");
+            return (Criteria) this;
+        }
+
+        public Criteria andM_urlIn(List<String> values) {
+            addCriterion("m_url in", values, "m_url");
+            return (Criteria) this;
+        }
+
+        public Criteria andM_urlNotIn(List<String> values) {
+            addCriterion("m_url not in", values, "m_url");
+            return (Criteria) this;
+        }
+
+        public Criteria andM_urlBetween(String value1, String value2) {
+            addCriterion("m_url between", value1, value2, "m_url");
+            return (Criteria) this;
+        }
+
+        public Criteria andM_urlNotBetween(String value1, String value2) {
+            addCriterion("m_url not between", value1, value2, "m_url");
+            return (Criteria) this;
+        }
+
         public Criteria andM_nameIsNull() {
             addCriterion("m_name is null");
             return (Criteria) this;

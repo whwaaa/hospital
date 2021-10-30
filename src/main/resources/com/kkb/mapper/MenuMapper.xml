@@ -3,6 +3,7 @@
 <mapper namespace="com.kkb.mapper.MenuMapper">
   <resultMap id="BaseResultMap" type="com.kkb.pojo.Menu">
     <id column="m_id" jdbcType="INTEGER" property="m_id" />
+    <result column="m_url" jdbcType="VARCHAR" property="m_url" />
     <result column="m_name" jdbcType="VARCHAR" property="m_name" />
     <result column="m_state" jdbcType="INTEGER" property="m_state" />
   </resultMap>
@@ -65,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    m_id, m_name, m_state
+    m_id, m_url, m_name, m_state
   </sql>
   <select id="selectByExample" parameterType="com.kkb.pojo.MenuExample" resultMap="BaseResultMap">
     select
@@ -98,16 +99,19 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.kkb.pojo.Menu">
-    insert into menu (m_id, m_name, m_state
-      )
-    values (#{m_id,jdbcType=INTEGER}, #{m_name,jdbcType=VARCHAR}, #{m_state,jdbcType=INTEGER}
-      )
+    insert into menu (m_id, m_url, m_name, 
+      m_state)
+    values (#{m_id,jdbcType=INTEGER}, #{m_url,jdbcType=VARCHAR}, #{m_name,jdbcType=VARCHAR}, 
+      #{m_state,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.kkb.pojo.Menu">
     insert into menu
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="m_id != null">
         m_id,
+      </if>
+      <if test="m_url != null">
+        m_url,
       </if>
       <if test="m_name != null">
         m_name,
@@ -119,6 +123,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="m_id != null">
         #{m_id,jdbcType=INTEGER},
+      </if>
+      <if test="m_url != null">
+        #{m_url,jdbcType=VARCHAR},
       </if>
       <if test="m_name != null">
         #{m_name,jdbcType=VARCHAR},
@@ -140,6 +147,9 @@
       <if test="record.m_id != null">
         m_id = #{record.m_id,jdbcType=INTEGER},
       </if>
+      <if test="record.m_url != null">
+        m_url = #{record.m_url,jdbcType=VARCHAR},
+      </if>
       <if test="record.m_name != null">
         m_name = #{record.m_name,jdbcType=VARCHAR},
       </if>
@@ -154,6 +164,7 @@
   <update id="updateByExample" parameterType="map">
     update menu
     set m_id = #{record.m_id,jdbcType=INTEGER},
+      m_url = #{record.m_url,jdbcType=VARCHAR},
       m_name = #{record.m_name,jdbcType=VARCHAR},
       m_state = #{record.m_state,jdbcType=INTEGER}
     <if test="_parameter != null">
@@ -163,6 +174,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.kkb.pojo.Menu">
     update menu
     <set>
+      <if test="m_url != null">
+        m_url = #{m_url,jdbcType=VARCHAR},
+      </if>
       <if test="m_name != null">
         m_name = #{m_name,jdbcType=VARCHAR},
       </if>
@@ -174,7 +188,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.kkb.pojo.Menu">
     update menu
-    set m_name = #{m_name,jdbcType=VARCHAR},
+    set m_url = #{m_url,jdbcType=VARCHAR},
+      m_name = #{m_name,jdbcType=VARCHAR},
       m_state = #{m_state,jdbcType=INTEGER}
     where m_id = #{m_id,jdbcType=INTEGER}
   </update>
