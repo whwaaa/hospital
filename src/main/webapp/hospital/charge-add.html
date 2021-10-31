@@ -45,10 +45,6 @@
 <form  class="definewidth m20">
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
-        <td width="10%" class="tableleft">编号</td>
-        <td><input type="text" id="chapId" value="1103" readonly="readonly"/></td>
-    </tr>
-    <tr>
         <td width="10%" class="tableleft">收费项目名称</td>
         <td><input type="text" id="chapName" value="心电图图检" /></td>
     </tr>
@@ -71,27 +67,23 @@
 </html>
 <script>
 
-    String.prototype.GetValue= function(para) {
-        let reg = new RegExp("(^|&)"+ para +"=([^&]*)(&|$)");
-        let r = this.substr(this.indexOf("\?")+1).match(reg);
-        if (r!=null) return unescape(r[2]); return null;
-    }
 
-    $(function() {
-        let url = document.location.toString();
-        let chapId = url.GetValue("chapId");
-        queryById(chapId);
-
-    });
-    function queryById(chapId){
+    $("#sub").click(function() {
+        let chapName = $("#chapName").val();
+        let chapMoney = $("#chapMoney").val();
         $.ajax({
-            type: "GET",
-            url: "/charge/"+chapId, //RESTful风格的API定义
-            data: {jwtToken:jwtToken},
+            type: "POST",
+            url: "/charge/", //RESTful风格的API定义
+            data: {
+                jwtToken:jwtToken,
+                chapName:chapName,
+                chapMoney:chapMoney,
+            },
             success: function (data) {
                 if(data.code == 200){
-                    loadDate(data);
+                    window.location.href = "/hospital/charge.html"
                 }else{
+                    alert("添加失败！"+data.msg);
                 }
             }
             // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
@@ -100,44 +92,7 @@
             }
         });
 
-    }
-    function loadDate(data) {
-        let chap = data.obj;
-        console.log(chap);
-        let chapId=chap.chapId;
-        let chapMoney=chap.chapMoney;
-        let chapName=chap.chapName;
-        $("#chapId").val(chapId);
-        $("#chapName").val(chapName);
-        $("#chapMoney").val(chapMoney);
+    });
 
-    }
-  $("#sub").click(function(){
-           let chapId = $("#chapId") .val();
-           let chapName = $("#chapName").val();
-           let chapMoney = $("#chapMoney").val();
-            alert(chapId);
-            $.ajax({
-                type: "POST",
-                url: "/charge/"+chapId, //RESTful风格的API定义
-                data: {
-                    _method:"PUT",
-                    jwtToken:jwtToken,
-                    chapName:chapName,
-                    chapMoney:chapMoney,
-                },
-                dataType: "json",
-                success: function (data) {
-                    console.log(data);
-                    if (data.code == 200){
-                        window.location.href = "/charge.html";
-                    }else{
-                    }
-                }
-                ,complete : function(xhr, status) {
-                    myComplete(xhr, status);
-                }
-            });
-        });
 
 </script>

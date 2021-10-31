@@ -27,4 +27,9 @@ public class ChargeControllerTest extends TestCase {
         PageInfo<ChargeProject> pageInfo = service.queryByPage(1, 5, null);
         System.out.println(pageInfo);
     }
+    @Test
+    public void queryById(){
+        ChargeProject chargeProject = service.queryById(1001);
+        System.out.println(chargeProject);
+    }
 }

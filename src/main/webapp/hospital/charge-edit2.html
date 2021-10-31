@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>添加收费项目--中软高科-2015</title>
+    <title>查看收费项目--中软高科-2015</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="../Css/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
@@ -50,17 +50,16 @@
     </tr>
     <tr>
         <td width="10%" class="tableleft">收费项目名称</td>
-        <td><input type="text" id="chapName" value="心电图图检" /></td>
+        <td><input type="text" id="chapName" value="心电图图检" readonly="readonly" /></td>
     </tr>
 
     <tr>
         <td width="10%" class="tableleft">收费金额</td>
-        <td><input type="text" id="chapMoney" value="600"/></td>
+        <td><input type="text" id="chapMoney" value="600" readonly="readonly"/></td>
     </tr>
     <tr>
         <td colspan="2">
-			<center>
-				<button type="submit" class="btn btn-primary" id="sub" type="button" >保存</button> &nbsp;
+			<center>&nbsp;
                 &nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
 			</center>
 		</td>
@@ -77,19 +76,18 @@
         if (r!=null) return unescape(r[2]); return null;
     }
 
-    $(function() {
+    $(function(){
         let url = document.location.toString();
         let chapId = url.GetValue("chapId");
         queryById(chapId);
 
-    });
     function queryById(chapId){
         $.ajax({
             type: "GET",
             url: "/charge/"+chapId, //RESTful风格的API定义
             data: {jwtToken:jwtToken},
             success: function (data) {
-                if(data.code == 200){
+                if(data.code === 200){
                     loadDate(data);
                 }else{
                 }
@@ -102,42 +100,16 @@
 
     }
     function loadDate(data) {
-        let chap = data.obj;
-        console.log(chap);
-        let chapId=chap.chapId;
-        let chapMoney=chap.chapMoney;
-        let chapName=chap.chapName;
-        $("#chapId").val(chapId);
-        $("#chapName").val(chapName);
-        $("#chapMoney").val(chapMoney);
+            let chap = data.obj;
+            console.log(chap);
+            let chapId=chap.chapId;
+            let chapMoney=chap.chapMoney;
+             let chapName=chap.chapName;
+            $("#chapId").val(chapId);
+            $("#chapName").val(chapName);
+            $("#chapMoney").val(chapMoney);
 
     }
-  $("#sub").click(function(){
-           let chapId = $("#chapId") .val();
-           let chapName = $("#chapName").val();
-           let chapMoney = $("#chapMoney").val();
-            alert(chapId);
-            $.ajax({
-                type: "POST",
-                url: "/charge/"+chapId, //RESTful风格的API定义
-                data: {
-                    _method:"PUT",
-                    jwtToken:jwtToken,
-                    chapName:chapName,
-                    chapMoney:chapMoney,
-                },
-                dataType: "json",
-                success: function (data) {
-                    console.log(data);
-                    if (data.code == 200){
-                        window.location.href = "/charge.html";
-                    }else{
-                    }
-                }
-                ,complete : function(xhr, status) {
-                    myComplete(xhr, status);
-                }
-            });
-        });
+    });
 
 </script>

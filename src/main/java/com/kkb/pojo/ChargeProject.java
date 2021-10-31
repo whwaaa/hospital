@@ -1,5 +1,8 @@
 package com.kkb.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -12,6 +15,21 @@ public class ChargeProject {
 
     private Integer chapIsDel;
 
+    @Override
+    public String toString() {
+        return "ChargeProject{" +
+                "chapId=" + chapId +
+                ", chapName='" + chapName + '\'' +
+                ", chapMoney=" + chapMoney +
+                ", chapIsDel=" + chapIsDel +
+                ", chapCreateTime=" + chapCreateTime +
+                ", chapUpdateTime=" + chapUpdateTime +
+                ", uId=" + uId +
+                '}';
+    }
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date chapCreateTime;
 
     private Date chapUpdateTime;
