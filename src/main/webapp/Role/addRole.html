@@ -49,18 +49,7 @@
         <tr>
             <td class="tableleft">权限</td>
             <td id="my-con">
-<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />挂号信息管理</label></ul> -->
-<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />门诊医生管理</label></ul> -->
-<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />药品管理</label></ul> -->
-<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />住院办理</label></ul> -->
-<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />收费项目登记</label></ul> -->
-<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />在院发药</label></ul> -->
-<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />住院结算</label></ul> -->
-<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />月营业额统计</label></ul> -->
-<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />年营业额统计</label></ul> -->
-<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />用户管理</label></ul> -->
-<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />角色管理</label></ul> -->
-<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />资源管理</label></ul> -->
+
             </td>
         </tr>
         <tr>
@@ -80,7 +69,7 @@
         $.ajax({
             type: "GET",
             url: "/menu/list",
-            data: {jwtToken:jwtToken},
+            data: {jwtToken:jwtToken,pageSize:999,pageNum:1},
             dataType: "json",
             success: function (data) {
                 layer.closeAll()
@@ -107,7 +96,7 @@
     let roleNameCheckFlag = false;
     function roleNameCheck(rName){
         roleNameCheckTime = setTimeout(function(){
-            if(rName == null || rName === "" || rName === undefined){
+            if(rName == null || rName == "" || rName == undefined){
                 layer.msg("登录名不能为空", function(){})
                 $("input[name='rName']").addClass("warning")
             }else{
@@ -144,12 +133,12 @@
     // 添加角色信息
     function addRole(){
         // 防止onblur和onclick发生冲突, 确保onclick先执行
-        clearTimeout(roleNameCheckTime)
+        clearTimeout(roleNameCheckTime);
         let rName = $("input[name='rName']").val();
-        let rState = $("input[name='rState']:checked").val()
+        let rState = $("input[name='rState']:checked").val();
         var menuIds = "";
         $.each($("input[name='group[]']:checked"), function(){
-            menuIds += $(this).val() + "_"
+            menuIds += $(this).val() + "_";
         })
         // 角色名的唯一性验证, 非空
         if(!roleNameCheckFlag){

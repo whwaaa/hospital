@@ -96,7 +96,7 @@
                      "         \t<td style=\"vertical-align:middle;\"><input type=\"checkbox\" name=\"check\" value=\""+ this.rId +"\"></td>\n" +
                      "            <td>"+ this.rName +"</td>\n" +
                      "            <td><a id='rid_"+ this.rId +"' onclick='updateState("+ this.rId +", "+ this.rState +")' href='javascript:void(0);'>"+ rState +"</a></td>\n" +
-                     "            <td><a href=\"editRole.html?pageSize="+obj.pageSize+"&pageNum="+obj.pageNum+"&mId="+this.rId+"\">编辑</a>&nbsp;&nbsp;&nbsp;<a href=\"javascript:deleteOne('"+ this.rId +"');\">删除</a> </td>\n" +
+                     "            <td><a href=\"editRole.html?pageSize="+obj.pageSize+"&pageNum="+obj.pageNum+"&rId="+this.rId+"\">编辑</a>&nbsp;&nbsp;&nbsp;<a href=\"javascript:deleteOne('"+ this.rId +"');\">删除</a> </td>\n" +
                      "        </tr>"
                  $("#mycon").append($(conbox));
              })

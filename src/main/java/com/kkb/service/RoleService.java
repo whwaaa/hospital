@@ -7,6 +7,7 @@ import com.kkb.mapper.RoleMenuMapper;
 import com.kkb.pojo.Role;
 import com.kkb.pojo.RoleExample;
 import com.kkb.pojo.RoleMenu;
+import com.kkb.pojo.RoleMenuExample;
 import com.kkb.vo.RoleQueryVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,24 +40,28 @@ public class RoleService {
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Integer add(Role role){
-        // 添加到RoleMenu表
-        // 解析menuIds
-        String[] menuIds = role.getMenuIds().split("_");
-        RoleMenu roleMenu = new RoleMenu();
-        roleMenu.setrId(role.getrId());
-        for (String menuId : menuIds) {
-            int mId;
-            try {
-                mId = Integer.parseInt(menuId);
-            } catch (NumberFormatException e) {
-                return null;
-            }
-            roleMenu.setmId(mId);
-            roleMenuMapper.insertSelective(roleMenu);
-        }
         // 添加到role表
         role.setrCreateTime(new Date());
-        return roleMapper.insertSelective(role);
+        int i = roleMapper.insertSelective(role);
+        if(role.getMenuIds()!=null && !"".equals(role.getMenuIds().trim()) && i>0){
+            // 添加到RoleMenu表
+            // 解析menuIds
+            String[] menuIds = role.getMenuIds().split("_");
+            RoleMenu roleMenu = new RoleMenu();
+            roleMenu.setrId(role.getrId());
+            for (String menuId : menuIds) {
+                int mId;
+                try {
+                    // TODO: 此处可抛全局异常处理, 待后期处理
+                    mId = Integer.parseInt(menuId);
+                } catch (NumberFormatException e) {
+                    return 0;
+                }
+                roleMenu.setmId(mId);
+                roleMenuMapper.insertSelective(roleMenu);
+            }
+        }
+        return i;
     }
 
     /**
@@ -81,9 +86,34 @@ public class RoleService {
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Integer update(Integer rId, Role role){
+        // 更新role表
         role.setrUpdateTime(new Date());
         role.setrId(rId);
-        return roleMapper.updateByPrimaryKeySelective(role);
+        int i = roleMapper.updateByPrimaryKeySelective(role);
+        if(role.getMenuIds()!=null && !"".equals(role.getMenuIds().trim())){
+            // 更新role与menu中间表
+            RoleMenuExample roleMenuExample = new RoleMenuExample();
+            RoleMenuExample.Criteria criteria = roleMenuExample.createCriteria();
+            criteria.andRIdEqualTo(rId);
+            // 先删除
+            roleMenuMapper.deleteByExample(roleMenuExample);
+            // 再添加
+            String[] menuIds = role.getMenuIds().split("_");
+            RoleMenu roleMenu = new RoleMenu();
+            roleMenu.setrId(rId);
+            for (String menuId : menuIds) {
+                int mId;
+                try {
+                    // TODO: 此处可抛全局异常处理, 待后期处理
+                    mId = Integer.parseInt(menuId);
+                } catch (NumberFormatException e) {
+                    return 0;
+                }
+                roleMenu.setmId(mId);
+                roleMenuMapper.insertSelective(roleMenu);
+            }
+        }
+        return i;
     }
 
     /**
@@ -115,11 +145,20 @@ public class RoleService {
      */
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public Role queryByRId(Integer rId){
-        return roleMapper.selectByPrimaryKey(rId);
+        // 查询role对象
+        Role role = roleMapper.selectByPrimaryKey(rId);
+        RoleMenuExample roleMenuExample = new RoleMenuExample();
+        RoleMenuExample.Criteria criteria = roleMenuExample.createCriteria();
+        // 根据rId查询role与menu的中间表
+        criteria.andRIdEqualTo(rId);
+        List<RoleMenu> roleMenus = roleMenuMapper.selectByExample(roleMenuExample);
+        // 将结果添加进role对象返回
+        role.setRoleMenuList(roleMenus);
+        return role;
     }
 
     /**
-     * 通过主键查询
+     * 通过rName查询
      * @param rName
      * @return
      */

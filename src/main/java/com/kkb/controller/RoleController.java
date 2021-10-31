@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.management.relation.RelationNotFoundException;
+import java.util.List;
+
 /**
  * shandong-hospital
  *
@@ -86,7 +89,10 @@ public class RoleController {
     // 根据角色名称查重
     @RequestMapping(value = "r-name/{rName}", method = RequestMethod.GET)
     public AjaxResultVo<Role> queryByRName(@PathVariable("rName") String rName){
-
+        List<Role> roles = roleService.queryByRName(rName);
+        if(roles.size() > 0){
+            return new AjaxResultVo<>(400, "角色名重复", null);
+        }
         return new AjaxResultVo<>();
     }
 
