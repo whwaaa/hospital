@@ -29,6 +29,12 @@ public class UserController {
     // 多条件分页查询
     @RequestMapping(value = "list",method = RequestMethod.GET)
     public AjaxResultVo<PageInfo> queryByPage(Integer pageNum, Integer pageSize, UserQueryVO userQueryVO){
+        if (pageNum == null || pageNum <=0){
+            pageNum = 1;
+        }
+        if (pageSize == null || pageSize <=0){
+            pageSize = 5;
+        }
         PageInfo<User> userPageInfo = userService.queryByPage(pageNum, pageSize, userQueryVO);
         if(userPageInfo != null){
             return new AjaxResultVo<>(200, "ok", userPageInfo);

@@ -25,10 +25,10 @@ public class ChargeController {
     private ChargeService chargeService;
     @RequestMapping(value = "list",method = RequestMethod.GET)
     public AjaxResultVo<ChargeProject> queryByPage(Integer pageNum, Integer pageSize, ChargeQueryVo vo){
-        if (pageNum == null && pageNum <=0){
+        if (pageNum == null || pageNum <=0){
             pageNum = 1;
         }
-        if (pageSize == null && pageSize <=0){
+        if (pageSize == null || pageSize <=0){
             pageSize = 5;
         }
         PageInfo<ChargeProject> chargePageInfo = chargeService.queryByPage(pageNum,pageSize,vo);
