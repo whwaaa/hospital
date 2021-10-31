@@ -45,7 +45,7 @@
             window.location.href="addUser.html";
         });
 
-        if(pageNum === null || pageNum == undefined){
+        if(pageNum == undefined || pageNum == ''){
             queryList(1);
         }else{
             queryList(pageNum);
@@ -59,10 +59,10 @@
     // TODO : 这里一定要重写queryList(分页查询方法)
     queryList = function(pageNum){
         // 先读取地址栏
-        if(pageSize === null || pageSize == undefined){
+        if(pageSize == undefined || pageSize == ''){
             // 再读取输入框
             pageSize = $("#pageSize").val();
-            if(pageSize === null || pageSize == undefined){
+            if(pageSize == undefined || pageSize == ''){
                 // 都读取不到再赋初始值
                 pageSize = 5;
             }

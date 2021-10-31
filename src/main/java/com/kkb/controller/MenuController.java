@@ -32,6 +32,12 @@ public class MenuController {
     // 多条件分页查询
     @RequestMapping(value = "list",method = RequestMethod.GET)
     public AjaxResultVo<PageInfo> queryByPage(Integer pageNum, Integer pageSize, MenuQueryVo menuQueryVo){
+        if (pageNum == null || pageNum <=0){
+            pageNum = 1;
+        }
+        if (pageSize == null || pageSize <=0){
+            pageSize = 5;
+        }
         PageInfo<Menu> menuPageInfo = menuService.queryByPage(pageNum, pageSize, menuQueryVo);
         if(menuPageInfo != null){
             return new AjaxResultVo<>(menuPageInfo);
