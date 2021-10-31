@@ -7,7 +7,6 @@
     <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
     <link rel="stylesheet" type="text/css" href="../Css/style.css" />
     <script type="text/javascript" src="../Js/jquery.js"></script>
-    <script type="text/javascript" src="../Js/jquery.sorted.js"></script>
     <script type="text/javascript" src="../Js/bootstrap.js"></script>
     <script type="text/javascript" src="../Js/ckform.js"></script>
     <script type="text/javascript" src="../Js/common.js"></script>
@@ -42,17 +41,17 @@
          let globalPageNum = document.location.toString().GetValue("pageNum");
          let globalPageSize = document.location.toString().GetValue("pageSize");
 
-         if(globalPageNum == null || globalPageNum == undefined || globalPageNum == '' || globalPageNum == 'null'){
+         if(globalPageNum == undefined || globalPageNum == ''){
              globalPageNum = 1;
          }
 
          // 分页查询
          queryList = function(pageNum){
              // 先读取地址栏
-             if(globalPageSize == null || globalPageSize == undefined || globalPageSize == ''){
+             if(globalPageSize == undefined || globalPageSize == ''){
                  // 再读取输入框
                  globalPageSize = $("#pageSize").val();
-                 if(globalPageSize == null || globalPageSize == undefined || globalPageSize == ''){
+                 if(globalPageSize == undefined || globalPageSize == ''){
                      // 都读取不到再赋初始值
                      globalPageSize = 5;
                  }
