@@ -38,10 +38,6 @@ public class Drug {
 
     private Integer uId;
 
-    public Drug(){
-        drIsDel = 0;
-    }
-
     public Integer getDrId() {
         return drId;
     }

@@ -37,10 +37,6 @@ public class Doctor {
 
     private Integer uId;
 
-    public Doctor(){
-        dIsDel = 0;
-    }
-
     public Integer getdId() {
         return dId;
     }

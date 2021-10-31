@@ -17,10 +17,6 @@ public class Role {
 
     private Integer uId;
 
-    public Role(){
-        rIsDel = 0;
-    }
-
     public Integer getrId() {
         return rId;
     }

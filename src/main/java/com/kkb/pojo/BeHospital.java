@@ -26,10 +26,6 @@ public class BeHospital {
 
     private Integer uId;
 
-    public BeHospital(){
-        behIsDel = 0;
-    }
-
     public Integer getBehId() {
         return behId;
     }

@@ -9,20 +9,20 @@ package com.kkb.vo;
  */
 public class MenuQueryVo {
 
-    private String m_name;
+    private String mName;
 
     public MenuQueryVo() {
     }
 
-    public MenuQueryVo(String m_name) {
-        this.m_name = m_name;
+    public MenuQueryVo(String mName) {
+        this.mName = mName;
     }
 
-    public String getM_name() {
-        return m_name;
+    public String getmName() {
+        return mName;
     }
 
-    public void setM_name(String m_name) {
-        this.m_name = m_name;
+    public void setmName(String mName) {
+        this.mName = mName;
     }
 }

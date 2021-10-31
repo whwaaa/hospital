@@ -69,7 +69,7 @@ public class UserService {
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = {Exception.class})
     public Integer addUser(User user){
         user.setuCreateTime(new Date());
-        return userMapper.insert(user);
+        return userMapper.insertSelective(user);
     }
 
     /**

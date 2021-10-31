@@ -76,6 +76,8 @@
             success: function (data) {
                 layer.closeAll()
                 if(data.code === 200){
+                    // 清除全局pageSize
+                    pageSize = null;
                     // 填充分页
                     fillPageData(data.obj);
                     // 填充内容

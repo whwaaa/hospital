@@ -5,7 +5,6 @@ import com.github.pagehelper.PageInfo;
 import com.kkb.mapper.MenuMapper;
 import com.kkb.pojo.*;
 import com.kkb.vo.MenuQueryVo;
-import com.kkb.vo.UserQueryVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -39,8 +38,8 @@ public class MenuService {
         MenuExample menuExample = new MenuExample();
         MenuExample.Criteria criteria = menuExample.createCriteria();
         // 添加多条件
-        if(menuQueryVo.getM_name()!=null && !"".equals(menuQueryVo.getM_name())){
-            criteria.andM_nameLike("%" + menuQueryVo.getM_name() + "%");
+        if(menuQueryVo.getmName()!=null && !"".equals(menuQueryVo.getmName().trim())){
+            criteria.andMNameLike("%" + menuQueryVo.getmName() + "%");
         }
         // 分页
         PageHelper.startPage(pageNum, pageSize);
@@ -60,12 +59,12 @@ public class MenuService {
 
     /**
      * 根据主键查询
-     * @param m_id
+     * @param mId
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED,readOnly = true)
-    public Menu queryById(Integer m_id){
-        return menuMapper.selectByPrimaryKey(m_id);
+    public Menu queryById(Integer mId){
+        return menuMapper.selectByPrimaryKey(mId);
     }
 
     /**
@@ -73,8 +72,8 @@ public class MenuService {
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = {Exception.class})
-    public Integer deleteById(Integer m_id){
-        return menuMapper.deleteByPrimaryKey(m_id);
+    public Integer deleteById(Integer mId){
+        return menuMapper.deleteByPrimaryKey(mId);
     }
 
     /**
@@ -82,8 +81,21 @@ public class MenuService {
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = {Exception.class})
-    public Integer updateById(Integer m_id, Menu menu){
-        menu.setM_id(m_id);
+    public Integer updateById(Integer mId, Menu menu){
+        menu.setmId(mId);
         return menuMapper.updateByPrimaryKeySelective(menu);
+    }
+
+    /**
+     * 根据资源名查询资源
+     * @param mName
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED,readOnly = true)
+    public List<Menu> queryByMName(String mName){
+        MenuExample menuExample = new MenuExample();
+        MenuExample.Criteria criteria = menuExample.createCriteria();
+        criteria.andMNameEqualTo(mName);
+        return menuMapper.selectByExample(menuExample);
     }
 }

@@ -7,7 +7,6 @@
     <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
     <link rel="stylesheet" type="text/css" href="../Css/style.css" />
     <script type="text/javascript" src="../Js/jquery.js"></script>
-    <script type="text/javascript" src="../Js/jquery.sorted.js"></script>
     <script type="text/javascript" src="../Js/bootstrap.js"></script>
     <script type="text/javascript" src="../Js/ckform.js"></script>
     <script type="text/javascript" src="../Js/common.js"></script>
@@ -34,49 +33,176 @@
 
     </style>
     <script type="text/javascript">
-     $(function () {
-		$('#newNav').click(function(){
-				window.location.href="add.html";
-		 });
+
+    String.prototype.GetValue= function(para) {
+        let reg = new RegExp("(^|&)"+ para +"=([^&]*)(&|$)");
+        let r = this.substr(this.indexOf("\?")+1).match(reg);
+        if (r!=null) return unescape(r[2]); return null;
+    }
+    // 地址参数
+    let globalPageNum = document.location.toString().GetValue("pageNum");
+    let globalPageSize = document.location.toString().GetValue("pageSize");
+
+    if(globalPageNum == null || globalPageNum == undefined || globalPageNum == '' || globalPageNum == 'null'){
+        globalPageNum = 1;
+    }
+
+    // 分页查询
+    queryList = function(pageNum){
+        // 先读取地址栏
+        if(globalPageSize == null || globalPageSize == undefined || globalPageSize == ''){
+            // 再读取输入框
+            globalPageSize = $("#pageSize").val();
+            if(globalPageSize == null || globalPageSize == undefined || globalPageSize == ''){
+                // 都读取不到再赋初始值
+                globalPageSize = 5;
+            }
+        }
+        // 读取mName
+        let mName = $("input[name='mName']").val().trim();
+        if(mName === undefined)
+            mName = "";
+        layer.load(0)
+        $.ajax({
+            type: "GET",
+            url: "/menu/list",
+            data: {pageNum:pageNum,pageSize:globalPageSize,jwtToken:jwtToken,mName:mName},
+            success: function (data) {
+                layer.closeAll();
+                if(data.code === 200){
+                    // 清除全局pageSize
+                    globalPageSize = null;
+                    // 填充分页
+                    fillPageData(data.obj);
+                    // 填充内容
+                    fillContent(data.obj);
+                }else{
+                    layer.msg(data.msg,function(){})
+                }
+            },
+            complete : function(xhr, status) {
+                myComplete(xhr, status);
+            }
+        });
+    }
+
+    $(function () {
+        // 分页查询
+        queryList(globalPageNum);
+        // 添加资源
+        $('#newNav').click(function(){
+            globalPageNum = $(".current").text();
+            globalPageSize = $("#pageSize").val();
+            window.location.href="add.html?pageNum=" + globalPageNum + "&pageSize=" + globalPageSize;
+        });
+        // 监听查询按钮
+        $("#queryByMName").on("click", function(){
+            globalPageNum = $(".current").text();
+            queryList(globalPageNum);
+        })
     });
-	
-	
+    function fillContent(obj){
+        let list = obj.list;
+        // 清空div
+        $("#mycon").empty();
+        $.each(list, function(){
+            let mState = this.mState==0 ? "有效" : "失效";
+            let conbox = "<tr>\n" +
+                "     \t<td style=\"vertical-align:middle;\"><input type=\"checkbox\" name=\"check\" value=\""+this.mId+"\"></td>\n" +
+                "        <td>"+ this.mName +"</td>\n" +
+                "        <td>"+ this.mUrl +"</td>\n" +
+                "        <td>"+ mState +"</td>\n" +
+                "        <td>\n" +
+                "            <a href=\"edit.html?pageSize="+obj.pageSize+"&pageNum="+obj.pageNum+"&mId="+this.mId+"\">编辑</a>&nbsp;&nbsp;&nbsp;<a href=\"javascript:deleteOne("+this.mId+");\">删除</a>\n" +
+                "        </td>\n" +
+                "    </tr>\t";
+            $("#mycon").append($(conbox));
+        })
+    }
+
+    // 删除一个资源信息
+    function deleteOne(mId){
+        if(confirm("确认删除?")){
+            layer.load(0);
+            $.ajax({
+                type: "POST",
+                url: "/menu/"+ mId,
+                data: {_method:"DELETE",jwtToken:jwtToken},
+                success: function (data) {
+                    layer.closeAll();
+                    if(data.code === 204){
+                        layer.msg("删除成功");
+                        queryList($(".current").text())     // 刷新页面
+                    }else{
+                        layer.msg(data.msg,function(){})
+                    }
+                }
+                ,complete : function(xhr, status) {
+                    myComplete(xhr, status);
+                }
+            });
+        }
+    }
+
     function checkall(){
-			var alls=document.getElementsByName("check");
-			var ch=document.getElementById("checkall");
-			if(ch.checked){
-				for(var i=0;i<alls.length;i++){
-					alls[i].checked=true;	
-				}	
-			}else{
-				for(var i=0;i<alls.length;i++){
-					alls[i].checked=false;	
-				}	
-			}
-		}
-		function delAll(){
-			var alls=document.getElementsByName("check");
-			var ids=new Array();
-			for(var i=0;i<alls.length;i++){
-				if(alls[i].checked){
-					ids.push(alls[i].value);
-				}		
-			}
-			if(ids.length>0){
-				if(confirm("确认删除?")){
-					alert("删除成功!");
-				}
-			}else{
-				alert("请选中要删除的项");
-			}
-		}
-    </script>
+        var alls=document.getElementsByName("check");
+        var ch=document.getElementById("checkall");
+        if(ch.checked){
+            for(var i=0;i<alls.length;i++){
+                alls[i].checked=true;
+            }
+        }else{
+            for(var i=0;i<alls.length;i++){
+                alls[i].checked=false;
+            }
+        }
+    }
+    function delAll(){
+        var alls=document.getElementsByName("check");
+        var ids=new Array();
+        for(var i=0;i<alls.length;i++){
+            if(alls[i].checked){
+                ids.push(alls[i].value);
+            }
+        }
+        if(ids.length>0){
+            if(confirm("确认删除?")){
+                layer.load(0);
+                $.each(ids, function(index,id){
+                    $.ajax({
+                        type: "POST",
+                        url: "/menu/"+ id,
+                        data: {_method:"DELETE",jwtToken:jwtToken},
+                        success: function (data) {
+                            layer.closeAll();
+                            if(data.code === 204){
+                                if(index === ids.length-1){
+                                    layer.msg("删除成功");
+                                    queryList($(".current").text())     // 刷新页面
+                                }
+                            }else{
+                                layer.msg(data.msg,function(){})
+                            }
+                        }
+                        // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+                        ,complete : function(xhr, status) {
+                            myComplete(xhr, status);
+                        }
+                    });
+                })
+                return false;
+            }
+        }else{
+            alert("请选中要删除的项");
+        }
+    }
+</script>
 </head>
 <body>
-<form class="form-inline definewidth m20" action="index.html" method="get">    
+<form class="form-inline definewidth m20">
     资源(菜单)名称：
-    <input type="text" name="username" id="username"class="abc input-default" placeholder="" value="">&nbsp;&nbsp;  
-    <button type="submit" class="btn btn-primary">查询</button>
+    <input type="text" name="mName" class="abc input-default" placeholder="" value="">&nbsp;&nbsp;
+    <button type="button" id="queryByMName" class="btn btn-primary">查询</button>
 </form>
 <table class="table table-bordered table-hover definewidth m10">
     <thead>
@@ -88,19 +214,16 @@
         <th  width="10%">操作</th>
     </tr>
     </thead>
-	     <tr>
-         	<td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
-            <td>挂号信息管理</td>
-            <td>query.action</td>
-            <td>有效</td>
-            <td>
-                <a href="edit.html">编辑</a>&nbsp;&nbsp;&nbsp;<a href="javascript:alert('删除成功！');">删除</a>             
-            </td>
-        </tr>	
+    <tbody id="mycon"></tbody>
+
 </table>
 <table class="table table-bordered table-hover definewidth m10" >
-  	<tr><th colspan="5">  <div class="inline pull-right page">
-         10122 条记录 1/507 页  <a href='#'>下一页</a>     <span class='current'>1</span><a href='#'>2</a><a href='/chinapost/index.php?m=Label&a=index&p=3'>3</a><a href='#'>4</a><a href='#'>5</a>  <a href='#' >下5页</a> <a href='#' >最后一页</a></div><div><button type="button" class="btn btn-success" id="newNav">添加资源</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-success" id="delPro" onClick="delAll();">删除选中</button></div></th></tr>
-  </table>
+  	<tr>
+        <th colspan="5">
+            <div id="pageInfo-box"></div>
+            <div><button type="button" class="btn btn-success" id="newNav">添加资源</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-success" id="delPro" onClick="delAll();">删除选中</button></div>
+        </th>
+    </tr>
+</table>
 </body>
 </html>

@@ -25,10 +25,6 @@ public class User {
 
     private Role role;
 
-    public User(){
-        uIsDel = 0;
-    }
-
     public Role getRole() {
         return role;
     }
