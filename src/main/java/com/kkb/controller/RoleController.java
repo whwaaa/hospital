@@ -49,7 +49,7 @@ public class RoleController {
 
     // 根据主键更新
     @RequestMapping(value = "{rId}", method = RequestMethod.PUT)
-    public AjaxResultVo<Role> update(Integer rId, Role role){
+    public AjaxResultVo<Role> update(@PathVariable("rId") Integer rId, Role role){
         Integer update = roleService.update(rId, role);
         if(update != 0){
             return new AjaxResultVo<>();
@@ -81,6 +81,13 @@ public class RoleController {
             return new AjaxResultVo<>(200, "ok", role);
         }
         return new AjaxResultVo<>(500, "服务器内部异常, 请稍后再试!");
+    }
+
+    // 根据角色名称查重
+    @RequestMapping(value = "r-name/{rName}", method = RequestMethod.GET)
+    public AjaxResultVo<Role> queryByRName(@PathVariable("rName") String rName){
+
+        return new AjaxResultVo<>();
     }
 
 }

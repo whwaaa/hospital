@@ -3,8 +3,10 @@ package com.kkb.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.kkb.mapper.RoleMapper;
+import com.kkb.mapper.RoleMenuMapper;
 import com.kkb.pojo.Role;
 import com.kkb.pojo.RoleExample;
+import com.kkb.pojo.RoleMenu;
 import com.kkb.vo.RoleQueryVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,9 @@ public class RoleService {
     @Autowired
     private RoleMapper roleMapper;
 
+    @Autowired
+    private RoleMenuMapper roleMenuMapper;
+
     /**
      * 新增role数据
      * @param role
@@ -34,6 +39,22 @@ public class RoleService {
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Integer add(Role role){
+        // 添加到RoleMenu表
+        // 解析menuIds
+        String[] menuIds = role.getMenuIds().split("_");
+        RoleMenu roleMenu = new RoleMenu();
+        roleMenu.setrId(role.getrId());
+        for (String menuId : menuIds) {
+            int mId;
+            try {
+                mId = Integer.parseInt(menuId);
+            } catch (NumberFormatException e) {
+                return null;
+            }
+            roleMenu.setmId(mId);
+            roleMenuMapper.insertSelective(roleMenu);
+        }
+        // 添加到role表
         role.setrCreateTime(new Date());
         return roleMapper.insertSelective(role);
     }
@@ -95,6 +116,20 @@ public class RoleService {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public Role queryByRId(Integer rId){
         return roleMapper.selectByPrimaryKey(rId);
+    }
+
+    /**
+     * 通过主键查询
+     * @param rName
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    public List<Role> queryByRName(String rName){
+        RoleExample roleExample = new RoleExample();
+        RoleExample.Criteria criteria = roleExample.createCriteria();
+        criteria.andRNameEqualTo(rName);
+        criteria.andRIsDelEqualTo(0);
+        return roleMapper.selectByExample(roleExample);
     }
 }
 

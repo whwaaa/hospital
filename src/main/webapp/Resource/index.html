@@ -76,6 +76,7 @@
                     fillPageData(data.obj);
                     // 填充内容
                     fillContent(data.obj);
+                    $("#checkall").removeAttr("checked");
                 }else{
                     layer.msg(data.msg,function(){})
                 }
@@ -220,7 +221,7 @@
 <table class="table table-bordered table-hover definewidth m10" >
   	<tr>
         <th colspan="5">
-            <div id="pageInfo-box"></div>
+            <div id="pageInfo-box" class="inline pull-right page"></div>
             <div><button type="button" class="btn btn-success" id="newNav">添加资源</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-success" id="delPro" onClick="delAll();">删除选中</button></div>
         </th>
     </tr>

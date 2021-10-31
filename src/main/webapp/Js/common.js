@@ -83,7 +83,7 @@ function fillPageData(pageInfo) {
         $("#prePage").removeAttr("href");
     }
     // 如果是尾页: 尾页和下一页不可用
-    if(pageInfo.pageNum == pageInfo.pages){
+    if(pageInfo.pageNum === pageInfo.pages || pageInfo.nextPage === 0){
         $("#nextPage").removeAttr("href");
         $("#lastPage").removeAttr("href");
     }

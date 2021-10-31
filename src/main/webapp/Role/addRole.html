@@ -7,7 +7,6 @@
     <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
     <link rel="stylesheet" type="text/css" href="../Css/style.css" />
     <script type="text/javascript" src="../Js/jquery.js"></script>
-    <script type="text/javascript" src="../Js/jquery.sorted.js"></script>
     <script type="text/javascript" src="../Js/bootstrap.js"></script>
     <script type="text/javascript" src="../Js/ckform.js"></script>
     <script type="text/javascript" src="../Js/common.js"></script>
@@ -28,44 +27,46 @@
                 padding-right: 5px;
             }
         }
-
+        .warning{
+            border-color: red !important;
+        }
 
     </style>
 </head>
 <body>
-<form action="index.html" method="post" class="definewidth m20">
+<form class="definewidth m20">
     <table class="table table-bordered table-hover definewidth m10">
         <tr>
             <td width="10%" class="tableleft">角色名称</td>
-            <td><input type="text" name="title"/></td>
+            <td><input type="text" onblur="roleNameCheck(this.value)" name="rName"/></td>
         </tr>
         <tr>
             <td class="tableleft">状态</td>
             <td>
-                <input type="radio" name="status" value="1" checked/> 启用  <input type="radio" name="status" value="0"/> 禁用
+                <input type="radio" name="rState" value="0" checked/> 启用  <input type="radio" name="rState" value="1"/> 禁用
             </td>
         </tr>
         <tr>
             <td class="tableleft">权限</td>
-            <td>
-                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />挂号信息管理</label></ul> 
-                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />门诊医生管理</label></ul> 
-                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />药品管理</label></ul> 
-                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />住院办理</label></ul> 
-                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />收费项目登记</label></ul> 
-                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />在院发药</label></ul> 
-                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />住院结算</label></ul> 
-                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />月营业额统计</label></ul> 
-                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />年营业额统计</label></ul> 
-                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />用户管理</label></ul> 
-                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />角色管理</label></ul> 
-                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />资源管理</label></ul> 
+            <td id="my-con">
+<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />挂号信息管理</label></ul> -->
+<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />门诊医生管理</label></ul> -->
+<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />药品管理</label></ul> -->
+<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />住院办理</label></ul> -->
+<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />收费项目登记</label></ul> -->
+<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />在院发药</label></ul> -->
+<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />住院结算</label></ul> -->
+<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />月营业额统计</label></ul> -->
+<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />年营业额统计</label></ul> -->
+<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />用户管理</label></ul> -->
+<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />角色管理</label></ul> -->
+<!--                <ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='' />资源管理</label></ul> -->
             </td>
         </tr>
         <tr>
             <td class="tableleft"></td>
             <td>
-                <button type="submit" class="btn btn-primary" type="button">保存</button> &nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
+                <button class="btn btn-primary" onclick="addRole()" id="role-add-btn" type="button">保存</button> &nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
             </td>
         </tr>
     </table>
@@ -73,13 +74,126 @@
 </body>
 </html>
 <script>
+    // 查询所有资源信息,遍历生成列表
+    function queryMenuList(){
+        layer.load(0)
+        $.ajax({
+            type: "GET",
+            url: "/menu/list",
+            data: {jwtToken:jwtToken},
+            dataType: "json",
+            success: function (data) {
+                layer.closeAll()
+                if (data.code == 200){
+                    $.each(data.obj.list, function () {
+                        let _ul = "<ul><label class='checkbox inline'><input type='checkbox' name='group[]' value='"+ this.mId +"' />"+ this.mName +"</label></ul>"
+                        $("#my-con").append($(_ul));
+                    })
+                }else{
+                    layer.msg(data.msg,function(){})
+                }
+            },
+            complete : function(xhr, status) {
+                myComplete(xhr, status);
+            }
+        })
+    }
+
+    // 刚按下提交, 被验证拦截时的标志 true刚按下
+    let presBtnFlag = false;
+    // 角色名的唯一性验证, 非空
+    // 设置定时器, 防止onblur和onclick发生冲突, 确保onclick先执行
+    let roleNameCheckTime;
+    let roleNameCheckFlag = false;
+    function roleNameCheck(rName){
+        roleNameCheckTime = setTimeout(function(){
+            if(rName == null || rName === "" || rName === undefined){
+                layer.msg("登录名不能为空", function(){})
+                $("input[name='rName']").addClass("warning")
+            }else{
+                $.ajax({
+                    type: "GET",
+                    url: "/role/r-name/" + rName,
+                    data: {jwtToken:jwtToken},
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code == 200){
+                            roleNameCheckFlag = true;
+                            $("input[name='rName']").removeClass("warning")
+                            if(presBtnFlag){
+                                // ajax查询有延迟,可在此处可设置再次自动提交
+                                $('#role-add-btn').trigger("click");
+                                presBtnFlag = false;
+                            }
+                        }else{
+                            layer.msg("登录名已存在，请重新输入。", function(){})
+                            roleNameCheckFlag = false;
+                            $("input[name='rName']").addClass("warning")
+                        }
+                    }
+                    // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+                    ,complete : function(xhr, status) {
+                        myComplete(xhr, status);
+                    }
+                })
+            }
+        },100)
+
+    }
+
+    // 添加角色信息
+    function addRole(){
+        // 防止onblur和onclick发生冲突, 确保onclick先执行
+        clearTimeout(roleNameCheckTime)
+        let rName = $("input[name='rName']").val();
+        let rState = $("input[name='rState']:checked").val()
+        var menuIds = "";
+        $.each($("input[name='group[]']:checked"), function(){
+            menuIds += $(this).val() + "_"
+        })
+        // 角色名的唯一性验证, 非空
+        if(!roleNameCheckFlag){
+            roleNameCheck(rName);
+            presBtnFlag = true;
+            return false;
+        }
+        // 验证没问题, 添加数据
+        presBtnFlag = false;
+        layer.load(0)
+        $.ajax({
+            type: "POST",
+            url: "/role",
+            data: {jwtToken:jwtToken,rName:rName,rState:rState,menuIds:menuIds},
+            dataType: "json",
+            success: function (data) {
+                layer.closeAll()
+                if (data.code == 201){
+                    layer.msg("添加成功")
+                    setTimeout(function(){
+                        // 返回index
+                        $('#backid').trigger("click");
+                    },500)
+                }else{
+                    layer.msg(data.msg,function(){})
+                }
+            },
+            complete : function(xhr, status) {
+                myComplete(xhr, status);
+            }
+        })
+    }
+
     $(function () {
+
+        // 查询所有资源信息,遍历生成列表
+        queryMenuList()
+
         $(':checkbox[name="group[]"]').click(function () {
             $(':checkbox', $(this).closest('li')).prop('checked', this.checked);
         });
 
 		$('#backid').click(function(){
 				window.location.href="index.html";
-		 });
+        });
     });
 </script>

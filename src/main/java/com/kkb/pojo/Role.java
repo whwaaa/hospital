@@ -17,6 +17,16 @@ public class Role {
 
     private Integer uId;
 
+    private String menuIds;
+
+    public String getMenuIds() {
+        return menuIds;
+    }
+
+    public void setMenuIds(String menuIds) {
+        this.menuIds = menuIds;
+    }
+
     public Integer getrId() {
         return rId;
     }
