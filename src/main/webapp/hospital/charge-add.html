@@ -7,7 +7,6 @@
     <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
     <link rel="stylesheet" type="text/css" href="../Css/style.css" />
     <script type="text/javascript" src="../Js/jquery.js"></script>
-    <script type="text/javascript" src="../Js/jquery.sorted.js"></script>
     <script type="text/javascript" src="../Js/bootstrap.js"></script>
     <script type="text/javascript" src="../Js/ckform.js"></script>
     <script type="text/javascript" src="../Js/common.js"></script>
@@ -42,16 +41,16 @@
     </script>
 </head>
 <body>
-<form  class="definewidth m20">
+<form  class="definewidth m20" >
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
         <td width="10%" class="tableleft">收费项目名称</td>
-        <td><input type="text" id="chapName" value="心电图图检" /></td>
+        <td><input type="text" id="chapName" placeholder="请输入收费项目名称" /></td>
     </tr>
 
     <tr>
         <td width="10%" class="tableleft">收费金额</td>
-        <td><input type="text" id="chapMoney" value="600"/></td>
+        <td><input type="text" id="chapMoney" placeholder="请输入收费金额"/></td>
     </tr>
     <tr>
         <td colspan="2">
@@ -73,13 +72,14 @@
         let chapMoney = $("#chapMoney").val();
         $.ajax({
             type: "POST",
-            url: "/charge/", //RESTful风格的API定义
+            url: "/charge", //RESTful风格的API定义
             data: {
                 jwtToken:jwtToken,
                 chapName:chapName,
                 chapMoney:chapMoney,
             },
             success: function (data) {
+                alert(data.code);
                 if(data.code == 200){
                     window.location.href = "/hospital/charge.html"
                 }else{
