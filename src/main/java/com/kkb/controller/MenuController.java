@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 /**
  * shandong-hospital
  *
@@ -38,9 +40,9 @@ public class MenuController {
     }
 
     // 根据主键查询
-    @RequestMapping(value = "{m_id}", method = RequestMethod.GET)
-    public AjaxResultVo<Menu> queryById(@PathVariable("m_id") Integer m_id){
-        Menu menu = menuService.queryById(m_id);
+    @RequestMapping(value = "{mId}", method = RequestMethod.GET)
+    public AjaxResultVo<Menu> queryById(@PathVariable("mId") Integer mId){
+        Menu menu = menuService.queryById(mId);
         if(menu != null){
             return new AjaxResultVo<>(menu);
         }
@@ -58,9 +60,9 @@ public class MenuController {
     }
 
     // 根据主键删除
-    @RequestMapping(value = "{m_id}", method = RequestMethod.DELETE)
-    public AjaxResultVo<Menu> deleteById(@PathVariable("m_id") Integer m_id){
-        Integer res = menuService.deleteById(m_id);
+    @RequestMapping(value = "{mId}", method = RequestMethod.DELETE)
+    public AjaxResultVo<Menu> deleteById(@PathVariable("mId") Integer mId){
+        Integer res = menuService.deleteById(mId);
         if(res > 0){
             return new AjaxResultVo<>(204, "ok", null);
         }
@@ -68,13 +70,23 @@ public class MenuController {
     }
 
     // 根据主键更新
-    @RequestMapping(value = "{m_id}", method = RequestMethod.PUT)
-    public AjaxResultVo<Menu> updateById(@PathVariable("m_id") Integer m_id, Menu menu){
-        Integer res = menuService.updateById(m_id, menu);
+    @RequestMapping(value = "{mId}", method = RequestMethod.PUT)
+    public AjaxResultVo<Menu> updateById(@PathVariable("mId") Integer mId, Menu menu){
+        Integer res = menuService.updateById(mId, menu);
         if(res > 0){
             return new AjaxResultVo<>(200, "ok", null);
         }
         return new AjaxResultVo<>(500, "服务器内部异常, 请稍后再试!");
+    }
+
+    // 根据资源名查询
+    @RequestMapping(value = "m-name/{mName}", method = RequestMethod.GET)
+    public AjaxResultVo<Menu> queryByMName(@PathVariable("mName") String mName){
+        List<Menu> menus = menuService.queryByMName(mName);
+        if(menus.size() > 0){
+            return new AjaxResultVo<>(500, "资源名已存在!");
+        }
+        return new AjaxResultVo<>();
     }
 
 }
