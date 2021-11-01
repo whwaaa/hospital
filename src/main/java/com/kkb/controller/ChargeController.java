@@ -28,50 +28,50 @@ public class ChargeController {
     @Autowired
     private ChargeService chargeService;
     @RequestMapping(value = "list",method = RequestMethod.GET)
-    public AjaxResultVo<ChargeProject> queryByPage(Integer pageNum, Integer pageSize, ChargeQueryVo vo){
+    public AjaxResultVo queryByPage(Integer pageNum, Integer pageSize, ChargeQueryVo vo){
         if (pageNum == null || pageNum <=0){
             pageNum = 1;
         }
         if (pageSize == null || pageSize <=0){
             pageSize = 5;
         }
-        PageInfo<ChargeProject> chargePageInfo = chargeService.queryByPage(pageNum,pageSize,vo);
-        return new AjaxResultVo<>(chargePageInfo);
+        PageInfo chargePageInfo = chargeService.queryByPage(pageNum,pageSize,vo);
+        return new AjaxResultVo(chargePageInfo);
     }
     @RequestMapping(value = "{chapId}",method = RequestMethod.GET)
-    public AjaxResultVo<ChargeProject> queryById(@PathVariable("chapId") Integer chapId){
+    public AjaxResultVo queryById(@PathVariable("chapId") Integer chapId){
         ChargeProject chargeProject = chargeService.queryById(chapId);
-        return new AjaxResultVo<>(chargeProject);
+        return new AjaxResultVo(chargeProject);
     }
     //更新
     @RequestMapping(value = "{chapId}",method = RequestMethod.PUT)
-    public AjaxResultVo<ChargeProject> update(@PathVariable("chapId") Integer chapId,ChargeProject chargeProject){
+    public AjaxResultVo update(@PathVariable("chapId") Integer chapId,ChargeProject chargeProject){
         chargeProject.setChapId(chapId);
         chargeProject.setChapUpdateTime(new Date());
         int i = chargeService.updateById(chargeProject);
         if(i > 0){
             System.out.println("================="+i+"================");
-            return new AjaxResultVo<>(200, "ok", null);
+            return new AjaxResultVo(200, "ok", null);
         }
-        return new AjaxResultVo<>(400, "服务器内部异常, 请稍后再试!");
+        return new AjaxResultVo(400, "服务器内部异常, 请稍后再试!");
     }
     //删除
     @RequestMapping(value = "{chapId}", method = RequestMethod.DELETE)
-    public AjaxResultVo<User> deleteById(@PathVariable("chapId") Integer chapId){
+    public AjaxResultVo deleteById(@PathVariable("chapId") Integer chapId){
         Integer i = chargeService.deleteById(chapId);
         if(i > 0){
-            return new AjaxResultVo<>(200, "ok", null);
+            return new AjaxResultVo(200, "ok", null);
         }
-        return new AjaxResultVo<>(500, "服务器内部异常, 请稍后再试!");
+        return new AjaxResultVo(500, "服务器内部异常, 请稍后再试!");
     }
     //增加
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public AjaxResultVo<User> addCharge(ChargeProject chargeProject){
+    public AjaxResultVo addCharge(ChargeProject chargeProject){
         Integer i = chargeService.addCharge(chargeProject);
         if(i > 0){
-            return new AjaxResultVo<>(200, "ok");
+            return new AjaxResultVo(200, "ok");
         }
-        return new AjaxResultVo<>(500, "服务器内部异常, 请稍后再试!");
+        return new AjaxResultVo(500, "服务器内部异常, 请稍后再试!");
     }
 
 }
