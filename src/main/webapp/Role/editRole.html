@@ -56,7 +56,8 @@
     <tr>
         <td class="tableleft"></td>
         <td>
-            <button id="role-update-btn" class="btn btn-primary"  onclick="updateRole()" type="button">更新</button> &nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
+<!--            onclick="updateRole()"-->
+            <button id="role-update-btn" class="btn btn-primary"  type="button">更新</button> &nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
         </td>
     </tr>
 </table>
@@ -64,18 +65,17 @@
 </body>
 </html>
 <script>
-
-    String.prototype.GetValue= function(para) {
-        let reg = new RegExp("(^|&)"+ para +"=([^&]*)(&|$)");
-        let r = this.substr(this.indexOf("\?")+1).match(reg);
-        if (r!=null) return unescape(r[2]); return null;
-    }
-    // 地址参数
-    let globlePageNum = document.location.toString().GetValue("pageNum");
-    let globlePageSize = document.location.toString().GetValue("pageSize");
     let rId = document.location.toString().GetValue("rId");
+    // 原角色名
     let oldRName;
+    // 查询的用户信息
     let globleRole;
+    // 发送添加标志,一旦发送即锁死,防止多次添加
+    let sendUpdateFlag = true;
+    // 设置定时器, 防止onblur和onclick发生冲突, 确保onclick先执行
+    let roleNameCheckTime;
+    // 角色名唯一,非空检测标志
+    let roleNameCheckFlag = false;
 
     // 查询所有资源信息,遍历生成列表
     function queryMenuList(){
@@ -83,8 +83,9 @@
         $.ajax({
             type: "GET",
             url: "/menu/list",
-            data: {jwtToken:jwtToken,pageSize:999,pageNum:1},
+            data: {pageSize:999,pageNum:1},
             dataType: "json",
+            async: false,
             success: function (data) {
                 layer.closeAll()
                 if (data.code == 200){
@@ -92,8 +93,8 @@
                         let _ul = "<ul><label class='checkbox inline'><input id='mid_"+ this.mId +"' type='checkbox' name='group[]' value='"+ this.mId +"' />"+ this.mName +"</label></ul>"
                         $("#my-con").append($(_ul));
                     })
-                    // 数据填充
-                    fillRoleDate(globleRole);
+                    // 延时等待查询出globleRole
+                    delayForGlobleRole();
                 }else{
                     layer.msg(data.msg,function(){})
                 }
@@ -103,13 +104,23 @@
             }
         })
     }
+    // 延时等待查询出globleRole
+    function delayForGlobleRole(){
+        setTimeout(function(){
+            if(globleRole == undefined){
+                delayForGlobleRole()
+            }else{
+                fillRoleDate(globleRole);
+            }
+        },20)
+    }
     // 根据rId查询role信息
     function queryByRId(){
         layer.load(0)
         $.ajax({
             type: "GET",
             url: "/role/" + rId,
-            data: {jwtToken:jwtToken},
+            data: {},
             dataType: "json",
             success: function (data) {
                 layer.closeAll()
@@ -143,63 +154,44 @@
             $("#mid_" + this.mId).prop("checked",true)
         })
     }
-
-    // 刚按下提交, 被验证拦截时的标志 true刚按下
-    let presBtnFlag = false;
-    // 角色名的唯一性验证, 非空
-    // 设置定时器, 防止onblur和onclick发生冲突, 确保onclick先执行
-    let roleNameCheckTime;
-    let roleNameCheckFlag = false;
+    // 角色名唯一,非空检测
     function roleNameCheck(rName){
         roleNameCheckTime = setTimeout(function(){
             if(rName == null || rName == "" || rName == undefined){
                 layer.msg("登录名不能为空", function(){})
                 $("input[name='rName']").addClass("warning")
-                presBtnFlag = false;
             }else{
                 if(rName.trim() == oldRName.trim()){
                     roleNameCheckFlag = true;
                     $("input[name='rName']").removeClass("warning")
-                    if(presBtnFlag){
-                        // ajax查询有延迟,可在此处可设置再次自动提交
-                        $('#role-update-btn').trigger("click");
-                        presBtnFlag = false;
-                    }
-                    return false;
-                }
-                layer.load(0)
-                $.ajax({
-                    type: "GET",
-                    url: "/role/r-name/" + rName,
-                    data: {jwtToken:jwtToken},
-                    dataType: "json",
-                    success: function (data) {
-                        layer.closeAll()
-                        if (data.code == 200){
-                            roleNameCheckFlag = true;
-                            $("input[name='rName']").removeClass("warning")
-                            if(presBtnFlag){
-                                // ajax查询有延迟,可在此处可设置再次自动提交
-                                $('#role-update-btn').trigger("click");
-                                presBtnFlag = false;
+                }else{
+                    layer.load(0)
+                    $.ajax({
+                        type: "GET",
+                        url: "/role/r-name/" + rName,
+                        data: {},
+                        dataType: "json",
+                        async: false,
+                        success: function (data) {
+                            layer.closeAll()
+                            if (data.code == 200){
+                                roleNameCheckFlag = true;
+                                $("input[name='rName']").removeClass("warning")
+                            }else{
+                                layer.msg("登录名已存在，请重新输入。", function(){})
+                                roleNameCheckFlag = false;
+                                $("input[name='rName']").addClass("warning")
                             }
-                        }else{
-                            layer.msg("登录名已存在，请重新输入。", function(){})
-                            roleNameCheckFlag = false;
-                            $("input[name='rName']").addClass("warning")
-                            presBtnFlag = false;
                         }
-                    }
-                    // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
-                    ,complete : function(xhr, status) {
-                        myComplete(xhr, status);
-                    }
-                })
+                        // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+                        ,complete : function(xhr, status) {
+                            myComplete(xhr, status);
+                        }
+                    })
+                }
             }
-        },100)
-
+        },120)
     }
-
     // 添加角色信息
     function updateRole(){
         // 防止onblur和onclick发生冲突, 确保onclick先执行
@@ -211,48 +203,54 @@
             menuIds += $(this).val() + "_"
         })
         // 角色名的唯一性验证, 非空
-        if(!roleNameCheckFlag){
-            roleNameCheck(rName);
-            presBtnFlag = true;
-            return false;
-        }
-        // 验证没问题, 添加数据
-        presBtnFlag = false;
-        layer.load(0)
-        $.ajax({
-            type: "POST",
-            url: "/role/" + rId,
-            data: {jwtToken:jwtToken,rName:rName,rState:rState,menuIds:menuIds,_method:"PUT"},
-            dataType: "json",
-            success: function (data) {
-                layer.closeAll()
-                if (data.code == 200){
-                    layer.msg("更新成功")
-                    setTimeout(function(){
-                        // 返回index
-                        $('#backid').trigger("click");
-                    },500)
-                }else{
-                    layer.msg(data.msg,function(){})
-                }
-            },
-            complete : function(xhr, status) {
-                myComplete(xhr, status);
+        roleNameCheck(rName);
+        // 延时确保ajax已经发送
+        setTimeout(function(){
+            if( !roleNameCheckFlag ){
+                return false;
             }
-        })
+            // 验证没问题, 添加数据
+            if(sendUpdateFlag){
+                // 一旦提交即锁死, 防止多次请求
+                sendUpdateFlag = false;
+                layer.load(0)
+                $.ajax({
+                    type: "POST",
+                    url: "/role/" + rId,
+                    data: {rName:rName,rState:rState,menuIds:menuIds,_method:"PUT"},
+                    dataType: "json",
+                    success: function (data) {
+                        layer.closeAll()
+                        if (data.code == 200){
+                            layer.msg("更新成功")
+                            setTimeout(function(){
+                                // 返回index
+                                $('#backid').trigger("click");
+                            },500)
+                        }else{
+                            layer.msg(data.msg,function(){})
+                        }
+                    },
+                    complete : function(xhr, status) {
+                        myComplete(xhr, status);
+                    }
+                })
+            }
+        },150)
     }
 
     $(function () {
-        // 查询角色数据
-        queryByRId();
         // 查询所有资源信息,遍历生成列表
         queryMenuList();
+        // 查询角色数据
+        queryByRId();
         $(':checkbox[name="group[]"]').click(function () {
             $(':checkbox', $(this).closest('li')).prop('checked', this.checked);
         });
-
         $('#backid').click(function(){
-            window.location.href="index.html?pageNum=" + globlePageNum + "&pageSize=" + globlePageSize;
+            window.location.href="index.html?pageNum=" + globalPageNum + "&pageSize=" + globalPageSize;
         });
+        // 监听修改按钮
+        $("#role-update-btn").on("click", function(){updateRole()})
     });
 </script>

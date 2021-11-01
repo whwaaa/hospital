@@ -41,19 +41,19 @@
     <table class="table table-bordered table-hover definewidth m10">
         <tr>
             <td width="10%" class="tableleft">登录名</td>
-            <td id="uLoginName"></td>
+            <td><input onblur="loginNameCheck(this.value)" type="text" name="uLoginName" value=""/></td>
         </tr>
         <tr>
             <td class="tableleft">密码</td>
-            <td><input onblur="passwordCheck(this)" type="password" name="uPassword"/></td>
+            <td><input onblur="passwordCheck(this.value)" type="password" name="uPassword"/></td>
         </tr>
         <tr>
             <td class="tableleft">真实姓名</td>
-            <td><input onblur="trueNameCheck(this)" type="text" name="uTrueName" value=""/></td>
+            <td><input onblur="trueNameCheck(this.value)" type="text" name="uTrueName" value=""/></td>
         </tr>
         <tr>
             <td class="tableleft">邮箱</td>
-            <td><input onblur="emailCheck(this)" type="text" name="uEmail" value=""/></td>
+            <td><input onblur="emailCheck(this.value)" type="text" name="uEmail" value=""/></td>
         </tr>
         <tr>
             <td class="tableleft">状态</td>
@@ -67,9 +67,6 @@
             <td>
             	<select onblur="roleCheck(this)" id="rId" name="rId">
         			<option value="">--请选择--
-<!--        			<option value="1">管理员-->
-<!--        			<option value="2">院长-->
-<!--            		<option value="3">医生护士-->
        			 </select>
         	</td>
         </tr>
@@ -84,70 +81,117 @@
 </body>
 </html>
 <script>
+    let loginNameCheckTime;
+    let passwordCheckTime;
+    let trueNameCheckTime;
+    let emailCheckTime;
+    let roleCheckTime;
+    let loginNameCheckFlag = false;
     let roleCheckFlag = true;
     let passwordCheckFlag = true;
     let trueNameCheckFlag = true;
     let emailCheckFlag = true;
+    // 原始用户名
+    let oldLoginName;
+    // 发送更新标志,一旦发送即锁死,防止多次添加
+    let sendUpdateFlag = true;
+    // 地址栏获取uId参数
+    let uId = document.location.toString().GetValue("uId");
 
-    // 密码强度的验证, 非空
+    // 登录名的唯一性验证, 非空
+    function loginNameCheck(uLoginName){
+        loginNameCheckTime = setTimeout(function() {
+            if (uLoginName == null || uLoginName === "" || uLoginName === undefined) {
+                layer.msg("登录名不能为空", function () {
+                })
+                $("input[name='uLoginName']").addClass("warning")
+            } else {
+                if (oldLoginName.trim() == uLoginName) {
+                    loginNameCheckFlag = true;
+                    $("input[name='uLoginName']").removeClass("warning")
+                } else {
+                    $.ajax({
+                        type: "GET",
+                        url: "/user/loginname/" + uLoginName,
+                        data: {jwtToken: jwtToken},
+                        dataType: "json",
+                        async: false,
+                        success: function (data) {
+                            if (data.code == 200) {
+                                loginNameCheckFlag = true;
+                                $("input[name='uLoginName']").removeClass("warning")
+                            } else {
+                                layer.msg("登录名已存在，请重新输入。", function () {
+                                })
+                                loginNameCheckFlag = false;
+                                $("input[name='uLoginName']").addClass("warning");
+                            }
+                        }
+                        // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+                        , complete: function (xhr, status) {
+                            myComplete(xhr, status);
+                        }
+                    })
+                }
+            }
+        },120)
+    }
+    // 密码强度的, 非空验证
     function passwordCheck(uPassword){
-        // 密码长度6-16位，必须包含有数字，字母及特殊字符。
-        var reg = /^.*(?=.{6,16})(?=.*\d)(?=.*[A-z])(?=.*[!@#$%^&*?\(\)]).*$/;
-        if(reg.test(uPassword.value)){
-            passwordCheckFlag = true;
-            $("input[name='uPassword']").removeClass("warning")
-        } else {
-            layer.msg("密码强度太弱,请重新设置", function(){})
-            passwordCheckFlag = false;
-            $("input[name='uPassword']").addClass("warning")
-        }
+        passwordCheckTime = setTimeout(function(){
+            // 密码长度6-16位，必须包含有数字，字母及特殊字符。
+            var reg = /^.*(?=.{6,16})(?=.*\d)(?=.*[A-z])(?=.*[!@#$%^&*?\(\)]).*$/;
+            if(reg.test(uPassword)){
+                passwordCheckFlag = true;
+                $("input[name='uPassword']").removeClass("warning")
+            } else {
+                layer.msg("密码强度太弱,请重新设置", function(){})
+                passwordCheckFlag = false;
+                $("input[name='uPassword']").addClass("warning")
+            }
+        },50)
     }
     // 真实姓名的非空验证
     function trueNameCheck(uLoginName){
-        if(uLoginName.value === "" || uLoginName.value === undefined){
-            layer.msg("姓名不能为空", function(){})
-            trueNameCheckFlag = false;
-            $("input[name='uTrueName']").addClass("warning")
-        } else {
-            trueNameCheckFlag = true;
-            $("input[name='uTrueName']").removeClass("warning")
-        }
+        trueNameCheckTime = setTimeout(function(){
+            if(uLoginName === "" || uLoginName === undefined){
+                layer.msg("姓名不能为空", function(){})
+                trueNameCheckFlag = false;
+                $("input[name='uTrueName']").addClass("warning")
+            } else {
+                trueNameCheckFlag = true;
+                $("input[name='uTrueName']").removeClass("warning")
+            }
+        },50)
     }
     // 邮箱的正规合法验证
     function emailCheck(uEmail){
-        var reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
-        if(reg.test(uEmail.value)){
-            emailCheckFlag = true;
-            $("input[name='uEmail']").removeClass("warning")
-        } else {
-            layer.msg("邮箱格式不正确", function(){})
-            emailCheckFlag = false;
-            $("input[name='uEmail']").addClass("warning")
-        }
+        emailCheckTime = setTimeout(function(){
+            var reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+            if(reg.test(uEmail)){
+                emailCheckFlag = true;
+                $("input[name='uEmail']").removeClass("warning")
+            } else {
+                layer.msg("邮箱格式不正确", function(){})
+                emailCheckFlag = false;
+                $("input[name='uEmail']").addClass("warning")
+            }
+        },50)
     }
     // 角色非空验证
     function roleCheck(uId){
-        if(uId.value === "" || uId.value === undefined){
-            layer.msg("必须选择一个角色", function(){})
-            roleCheckFlag = false;
-            $("#uId").addClass("warning")
-
-        }else{
-            roleCheckFlag = true;
-            $("#uId").removeClass("warning")
-        }
+        roleCheckTime = setTimeout(function(){
+            if(uId === "" || uId === undefined){
+                layer.msg("必须选择一个角色", function(){})
+                roleCheckFlag = false;
+                $("#uId").addClass("warning")
+            }else{
+                roleCheckFlag = true;
+                $("#uId").removeClass("warning")
+            }
+        },50)
     }
-
-    String.prototype.GetValue= function(para) {
-        let reg = new RegExp("(^|&)"+ para +"=([^&]*)(&|$)");
-        let r = this.substr(this.indexOf("\?")+1).match(reg);
-        if (r!=null) return unescape(r[2]); return null;
-    }
-    // 回调地址参数
-    let pageNum = document.location.toString().GetValue("pageNum");
-    let pageSize = document.location.toString().GetValue("pageSize");
-    let uId = document.location.toString().GetValue("uId");
-
+    // 用户查询
     function queryUser(){
         layer.load(0)
         // 通过uId查询用户信息
@@ -158,6 +202,8 @@
             success: function (data) {
                 layer.closeAll();
                 if(data.code === 200){
+                    // 保存原始用户名
+                    oldLoginName = data.obj.uLoginName;
                     // 填充数据
                     loadDate(data.obj)
                 }else{
@@ -172,95 +218,93 @@
     }
 
     $(function () {
-
-        // // 角色查询
-        // $.ajax({
-        //     type: "GET",
-        //     url: "/role/list",
-        //     data: {jwtToken:jwtToken},
-        //     dataType: "json",
-        //     success: function (data) {
-        //         if(data.code === 200){
-        //             $.each(data.obj, function(){
-        //                 $("#uId").append("<option value='"+ this.uId +"'>" + this.r_name);
-        //             })
-        //             // 查询用户信息
-        //             queryUser();
-        //         }
-        //     },
-        //     complete : function(xhr, status) {
-        //         myComplete(xhr, status);
-        //     }
-        // })
-        // TODO: 等待角色查询启用上面代码, 下面代码暂时替代
-        roles = [{"rId":1,"r_isDel":0,"rName":"管理员","r_state":1},{"rId":2,"r_isDel":0,"rName":"院长","r_state":1},{"rId":3,"r_isDel":0,"rName":"医生护士","r_state":1},{"rId":4,"r_isDel":0,"rName":"药品管理员","r_state":1}]
-        $.each(roles, function(){
-            $("#rId").append("<option value='"+ this.rId +"'>" + this.rName);
+        // 角色查询
+        $.ajax({
+            type: "GET",
+            url: "/role/list",
+            data: {pageSize:999,pageNum:1},
+            dataType: "json",
+            success: function (data) {
+                if(data.code === 200){
+                    $.each(data.obj.list, function(){
+                        $("#rId").append("<option value='"+ this.rId +"'>" + this.rName);
+                    })
+                    // 查询用户信息
+                    queryUser();
+                }
+            },
+            complete : function(xhr, status) {
+                myComplete(xhr, status);
+            }
         })
-        setTimeout(function(){
-            // 查询用户信息
-            queryUser();
-        }, 500)
-
         // 返回
         $('#backid').click(function(){
-            window.location.href="index.html?pageNum=" + pageNum + "&pageSize=" + pageSize;
+            window.location.href="index.html?pageNum=" + globalPageNum + "&pageSize=" + globalPageSize;
         });
-
         // 更新
         $('#userEdit').click(function() {
+            // 防止onclick和onblur冲突关闭所有setTime
+            clearTimeout(loginNameCheckTime);
+            clearTimeout(passwordCheckTime);
+            clearTimeout(trueNameCheckTime);
+            clearTimeout(emailCheckTime);
+            clearTimeout(roleCheckTime);
             let rId = $("#rId").val();
             let uEmail = $("input[name='uEmail']").val();
             let uTrueName = $("input[name='uTrueName']").val();
             let uPassword = $("input[name='uPassword']").val();
+            let uLoginName = $("input[name='uLoginName']").val();
             let uState = $("input[name='uState']:checked").val();
-
-            if( !passwordCheckFlag ){
-                passwordCheck(uPassword);
-                return false;
-            }
-            if( !trueNameCheckFlag ){
-                trueNameCheck(uTrueName);
-                return false;
-            }
-            if( !emailCheckFlag ){
-                emailCheck(uEmail);
-                return false;
-            }
-            if( !roleCheckFlag ){
-                roleCheck(rId);
-                return false;
-            }
-            // 校验没有问题, 发起请求添加用户
-            layer.load(0)
-            $.ajax({
-                type: "POST",
-                url: "/user/" + uId,
-                data: {_method:"PUT",jwtToken:jwtToken,rId:rId,uEmail:uEmail,uTrueName:uTrueName,
-                    uPassword:uPassword,uState:uState},
-                dataType: "json",
-                success: function (data) {
-                    layer.closeAll()
-                    if (data.code == 200){
-                        layer.msg("修改成功")
-                        setTimeout(function () {
-                            $('#backid').trigger("click");
-                        },500)
-                    }else{
-                        layer.msg(data.msg,function(){})
-                    }
+            // 再次校验所有信息
+            loginNameCheck(uLoginName);
+            passwordCheck(uPassword);
+            trueNameCheck(uTrueName);
+            emailCheck(uEmail);
+            roleCheck(rId);
+            // 确保ajax已发送
+            setTimeout(function() {
+                if( !loginNameCheckFlag ){return false;}
+                if( !passwordCheckFlag ){return false;}
+                if( !trueNameCheckFlag ){return false;}
+                if( !emailCheckFlag ){return false;}
+                if( !roleCheckFlag ){return false;}
+                // 校验没有问题, 发起请求添加用户
+                if (sendUpdateFlag) {
+                    // 一旦执行即死锁, 防止多次提交
+                    sendUpdateFlag = false;
+                    layer.load(0)
+                    $.ajax({
+                        type: "POST",
+                        url: "/user/" + uId,
+                        data: {
+                            _method: "PUT", rId: rId, uEmail: uEmail, uTrueName: uTrueName,
+                            uPassword: uPassword, uState: uState, uLoginName: uLoginName
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            layer.closeAll()
+                            if (data.code == 200) {
+                                layer.msg("修改成功")
+                                setTimeout(function () {
+                                    $('#backid').trigger("click");
+                                }, 500)
+                            } else {
+                                layer.msg(data.msg, function () {
+                                })
+                            }
+                        }
+                        , complete: function (xhr, status) {
+                            myComplete(xhr, status);
+                        }
+                    })
                 }
-                ,complete : function(xhr, status) {
-                    myComplete(xhr, status);
-                }
-            })
+            },150)
         })
     });
 
     // 填充查询数据
     function loadDate(user){
-        console.log(user);
-        $("#uLoginName").text(user.uLoginName)
+        $("input[name='uLoginName']").val(user.uLoginName)
         $("input[name='uPassword']").val(user.uPassword)
         $("input[name='uTrueName']").val(user.uTrueName)
         $("input[name='uEmail']").val(user.uEmail)
@@ -273,6 +317,4 @@
         }
         $("select[name='rId']").val(user.rId)
     }
-
-
 </script>

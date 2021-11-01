@@ -32,25 +32,56 @@ function U() {
 let jwtToken;
 document.write("<script src=\"https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js\"></script>");
 document.write("<script src=\"https://cdn.bootcdn.net/ajax/libs/layer/3.5.1/layer.js\"></script>");
-$(function(){
-    // TODO: 从cookie中获取jwtToken令牌, 每一个请求都需要带上这个参数, "&jwtToken="+jwtToken
-    jwtToken = $.cookie("jwtToken");
-})
+
+// 获取地址参数
+String.prototype.GetValue= function(para) {
+    let reg = new RegExp("(^|&)"+ para +"=([^&]*)(&|$)");
+    let r = this.substr(this.indexOf("\?")+1).match(reg);
+    if (r!=null) return unescape(r[2]); return null;
+}
+
+// 优先取URI地址参数
+let globalPageNum = document.location.toString().GetValue("pageNum");
+if(globalPageNum == undefined || globalPageNum == '' || globalPageNum == 'null'){
+    // URI为空取分页模块参数
+    globalPageNum = $(".current").text();
+    if(globalPageNum == undefined || globalPageNum == '' || globalPageNum == 'null'){
+        // 分页为空赋初值
+        globalPageNum = 1;
+    }
+    globalPageNum = "1";
+}
+// 优先取URI地址参数
+let globalPageSize = document.location.toString().GetValue("pageSize");
+if(globalPageSize == undefined || globalPageSize == '' || globalPageSize == 'null'){
+    // URI为空取分页模块参数
+    globalPageSize = $("#pageSize").val();
+    if(globalPageSize == undefined || globalPageSize == '' || globalPageSize == 'null'){
+        // 分页为空赋初值
+        globalPageSize = 5;
+    }
+}
+
 
 // ajax配合拦截器跳转登陆界面
 function myComplete(xhr, status){
     // 通过xhr取得响应头
-    var REDIRECT = xhr.getResponseHeader("REDIRECT");
+    let REDIRECT = xhr.getResponseHeader("REDIRECT");
+    let TOKEN_MSG = xhr.getResponseHeader("TOKEN-MSG");
     // 如果响应头中包含 REDIRECT 则说明是拦截器返回的
     if(REDIRECT == "REDIRECT"){
         layer.closeAll()
-        layer.msg("请先登陆")
+        if(TOKEN_MSG == "no-token"){
+            layer.msg("请先登陆")
+        }else if(TOKEN_MSG == "token-invalid"){
+            layer.msg("登陆信息过期,请再次登陆")
+        }
         // 跳到登陆界面, 传入当前URL作为参数, 登陆成功再跳回来
         setTimeout(function (){
             let callBackUrL = window.location.href;
             console.log(callBackUrL)
             window.location.href = xhr.getResponseHeader("CONTENTPATH") + "?callBackUrL=" + callBackUrL;
-        }, 1000)
+        }, 1500)
     }
 
 }

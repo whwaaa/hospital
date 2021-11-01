@@ -94,6 +94,7 @@ public class UserService {
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
         criteria.andULoginNameEqualTo(uLoginName);
+        criteria.andUIsDelEqualTo(0);
         List<User> users = userMapper.selectByExample(userExample);
         if(users.size() != 0){
             return users.get(0);

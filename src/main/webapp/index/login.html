@@ -71,7 +71,7 @@
             $.ajax({
                 type: "POST",
                 url: "/access/login",
-                data: {jwtToken:jwtToken,uLoginName:uLoginName,uPassword:uPassword},
+                data: {uLoginName:uLoginName,uPassword:uPassword},
                 dataType: "json",
                 // xhrFields: {
                 //     withCredentials: true
@@ -80,10 +80,11 @@
                 success: function (data) {
                     layer.closeAll()
                     if (data.code == 200){
-                        // 登陆成功
-                        // 把jwtToken添加进cookie, 过期时间设置为1天
-                        $.cookie('jwtToken', data.obj, {expires: 1, path: '/' });
-                        window.location.href = callBackUrL;
+                        layer.msg("登陆成功")
+                        setTimeout(function(){
+                            // 跳回原地址
+                            window.location.href = callBackUrL;
+                        },300)
                     }else{
                         layer.msg(data.msg,function(){})
                     }

@@ -32,30 +32,9 @@
     </style>
     
      <script type="text/javascript">
-         String.prototype.GetValue= function(para) {
-             let reg = new RegExp("(^|&)"+ para +"=([^&]*)(&|$)");
-             let r = this.substr(this.indexOf("\?")+1).match(reg);
-             if (r!=null) return unescape(r[2]); return null;
-         }
-         // 地址参数
-         let globalPageNum = document.location.toString().GetValue("pageNum");
-         let globalPageSize = document.location.toString().GetValue("pageSize");
-
-         if(globalPageNum == undefined || globalPageNum == ''){
-             globalPageNum = 1;
-         }
 
          // 分页查询
          queryList = function(pageNum){
-             // 先读取地址栏
-             if(globalPageSize == undefined || globalPageSize == ''){
-                 // 再读取输入框
-                 globalPageSize = $("#pageSize").val();
-                 if(globalPageSize == undefined || globalPageSize == ''){
-                     // 都读取不到再赋初始值
-                     globalPageSize = 5;
-                 }
-             }
              // 读取rName
              let rName = $("input[name='rName']").val().trim();
              if(rName === undefined)
@@ -64,12 +43,13 @@
              $.ajax({
                  type: "GET",
                  url: "/role/list",
-                 data: {pageNum:pageNum,pageSize:globalPageSize,jwtToken:jwtToken,rName:rName},
+                 data: {pageNum:pageNum,pageSize:globalPageSize,rName:rName},
                  success: function (data) {
                      layer.closeAll();
                      if(data.code === 200){
-                         // 清除全局pageSize
-                         globalPageSize = null;
+                         // 更新全局分页参数
+                         globalPageSize = data.obj.pageSize;
+                         globalPageNum = data.obj.pageNum;
                          // 填充分页
                          fillPageData(data.obj);
                          // 填充内容
@@ -109,12 +89,12 @@
                  $.ajax({
                      type: "POST",
                      url: "/role/"+ rId,
-                     data: {_method:"DELETE",jwtToken:jwtToken},
+                     data: {_method:"DELETE"},
                      success: function (data) {
                          layer.closeAll();
                          if(data.code === 204){
                              layer.msg("删除成功");
-                             queryList($(".current").text())     // 刷新页面
+                             queryList(globalPageNum)     // 刷新页面
                          }else{
                              layer.msg(data.msg,function(){})
                          }
@@ -137,7 +117,7 @@
              $.ajax({
                  type: "POST",
                  url: "/role/" + rId,
-                 data: {jwtToken:jwtToken,rState:rState,_method:"PUT"},
+                 data: {rState:rState,_method:"PUT"},
                  dataType: "json",
                  success: function (data) {
                      layer.closeAll()
@@ -189,13 +169,13 @@
                         $.ajax({
                             type: "POST",
                             url: "/role/"+ id,
-                            data: {_method:"DELETE",jwtToken:jwtToken},
+                            data: {_method:"DELETE"},
                             success: function (data) {
                                 layer.closeAll();
                                 if(data.code === 204){
                                     if(index === ids.length-1){
                                         layer.msg("删除成功");
-                                        queryList($(".current").text())     // 刷新页面
+                                        queryList(globalPageNum)     // 刷新页面
                                     }
                                 }else{
                                     layer.msg(data.msg,function(){})
@@ -218,14 +198,11 @@
              queryList(globalPageNum);
              // 添加资源
              $('#newNav').click(function(){
-                 globalPageNum = $(".current").text();
-                 globalPageSize = $("#pageSize").val();
                  window.location.href="addRole.html?pageNum=" + globalPageNum + "&pageSize=" + globalPageSize;
              });
              // 监听查询按钮
              $("#queryByRName").on("click", function(){
-                 globalPageNum = $(".current").text();
-                 queryList(globalPageNum);
+                 queryList(1);
              })
          });
     </script>   
