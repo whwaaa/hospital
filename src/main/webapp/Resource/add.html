@@ -121,7 +121,6 @@
             clearTimeout(urlCheckTime);
             let mUrl = $("input[name='mUrl']").val();
             let mName = $("input[name='mName']").val();
-            let mState = $("input[name='mState']:checked").val()
             // 资源名的唯一性验证
             mNameCheck(mName);
             // 资源有效性检测
@@ -132,6 +131,8 @@
             if(urlCheckFlat === false){
                 return false;
             }
+            // 检测中值可能会变更,所有要放到最后获取
+            let mState = $("input[name='mState']:checked").val()
             setTimeout(function(){
                 if(sendAddFlag){
                     // 执行即死锁, 防止重复添加

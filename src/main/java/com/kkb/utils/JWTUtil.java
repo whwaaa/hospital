@@ -30,8 +30,9 @@ public class JWTUtil {
     public final static long keeptime = 1800000;
 
     // 存入payLoad的参数名
-    public final static String payLoadParam1 = "uId";
-    public final static String payLoadParam2 = "uLoginName";
+    public final static String payLoadUserId = "uId";
+    public final static String payLoadLoginName = "loginName";
+    public final static String payLoadRoleId = "rId";
 
     /**
      * 获取一个JWTToken
@@ -71,11 +72,13 @@ public class JWTUtil {
         Map<String, Object> payLoadMap = new HashMap<>();
         // Claims就是包含了我们的Payload信息类
         Claims claims = verifyToken(token);
-        // 获取payLoad中的u_id, u_loginName
-        Object u_id = claims.get(payLoadParam1);
-        Object u_loginName = claims.get(payLoadParam2);
-        payLoadMap.put(payLoadParam1, u_id);
-        payLoadMap.put(payLoadParam2, u_loginName);
+        // 获取payLoad中的uId, uLoginName, rId
+        Object uId = claims.get(payLoadUserId);
+        Object loginName = claims.get(payLoadLoginName);
+        Object rId = claims.get(payLoadRoleId);
+        payLoadMap.put(payLoadUserId, uId);
+        payLoadMap.put(payLoadLoginName, loginName);
+        payLoadMap.put(payLoadRoleId, rId);
         // 重新获取Token并返回
         return generToken(payLoadMap);
     }

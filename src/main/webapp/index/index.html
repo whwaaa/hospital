@@ -41,74 +41,116 @@
 
 <script>
 
-    $(function (){
-        // 判断是否登陆
-        isLogin();
-        function isLogin(){
-            $.ajax({
-                type: "GET",
-                url: "/access/uLoginName",
-                data: {},
-                dataType: "json",
-                // xhrFields: {
-                //     withCredentials: true
-                // },
-                // crossDomain: true,
-                success: function (data) {
-                    if (data.code == 200){
-                        $(".dl-log-user").text(data.obj)
-                    }
-                }
-                // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上下面的代码
-                ,complete : function(xhr, status) {
-                    myComplete(xhr, status)
-                }
-            })
-        }
-        // 监听退出登陆按钮
-        $(".dl-log-quit").on("click", function (){
-            // 删除cookie
-            $.removeCookie('jwtToken');
-            // 返回登陆界面
-            isLogin();
-        })
-    })
+    // BUI.use('common/main',function(){
+    //     var config = [
+    //         {id:'1',menu:[
+    //                 {text:'快速通道',items:[
+    //                         {id:'2',text:'挂号信息管理',href:'registration/index.html'},
+    //
+    //                         {id:'5',text:'住院办理',href:'hospital/index.html'},
+    //                         {id:'8',text:'住院结算',href:'hospital/account.html'},
+    //
+    //                         {id:'7',text:'在院发药',href:'hospital/dispensing.html'},
+    //                         {id:'4',text:'药品管理',href:'medicine/index.html'},
+    //
+    //                         {id:'16',text:'检查收费项目登记',href:'hospital/charge2.html'},
+    //                         {id:'6',text:'收费项目管理',href:'hospital/charge.html'},
+    //
+    //                         /** 扩展
+    //                          {id:'9',text:'月营业额统计',href:''},
+    //                          {id:'10',text:'年营业额统计',href:''},
+    //                          **/
+    //                         {id:'3',text:'门诊医生管理',href:'doctor/index.html'},
+    //                         {id:'11',text:'用户管理',href:'User/index.html'},
+    //                         {id:'12',text:'角色管理',href:'Role/index.html'},
+    //                         {id:'13',text:'资源管理',href:'Resource/index.html'},
+    //                         {id:'13',text:'密码管理',href:'User/password.html'}
+    //                     ]}
+    //             ]}
+    //     ];
+    // });
 
-    BUI.use('common/main',function(){
-        var config = [
-		{id:'1',menu:[
-		
-		{text:'快速通道',items:[
-		
-		{id:'2',text:'挂号信息管理',href:'registration/index.html'},		
-		
-		{id:'5',text:'住院办理',href:'hospital/index.html'},
-		{id:'8',text:'住院结算',href:'hospital/account.html'},
-		
-		{id:'7',text:'在院发药',href:'hospital/dispensing.html'},
-		{id:'4',text:'药品管理',href:'medicine/index.html'},
-		
-		{id:'16',text:'检查收费项目登记',href:'hospital/charge2.html'},
-		{id:'6',text:'收费项目管理',href:'hospital/charge.html'},		
-	
-		/** 扩展
-		{id:'9',text:'月营业额统计',href:''},
-		{id:'10',text:'年营业额统计',href:''},
-		**/
-		{id:'3',text:'门诊医生管理',href:'doctor/index.html'},
-		{id:'11',text:'用户管理',href:'User/index.html'},
-		{id:'12',text:'角色管理',href:'Role/index.html'},
-		{id:'13',text:'资源管理',href:'Resource/index.html'},
-		{id:'13',text:'密码管理',href:'User/password.html'}
-		]}
-		
-		]}
-		
-		];
-        new PageUtil.MainPage({
-            modulesConfig : config
+
+    // 获取用户,角色,资源信息
+    getUserMessage();
+    function getUserMessage(){
+        $.ajax({
+            type: "GET",
+            url: "/access/user",
+            data: {},
+            dataType: "json",
+            // xhrFields: {
+            //     withCredentials: true
+            // },
+            // crossDomain: true,
+            success: function (data) {
+                if (data.code == 200){
+                    $(".dl-log-user").text(data.obj.uLoginName)
+                    // 加载导航栏
+                    loadNav(data.obj);
+                    // 刷新iframe局部页面
+                    // $("#J_NavContent").find("iframe").prop("src",src)
+                    // let _iframe = $("#J_NavContent").find("iframe")
+                    // _iframe.contentWindow.location.reload(true);
+                }
+            }
+            // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上下面的代码
+            ,complete : function(xhr, status) {
+                myComplete(xhr, status)
+            }
+        })
+    }
+    // 监听退出登陆按钮
+    $(".dl-log-quit").on("click", function (){
+        // 删除cookie
+        $.removeCookie('jwtToken');
+        // 返回登陆界面
+        isLogin();
+    })
+    // 加载导航栏
+    function loadNav(user){
+        BUI.use('common/main',function(){
+            var config = [
+                {id:'1',menu:[
+                        {text:'快速通道',items:[
+                                // {id:'2',text:'挂号信息管理',href:'registration/index.html'},
+                                //
+                                // {id:'5',text:'住院办理',href:'hospital/index.html'},
+                                // {id:'8',text:'住院结算',href:'hospital/account.html'},
+                                //
+                                // {id:'7',text:'在院发药',href:'hospital/dispensing.html'},
+                                // {id:'4',text:'药品管理',href:'medicine/index.html'},
+                                //
+                                // {id:'16',text:'检查收费项目登记',href:'hospital/charge2.html'},
+                                // {id:'6',text:'收费项目管理',href:'hospital/charge.html'},
+                                //
+                                // /** 扩展
+                                //  {id:'9',text:'月营业额统计',href:''},
+                                //  {id:'10',text:'年营业额统计',href:''},
+                                //  **/
+                                // {id:'3',text:'门诊医生管理',href:'doctor/index.html'},
+                                // {id:'11',text:'用户管理',href:'User/index.html'},
+                                // {id:'12',text:'角色管理',href:'Role/index.html'},
+                                // {id:'13',text:'资源管理',href:'Resource/index.html'},
+                                // {id:'13',text:'密码管理',href:'User/password.html'}
+                            ]}
+                    ]}
+            ];
+            var myarr = [];
+            $.each(user.menuList, function(i, v){
+                let myobj = {id:'',text:'',href:''}
+                myobj.id = v.mId;
+                myobj.text = v.mName;
+                myobj.href = v.mUrl;
+                myarr[i] = myobj;
+            })
+            config[0].menu[0].items = myarr;
+            new PageUtil.MainPage({
+                modulesConfig : config
+            });
         });
-    });
+    }
+
 </script>
 </body>
 </html>

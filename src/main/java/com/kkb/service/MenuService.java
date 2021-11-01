@@ -3,6 +3,7 @@ package com.kkb.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.kkb.mapper.MenuMapper;
+import com.kkb.mapper.RoleMenuMapper;
 import com.kkb.pojo.*;
 import com.kkb.vo.MenuQueryVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class MenuService {
 
     @Autowired
     private MenuMapper menuMapper;
+
+    @Autowired
+    private RoleMenuMapper roleMenuMapper;
 
     /**
      * 多条件查询
@@ -73,6 +77,12 @@ public class MenuService {
      */
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = {Exception.class})
     public Integer deleteById(Integer mId){
+        // 删除关联的RoleMenu表中数据
+        RoleMenuExample roleMenuExample = new RoleMenuExample();
+        RoleMenuExample.Criteria criteria = roleMenuExample.createCriteria();
+        criteria.andMIdEqualTo(mId);
+        roleMenuMapper.deleteByExample(roleMenuExample);
+        // 最后删除menu表中的数据
         return menuMapper.deleteByPrimaryKey(mId);
     }
 

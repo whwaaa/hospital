@@ -36,6 +36,7 @@ public class AccessController {
     // 用户登陆验证
     @RequestMapping(value = "/access/login", method = RequestMethod.POST)
     public AjaxResultVo login(HttpServletResponse response, User user){
+        // 验证用户名密码是否正确
         List<User> users = accessService.queryByUserNameAndPassword(user);
         if(users == null || users.size() == 0){
             // 用户名或密码错误
@@ -46,39 +47,17 @@ public class AccessController {
             // 角色禁用
             return new AjaxResultVo(401, "此用户被禁用请联系管理员。");
         }
-        // 将用户id和用户名称封装, 生成jwtToken令牌
-        Map<String, Object> payLoadMap = new HashMap<>();
-        payLoadMap.put(JWTUtil.payLoadParam1, user.getuState());
-        payLoadMap.put(JWTUtil.payLoadParam2, user.getuLoginName());
-        String jwtToken = JWTUtil.generToken(payLoadMap);
-        // 将jwt令牌存储cookie返回
-        Cookie cookie = new Cookie("jwtToken", jwtToken);
-        cookie.setPath("/");
-        cookie.setMaxAge(3*24*60*60);     // 设置过期时间3天 3*24*60*60秒
-        response.addCookie(cookie);
-        return new AjaxResultVo();
+        // 生成token存入cookie
+        return accessService.createToken(response, user);
     }
 
-    // 获取用户名信息, 并判断用户是否登录 前端jwtToken已经保存用户名信息,
-    // 再次通过后端解析jwtToken可经过拦截器, 判断jwtToken是否过期
-    @RequestMapping(value = "/access/uLoginName", method = RequestMethod.GET)
-    public AjaxResultVo isLogin(HttpServletRequest request){
-        // 获取cookie
-        Cookie[] cookies = request.getCookies();
-        String jwtToken = null;
-        // 遍历cookie
-        if(cookies != null){
-            for (Cookie cookie : cookies) {
-                // 查找name=jwtToken的cookie
-                if(cookie.getName()!=null && "jwtToken".equals(cookie.getName())){
-                    jwtToken = cookie.getValue();
-                }
-            }
+    // 获取用户信息
+    @RequestMapping(value = "/access/user", method = RequestMethod.GET)
+    public AjaxResultVo getUserMessage(HttpServletRequest request){
+        User user = accessService.paseUserMessage(request);
+        if(user != null){
+            return new AjaxResultVo(200, "ok", user);
         }
-        // 解析jwtToken
-        Claims claims = JWTUtil.verifyToken(jwtToken);
-        // 获取并返回用户名
-        String uLoginName = claims.get("uLoginName").toString();
-        return new AjaxResultVo(200, "ok", uLoginName);
+        return new AjaxResultVo(401, "用户信息过期");
     }
 }
