@@ -7,7 +7,7 @@ package com.kkb.vo;
  * @version 1.0
  * @date 2021/10/12
  */
-public class AjaxResultVo<T> {
+public class AjaxResultVo {
     private Integer code;
     private String msg;
     private Object obj;

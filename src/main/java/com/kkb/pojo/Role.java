@@ -1,6 +1,7 @@
 package com.kkb.pojo;
 
 import java.util.Date;
+import java.util.List;
 
 public class Role {
     private Integer rId;
@@ -16,6 +17,26 @@ public class Role {
     private Date rUpdateTime;
 
     private Integer uId;
+
+    private String menuIds;
+
+    private List<RoleMenu> roleMenuList;
+
+    public List<RoleMenu> getRoleMenuList() {
+        return roleMenuList;
+    }
+
+    public void setRoleMenuList(List<RoleMenu> roleMenuList) {
+        this.roleMenuList = roleMenuList;
+    }
+
+    public String getMenuIds() {
+        return menuIds;
+    }
+
+    public void setMenuIds(String menuIds) {
+        this.menuIds = menuIds;
+    }
 
     public Integer getrId() {
         return rId;

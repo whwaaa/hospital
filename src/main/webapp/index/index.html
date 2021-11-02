@@ -41,74 +41,140 @@
 
 <script>
 
-    $(function (){
-        // 判断是否登陆
-        isLogin();
-        function isLogin(){
-            $.ajax({
-                type: "GET",
-                url: "/access/login",
-                data: {jwtToken:jwtToken},
-                dataType: "json",
-                // xhrFields: {
-                //     withCredentials: true
-                // },
-                // crossDomain: true,
-                success: function (data) {
-                    if (data.code == 200){
-                        $(".dl-log-user").text(data.obj)
-                    }
+    // BUI.use('common/main',function(){
+    //     var config = [
+    //         {id:'1',menu:[
+    //                 {text:'快速通道',items:[
+    //                         {id:'2',text:'挂号信息管理',href:'registration/index.html'},
+    //
+    //                         {id:'5',text:'住院办理',href:'hospital/index.html'},
+    //                         {id:'8',text:'住院结算',href:'hospital/account.html'},
+    //
+    //                         {id:'7',text:'在院发药',href:'hospital/dispensing.html'},
+    //                         {id:'4',text:'药品管理',href:'medicine/index.html'},
+    //
+    //                         {id:'16',text:'检查收费项目登记',href:'hospital/charge2.html'},
+    //                         {id:'6',text:'收费项目管理',href:'hospital/charge.html'},
+    //
+    //                         /** 扩展
+    //                          {id:'9',text:'月营业额统计',href:''},
+    //                          {id:'10',text:'年营业额统计',href:''},
+    //                          **/
+    //                         {id:'3',text:'门诊医生管理',href:'doctor/index.html'},
+    //                         {id:'11',text:'用户管理',href:'User/index.html'},
+    //                         {id:'12',text:'角色管理',href:'Role/index.html'},
+    //                         {id:'13',text:'资源管理',href:'Resource/index.html'},
+    //                         {id:'13',text:'密码管理',href:'User/password.html'}
+    //                     ]}
+    //             ]}
+    //     ];
+    // });
+
+
+    // 获取用户,角色,资源信息
+    getUserMessage();
+    function getUserMessage(){
+        $.ajax({
+            type: "GET",
+            url: "/access/user",
+            data: {},
+            dataType: "json",
+            // xhrFields: {
+            //     withCredentials: true
+            // },
+            // crossDomain: true,
+            success: function (data) {
+                if (data.code == 200){
+                    $(".dl-log-user").text(data.obj.uLoginName)
+                    // 加载导航栏
+                    loadNav(data.obj);
                 }
-                // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上下面的代码
-                ,complete : function(xhr, status) {
-                    myComplete(xhr, status)
+            }
+            // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上下面的代码
+            ,complete : function(xhr, status) {
+                myComplete(xhr, status)
+            }
+        })
+    }
+    // 监听退出登陆按钮
+    $(".dl-log-quit").on("click", function (){
+        // 删除cookie
+        $.removeCookie('jwtToken');
+        layer.msg("退出登陆成功")
+        // 返回登陆界面
+        setTimeout(function(){
+            window.location.href = "login.html";
+        }, 1000)
+    })
+    // 加载导航栏
+    function loadNav(user){
+        BUI.use('common/main',function(){
+            // 获取当前url
+            let nowHref = window.location.href;
+            // 获取url中最后的数字 例: newhref=http://localhost/#1/9  urlNum=9
+            let urlNum = nowHref.split("/")[nowHref.split("/").length-1];
+            // 将要刷新的href
+            let refreshHref;
+            // 将要刷新的资源名称
+            let refreshName;
+            var config = [
+                {id:'1',menu:[{text:'快速通道',items:[]}]}];
+            var myarr = [];
+            // 遍历用户数据
+            $.each(user.menuList, function(i, v){
+                let myobj = {id:'',text:'',href:''}
+                if(refreshHref === undefined && urlNum == v.mId){
+                    // 获取将要刷新的href
+                    refreshHref = v.mUrl;
+                    // 将要刷新的资源名称
+                    refreshName = v.mName;
+                }
+                myobj.id = v.mId;
+                myobj.text = v.mName;
+                myobj.href = v.mUrl;
+                myarr[i] = myobj;
+            })
+            // 将用户数据添加进config
+            config[0].menu[0].items = myarr;
+            new PageUtil.MainPage({
+                modulesConfig : config
+            });
+            // 遍历找到属性data-id=urlNum(url后缀数字)的导航栏
+            let $nav = $("#J_NavContent").find("li.bui-menu-item").find("ul").find("li")
+            $.each($nav, function(){
+                if($(this).attr("data-id") == urlNum){
+                    // 找到导航栏, 添加class
+                    $(this).siblings().removeClass("bui-menu-item-selected");
+                    $(this).addClass("bui-menu-item-selected");
                 }
             })
-        }
-        // 监听退出登陆按钮
-        $(".dl-log-quit").on("click", function (){
-            // 删除cookie
-            $.removeCookie('jwtToken');
-            // 返回登陆界面
-            isLogin();
-        })
-    })
-
-    BUI.use('common/main',function(){
-        var config = [
-		{id:'1',menu:[
-		
-		{text:'快速通道',items:[
-		
-		{id:'2',text:'挂号信息管理',href:'registration/index.html'},		
-		
-		{id:'5',text:'住院办理',href:'hospital/index.html'},
-		{id:'8',text:'住院结算',href:'hospital/account.html'},
-		
-		{id:'7',text:'在院发药',href:'hospital/dispensing.html'},
-		{id:'4',text:'药品管理',href:'medicine/index.html'},
-		
-		{id:'16',text:'检查收费项目登记',href:'hospital/charge2.html'},
-		{id:'6',text:'收费项目管理',href:'hospital/charge.html'},		
-	
-		/** 扩展
-		{id:'9',text:'月营业额统计',href:''},
-		{id:'10',text:'年营业额统计',href:''},
-		**/
-		{id:'3',text:'门诊医生管理',href:'doctor/index.html'},
-		{id:'11',text:'用户管理',href:'User/index.html'},
-		{id:'12',text:'角色管理',href:'Role/index.html'},
-		{id:'13',text:'资源管理',href:'Resource/index.html'},
-		{id:'13',text:'密码管理',href:'User/password.html'}
-		]}
-		
-		]}
-		
-		];
-        new PageUtil.MainPage({
-            modulesConfig : config
+            // 刷新页面
+            $("#J_NavContent").find("iframe").attr("src",refreshHref)
+            // 修改title
+            $("s.tab-item-close").siblings("span").text(refreshName)
         });
-    });
+    }
+
 </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

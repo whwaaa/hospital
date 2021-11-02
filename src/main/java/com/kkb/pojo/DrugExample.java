@@ -116,52 +116,62 @@ public class DrugExample {
             return (Criteria) this;
         }
 
-        public Criteria andDrIdEqualTo(Integer value) {
+        public Criteria andDrIdEqualTo(String value) {
             addCriterion("dr_id =", value, "drId");
             return (Criteria) this;
         }
 
-        public Criteria andDrIdNotEqualTo(Integer value) {
+        public Criteria andDrIdNotEqualTo(String value) {
             addCriterion("dr_id <>", value, "drId");
             return (Criteria) this;
         }
 
-        public Criteria andDrIdGreaterThan(Integer value) {
+        public Criteria andDrIdGreaterThan(String value) {
             addCriterion("dr_id >", value, "drId");
             return (Criteria) this;
         }
 
-        public Criteria andDrIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andDrIdGreaterThanOrEqualTo(String value) {
             addCriterion("dr_id >=", value, "drId");
             return (Criteria) this;
         }
 
-        public Criteria andDrIdLessThan(Integer value) {
+        public Criteria andDrIdLessThan(String value) {
             addCriterion("dr_id <", value, "drId");
             return (Criteria) this;
         }
 
-        public Criteria andDrIdLessThanOrEqualTo(Integer value) {
+        public Criteria andDrIdLessThanOrEqualTo(String value) {
             addCriterion("dr_id <=", value, "drId");
             return (Criteria) this;
         }
 
-        public Criteria andDrIdIn(List<Integer> values) {
+        public Criteria andDrIdLike(String value) {
+            addCriterion("dr_id like", value, "drId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDrIdNotLike(String value) {
+            addCriterion("dr_id not like", value, "drId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDrIdIn(List<String> values) {
             addCriterion("dr_id in", values, "drId");
             return (Criteria) this;
         }
 
-        public Criteria andDrIdNotIn(List<Integer> values) {
+        public Criteria andDrIdNotIn(List<String> values) {
             addCriterion("dr_id not in", values, "drId");
             return (Criteria) this;
         }
 
-        public Criteria andDrIdBetween(Integer value1, Integer value2) {
+        public Criteria andDrIdBetween(String value1, String value2) {
             addCriterion("dr_id between", value1, value2, "drId");
             return (Criteria) this;
         }
 
-        public Criteria andDrIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andDrIdNotBetween(String value1, String value2) {
             addCriterion("dr_id not between", value1, value2, "drId");
             return (Criteria) this;
         }
@@ -576,62 +586,52 @@ public class DrugExample {
             return (Criteria) this;
         }
 
-        public Criteria andDrExpireDateEqualTo(String value) {
+        public Criteria andDrExpireDateEqualTo(Integer value) {
             addCriterion("dr_expire_date =", value, "drExpireDate");
             return (Criteria) this;
         }
 
-        public Criteria andDrExpireDateNotEqualTo(String value) {
+        public Criteria andDrExpireDateNotEqualTo(Integer value) {
             addCriterion("dr_expire_date <>", value, "drExpireDate");
             return (Criteria) this;
         }
 
-        public Criteria andDrExpireDateGreaterThan(String value) {
+        public Criteria andDrExpireDateGreaterThan(Integer value) {
             addCriterion("dr_expire_date >", value, "drExpireDate");
             return (Criteria) this;
         }
 
-        public Criteria andDrExpireDateGreaterThanOrEqualTo(String value) {
+        public Criteria andDrExpireDateGreaterThanOrEqualTo(Integer value) {
             addCriterion("dr_expire_date >=", value, "drExpireDate");
             return (Criteria) this;
         }
 
-        public Criteria andDrExpireDateLessThan(String value) {
+        public Criteria andDrExpireDateLessThan(Integer value) {
             addCriterion("dr_expire_date <", value, "drExpireDate");
             return (Criteria) this;
         }
 
-        public Criteria andDrExpireDateLessThanOrEqualTo(String value) {
+        public Criteria andDrExpireDateLessThanOrEqualTo(Integer value) {
             addCriterion("dr_expire_date <=", value, "drExpireDate");
             return (Criteria) this;
         }
 
-        public Criteria andDrExpireDateLike(String value) {
-            addCriterion("dr_expire_date like", value, "drExpireDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDrExpireDateNotLike(String value) {
-            addCriterion("dr_expire_date not like", value, "drExpireDate");
-            return (Criteria) this;
-        }
-
-        public Criteria andDrExpireDateIn(List<String> values) {
+        public Criteria andDrExpireDateIn(List<Integer> values) {
             addCriterion("dr_expire_date in", values, "drExpireDate");
             return (Criteria) this;
         }
 
-        public Criteria andDrExpireDateNotIn(List<String> values) {
+        public Criteria andDrExpireDateNotIn(List<Integer> values) {
             addCriterion("dr_expire_date not in", values, "drExpireDate");
             return (Criteria) this;
         }
 
-        public Criteria andDrExpireDateBetween(String value1, String value2) {
+        public Criteria andDrExpireDateBetween(Integer value1, Integer value2) {
             addCriterion("dr_expire_date between", value1, value2, "drExpireDate");
             return (Criteria) this;
         }
 
-        public Criteria andDrExpireDateNotBetween(String value1, String value2) {
+        public Criteria andDrExpireDateNotBetween(Integer value1, Integer value2) {
             addCriterion("dr_expire_date not between", value1, value2, "drExpireDate");
             return (Criteria) this;
         }
