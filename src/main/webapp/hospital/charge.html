@@ -72,7 +72,7 @@
 		
         <td>
 		<button type="button" class="btn btn-primary" onclick="queryList(1)">查询</button>
-			<button type="reset" class="btn btn-primary" type="button">清空</button> </td>
+			<button type="reset" class="btn btn-primary" id="res">清空</button> </td>
     </tr>
    
 </table>
@@ -130,7 +130,7 @@
 </body>
 </html>
 <script type="text/javascript">
-
+    layer.load(0);
     // TODO: 这些在common.js定义过了
     // String.prototype.GetValue= function(para) {
     //     let reg = new RegExp("(^|&)"+ para +"=([^&]*)(&|$)");
@@ -172,13 +172,17 @@
 
     queryList = function(pageNum){
         let chapName = $("#pname").val();
+
         $.ajax({
             type: "GET",
             url: "/charge/list/?pageNum="+pageNum+"&pageSize="+globalPageSize+"&jwtToken=" + jwtToken,
             data:{chapName:chapName},
             success: function (data) {
+                layer.closeAll();
                 console.log(data);
                 if(data.code == 200){
+                    $("#res").trigger("click");
+
                     // 填充分页
                     fillPageData(data.obj);
                     // 更新当前页全局变量
@@ -234,7 +238,7 @@
     }
     function deleteCharge(chapId) {
         if(confirm("确定要删除吗?")) {
-            alert(chapId);
+
             //发起异步请求
             $.ajax({
                 type: "POST",
@@ -245,9 +249,10 @@
                 success: function (data) {
                     if(data.code == 200){
                         // queryList(1);
+                        layer.msg("删除成功！", function(){})
                         queryList(globalPageNum);
                     }else{
-                        alert("删除失败！"+data.msg);
+                        layer.msg(data.msg, function(){})
 
                     }
                 }

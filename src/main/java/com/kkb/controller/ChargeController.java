@@ -46,14 +46,16 @@ public class ChargeController {
     //更新
     @RequestMapping(value = "{chapId}",method = RequestMethod.PUT)
     public AjaxResultVo update(@PathVariable("chapId") Integer chapId,ChargeProject chargeProject){
-        chargeProject.setChapId(chapId);
+        if(chargeService.queryName(chargeProject.getChapName())<=1){
+            chargeProject.setChapId(chapId);
         chargeProject.setChapUpdateTime(new Date());
         int i = chargeService.updateById(chargeProject);
         if(i > 0){
-            System.out.println("================="+i+"================");
             return new AjaxResultVo(200, "ok", null);
         }
-        return new AjaxResultVo(400, "服务器内部异常, 请稍后再试!");
+        return new AjaxResultVo(500, "服务器内部异常, 请稍后再试!");
+        }
+        return new AjaxResultVo(400, "该项目名称已存在，请重试！");
     }
     //删除
     @RequestMapping(value = "{chapId}", method = RequestMethod.DELETE)
@@ -66,12 +68,14 @@ public class ChargeController {
     }
     //增加
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public AjaxResultVo addCharge(ChargeProject chargeProject){
-        Integer i = chargeService.addCharge(chargeProject);
-        if(i > 0){
-            return new AjaxResultVo(200, "ok");
+    public AjaxResultVo addCharge(ChargeProject chargeProject) {
+        if (chargeService.queryName(chargeProject.getChapName()) ==0) {
+            Integer i = chargeService.addCharge(chargeProject);
+            if (i > 0) {
+                return new AjaxResultVo(200, "ok");
+            }
+            return new AjaxResultVo(500, "服务器内部异常, 请稍后再试!");
         }
-        return new AjaxResultVo(500, "服务器内部异常, 请稍后再试!");
+        return  new AjaxResultVo(400, "该项目名称已存在，请重试！");
     }
-
 }

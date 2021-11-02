@@ -115,6 +115,7 @@
            let chapId = $("#chapId") .val();
            let chapName = $("#chapName").val();
            let chapMoney = $("#chapMoney").val();
+            layer.load(0);
             $.ajax({
                 type: "POST",
                 url: "/charge/"+chapId, //RESTful风格的API定义
@@ -126,10 +127,15 @@
                 },
                 dataType: "json",
                 success: function (data) {
+                    layer.closeAll()
                     console.log(data);
                     if (data.code == 200){
                         window.location.href = "charge.html";
                     }else{
+                        layer.msg(data.msg, function(){})
+                        if(data.code == 400){
+                            $("#chapName").focus();
+                        }
                     }
                 }
                 ,complete : function(xhr, status) {
