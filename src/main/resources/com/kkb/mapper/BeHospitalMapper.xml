@@ -3,6 +3,7 @@
 <mapper namespace="com.kkb.mapper.BeHospitalMapper">
   <resultMap id="BaseResultMap" type="com.kkb.pojo.BeHospital">
     <id column="beh_id" jdbcType="INTEGER" property="behId" />
+    <result column="beh_name" jdbcType="VARCHAR" property="behName" />
     <result column="beh_nurse_people" jdbcType="VARCHAR" property="behNursePeople" />
     <result column="beh_pat_bed" jdbcType="VARCHAR" property="behPatBed" />
     <result column="beh_antecedent" jdbcType="DECIMAL" property="behAntecedent" />
@@ -73,7 +74,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    beh_id, beh_nurse_people, beh_pat_bed, beh_antecedent, beh_illness, beh_close_price, 
+    beh_id, beh_name, beh_nurse_people, beh_pat_bed, beh_antecedent, beh_illness, beh_close_price, 
     beh_state, beh_is_del, beh_create_time, beh_update_time, u_id
   </sql>
   <select id="selectByExample" parameterType="com.kkb.pojo.BeHospitalExample" resultMap="BaseResultMap">
@@ -107,20 +108,25 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.kkb.pojo.BeHospital">
-    insert into be_hospital (beh_id, beh_nurse_people, beh_pat_bed, 
-      beh_antecedent, beh_illness, beh_close_price, 
-      beh_state, beh_is_del, beh_create_time, 
-      beh_update_time, u_id)
-    values (#{behId,jdbcType=INTEGER}, #{behNursePeople,jdbcType=VARCHAR}, #{behPatBed,jdbcType=VARCHAR}, 
-      #{behAntecedent,jdbcType=DECIMAL}, #{behIllness,jdbcType=VARCHAR}, #{behClosePrice,jdbcType=INTEGER}, 
-      #{behState,jdbcType=INTEGER}, #{behIsDel,jdbcType=INTEGER}, #{behCreateTime,jdbcType=TIMESTAMP}, 
-      #{behUpdateTime,jdbcType=TIMESTAMP}, #{uId,jdbcType=INTEGER})
+    insert into be_hospital (beh_id, beh_name, beh_nurse_people, 
+      beh_pat_bed, beh_antecedent, beh_illness, 
+      beh_close_price, beh_state, beh_is_del, 
+      beh_create_time, beh_update_time, u_id
+      )
+    values (#{behId,jdbcType=INTEGER}, #{behName,jdbcType=VARCHAR}, #{behNursePeople,jdbcType=VARCHAR}, 
+      #{behPatBed,jdbcType=VARCHAR}, #{behAntecedent,jdbcType=DECIMAL}, #{behIllness,jdbcType=VARCHAR}, 
+      #{behClosePrice,jdbcType=INTEGER}, #{behState,jdbcType=INTEGER}, #{behIsDel,jdbcType=INTEGER}, 
+      #{behCreateTime,jdbcType=TIMESTAMP}, #{behUpdateTime,jdbcType=TIMESTAMP}, #{uId,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.kkb.pojo.BeHospital">
     insert into be_hospital
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="behId != null">
         beh_id,
+      </if>
+      <if test="behName != null">
+        beh_name,
       </if>
       <if test="behNursePeople != null">
         beh_nurse_people,
@@ -156,6 +162,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="behId != null">
         #{behId,jdbcType=INTEGER},
+      </if>
+      <if test="behName != null">
+        #{behName,jdbcType=VARCHAR},
       </if>
       <if test="behNursePeople != null">
         #{behNursePeople,jdbcType=VARCHAR},
@@ -201,6 +210,9 @@
       <if test="record.behId != null">
         beh_id = #{record.behId,jdbcType=INTEGER},
       </if>
+      <if test="record.behName != null">
+        beh_name = #{record.behName,jdbcType=VARCHAR},
+      </if>
       <if test="record.behNursePeople != null">
         beh_nurse_people = #{record.behNursePeople,jdbcType=VARCHAR},
       </if>
@@ -239,6 +251,7 @@
   <update id="updateByExample" parameterType="map">
     update be_hospital
     set beh_id = #{record.behId,jdbcType=INTEGER},
+      beh_name = #{record.behName,jdbcType=VARCHAR},
       beh_nurse_people = #{record.behNursePeople,jdbcType=VARCHAR},
       beh_pat_bed = #{record.behPatBed,jdbcType=VARCHAR},
       beh_antecedent = #{record.behAntecedent,jdbcType=DECIMAL},
@@ -256,6 +269,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.kkb.pojo.BeHospital">
     update be_hospital
     <set>
+      <if test="behName != null">
+        beh_name = #{behName,jdbcType=VARCHAR},
+      </if>
       <if test="behNursePeople != null">
         beh_nurse_people = #{behNursePeople,jdbcType=VARCHAR},
       </if>
@@ -291,7 +307,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.kkb.pojo.BeHospital">
     update be_hospital
-    set beh_nurse_people = #{behNursePeople,jdbcType=VARCHAR},
+    set beh_name = #{behName,jdbcType=VARCHAR},
+      beh_nurse_people = #{behNursePeople,jdbcType=VARCHAR},
       beh_pat_bed = #{behPatBed,jdbcType=VARCHAR},
       beh_antecedent = #{behAntecedent,jdbcType=DECIMAL},
       beh_illness = #{behIllness,jdbcType=VARCHAR},

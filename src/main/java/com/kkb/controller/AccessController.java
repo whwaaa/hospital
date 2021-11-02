@@ -1,8 +1,10 @@
 package com.kkb.controller;
 
 import com.kkb.exceptions.JWTTokenInvalidException;
+import com.kkb.pojo.Role;
 import com.kkb.pojo.User;
 import com.kkb.service.AccessService;
+import com.kkb.service.RoleService;
 import com.kkb.utils.JWTUtil;
 import com.kkb.vo.AjaxResultVo;
 import io.jsonwebtoken.Claims;
@@ -30,6 +32,10 @@ public class AccessController {
 
     @Autowired
     private AccessService accessService;
+
+    @Autowired
+    private RoleService roleService;
+
     // 用户登陆验证
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public AjaxResultVo login(HttpServletResponse response, User user){
@@ -41,9 +47,15 @@ public class AccessController {
         }
         user = users.get(0);
         if(user.getuState() != 0){
-            // 角色禁用
-            return new AjaxResultVo(401, "此用户被禁用请联系管理员。");
+            // 用户被禁用
+            return new AjaxResultVo(403, "此用户被禁用请联系管理员。");
         }
+        Role role = roleService.queryByRId(user.getrId());
+        if(role.getrState() != 0){
+            // 角色被禁用
+            return new AjaxResultVo(403, "此用户所属角色被禁用请联系管理员。");
+        }
+
         // 生成token存入cookie
         return accessService.createToken(response, user);
     }

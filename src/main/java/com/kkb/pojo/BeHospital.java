@@ -6,6 +6,8 @@ import java.util.Date;
 public class BeHospital {
     private Integer behId;
 
+    private String behName;
+
     private String behNursePeople;
 
     private String behPatBed;
@@ -32,6 +34,14 @@ public class BeHospital {
 
     public void setBehId(Integer behId) {
         this.behId = behId;
+    }
+
+    public String getBehName() {
+        return behName;
+    }
+
+    public void setBehName(String behName) {
+        this.behName = behName == null ? null : behName.trim();
     }
 
     public String getBehNursePeople() {

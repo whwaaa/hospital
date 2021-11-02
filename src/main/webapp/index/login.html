@@ -62,23 +62,33 @@
         </div>
        
         <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-large btn-primary" id="login-btn" type="button">登录</button></p>
+        <span id="loginTips" style="color:red;display: none"></span>
     </div>
 
 </div>
 <script>
-
-    // 密码
+    let firsetverify = true;
 
     $(function (){
         // 回调地址
         let callBackUrL = document.location.toString().GetValue("callBackUrL");
+        let username = document.location.toString().GetValue("username");
+        if(username == undefined || username == '' || username == 'null'){}else{
+            $("input[name='username']").val(username)
+        }
 
         $("#login-btn").on("click", function(){
             layer.msg("请先完成安全验证", function(){})
         })
+
         $('#captcha').sliderCaptcha({
             repeatIcon: 'fa fa-redo',
             setSrc: function () {
+                if(firsetverify){
+                    firsetverify = false;
+                }else{
+                    layer.msg("验证失败，请重试", function(){})
+                }
                 return ''; },
             onSuccess: function () {
                 layer.msg("完成安全验证");
@@ -105,8 +115,18 @@
                                     // 跳回原地址
                                     window.location.href = callBackUrL;
                                 },300)
-                            }else{
+                            }else {
+                                $("input[name='username']").on("click", function(){
+                                    window.location.href = "login.html?username=" + $("input[name='username']").val().trim()
+                                        + "&callBackUrL" + callBackUrL;
+                                })
+                                $("input[name='password']").on("click", function(){
+                                    window.location.href = "login.html?username=" + $("input[name='username']").val().trim()
+                                        + "&callBackUrL" + callBackUrL;
+                                })
                                 layer.msg(data.msg,function(){})
+                                $("#loginTips").text(data.msg)
+                                $("#loginTips").show()
                             }
                         }
                     })
