@@ -91,7 +91,7 @@ function myComplete(xhr, status){
 function fillPageData(pageInfo) {
     // 清空div内容
     $("#pageInfo-box").empty();
-    let box = "<span id='total'>"+pageInfo.total+"</span> 条记录 <span id='pages'>"+pageInfo.pageNum+"</span>/<span id='pages'>"+pageInfo.pages+"</span>页&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每页显示<select id='pageSize' style='width:42px;position:relative;top:3px;'><option value='5'>5<option value='10'>10<option value='14'>14</select>条&nbsp;<a id='prePage' href='javascript:queryList("+pageInfo.prePage+")'>上一页</a>";
+    let box = "<span id='total'>"+pageInfo.total+"</span> 条记录 <span id='pages'>"+pageInfo.pageNum+"</span>/<span id='pages'>"+pageInfo.pages+"</span>页&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每页显示<select id='pageSize' style='width:42px;position:relative;top:3px;'><option value='5'>5<option value='10'>10<option value='13'>13</select>条&nbsp;<a id='prePage' href='javascript:queryList("+pageInfo.prePage+")'>上一页</a>";
     // 例: 总页数16, 当前页13, 则显示(Math.ceil(13/5)*5-4)=10 - (Math.ceil(13/5)*4)=15   11-15
     let showPages_start = Math.ceil(pageInfo.pageNum/5)*5 - 4;
     let showPages_end = Math.ceil(pageInfo.pageNum/5)*5<=pageInfo.pages ? Math.ceil(pageInfo.pageNum/5)*5 : pageInfo.pages;
