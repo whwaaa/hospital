@@ -8,10 +8,7 @@ import com.kkb.vo.AjaxResultVo;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -28,13 +25,13 @@ import java.util.Map;
  */
 @Controller
 @ResponseBody
+@RequestMapping(value = "access")
 public class AccessController {
 
     @Autowired
     private AccessService accessService;
-
     // 用户登陆验证
-    @RequestMapping(value = "/access/login", method = RequestMethod.POST)
+    @RequestMapping(value = "login", method = RequestMethod.POST)
     public AjaxResultVo login(HttpServletResponse response, User user){
         // 验证用户名密码是否正确
         List<User> users = accessService.queryByUserNameAndPassword(user);
@@ -52,7 +49,7 @@ public class AccessController {
     }
 
     // 获取用户信息
-    @RequestMapping(value = "/access/user", method = RequestMethod.GET)
+    @RequestMapping(value = "user", method = RequestMethod.GET)
     public AjaxResultVo getUserMessage(HttpServletRequest request){
         User user = accessService.paseUserMessage(request);
         if(user != null){
@@ -60,4 +57,17 @@ public class AccessController {
         }
         return new AjaxResultVo(401, "用户信息过期");
     }
+
+    // 验证原始密码是否一致
+    @RequestMapping(value = "verify-password", method = RequestMethod.POST)
+    public AjaxResultVo verifyPassword(User user){
+        // 验证原始密码是否一致
+        List<User> users = accessService.queryByUserIdAndPassword(user);
+        if(users == null || users.size() == 0){
+            // 密码验证失败
+            return new AjaxResultVo(401, "与原始密码不一致");
+        }
+        return new AjaxResultVo();
+    }
+
 }

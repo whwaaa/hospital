@@ -131,4 +131,29 @@ public class AccessService {
         criteria.andUIsDelEqualTo(0);
         return userMapper.selectByExample(userExample);
     }
+
+    /**
+     * 根据用id和密码查询用户
+     * @param user
+     * @return : 用户名和密码任意一项为空则返回null, 否则返回查询结果
+     */
+    @Transactional(propagation = Propagation.REQUIRED,readOnly = true)
+    public List<User> queryByUserIdAndPassword(User user){
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        // 用户id为空返回null
+        if(user.getuId() != null){
+            criteria.andUIdEqualTo(user.getuId());
+        }else{
+            return null;
+        }
+        // 密码为空返回null
+        if(user.getuPassword() != null && !"".equals(user.getuPassword())){
+            criteria.andUPasswordEqualTo(user.getuPassword());
+        }else{
+            return null;
+        }
+        criteria.andUIsDelEqualTo(0);
+        return userMapper.selectByExample(userExample);
+    }
 }

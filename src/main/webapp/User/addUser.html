@@ -79,7 +79,7 @@
     function passwordCheck(uPassword){
         passwordCheckTime = setTimeout(function(){
             // 密码长度6-16位，必须包含有数字，字母及特殊字符。
-            var reg = /^.*(?=.{6,16})(?=.*\d)(?=.*[A-z])(?=.*[!@#$%^&*?\(\)]).*$/;
+            var reg = /^.*(?=.{6,16})(?=.*\d)(?=.*[A-z])(?=.*[!@#$%^&*_\-;:'"+=<>\\\|,\.?\(\)]).*$/;
             if(reg.test(uPassword)){
                 passwordCheckFlag = true;
                 $("input[name='uPassword']").removeClass("warning")
