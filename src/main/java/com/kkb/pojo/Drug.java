@@ -23,6 +23,7 @@ public class Drug {
     @Pattern(regexp = "^([ZXCF])([0-9]{7})$",message = "药品编码不正确，不符合1位英文编(ZXCF)+7位数字(0-9)")
     private String drId;
     // 药品图片URL，根据文件是否为空判定
+    @NotNull(message = "药品图片不能为空")
     private String drUrl;
     // 进价
     @Range(min = 0,max = 99999999)

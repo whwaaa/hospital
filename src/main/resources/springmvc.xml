@@ -37,6 +37,8 @@
     <mvc:resources mapping="/Role/**" location="/Role/"/>
     <mvc:resources mapping="/User/**" location="/User/"/>
     <mvc:resources mapping="/index/**" location="/index/"/>
+    <!-- 上传的药品图片映射 -->
+    <mvc:resources mapping="/shandong-hospita/uploads/**" location="file:///D:/shandong-hospita/upload/"/>
 <!--    <mvc:resources mapping="/html/**" location="/html/"/>-->
 
     <!-- 拦截器 -->
