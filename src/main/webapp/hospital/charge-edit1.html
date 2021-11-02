@@ -59,7 +59,7 @@
     <tr>
         <td colspan="2">
 			<center>
-				<button type="submit" class="btn btn-primary" id="sub" type="button" >保存</button> &nbsp;
+				<button  class="btn btn-primary" id="sub" type="button" >保存</button> &nbsp;
                 &nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
 			</center>
 		</td>
@@ -115,7 +115,6 @@
            let chapId = $("#chapId") .val();
            let chapName = $("#chapName").val();
            let chapMoney = $("#chapMoney").val();
-            alert(chapId);
             $.ajax({
                 type: "POST",
                 url: "/charge/"+chapId, //RESTful风格的API定义
@@ -129,7 +128,7 @@
                 success: function (data) {
                     console.log(data);
                     if (data.code == 200){
-                        window.location.href = "/charge.html";
+                        window.location.href = "charge.html";
                     }else{
                     }
                 }
