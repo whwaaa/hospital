@@ -41,15 +41,26 @@
     <table class="table table-bordered table-hover definewidth m10">
         <tr>
             <td width="10%" class="tableleft">登录名</td>
-            <td><input onblur="loginNameCheck(this.value)" type="text" name="uLoginName" value=""/></td>
+            <td>
+<!--                <input onblur="loginNameCheck(this.value)" type="text" name="uLoginName"/>-->
+                <span id="uLoginName"></span>
+<!--                <span id="loginNameTips" style="display:none;color:red;position: relative;top: -4px;margin-left: 5px;"></span>-->
+            </td>
+
         </tr>
         <tr>
             <td class="tableleft">密码</td>
-            <td><input onblur="passwordCheck(this.value)" type="password" name="uPassword"/></td>
+            <td>
+                <input onblur="passwordCheck(this.value)" type="password" name="uPassword"/>
+                <span id="passwordTips" style="display:none;color:red;position: relative;top: -4px;margin-left: 5px;">密码长度6-16位，必须包含有数字，字母及特殊字符。</span>
+            </td>
         </tr>
         <tr>
             <td class="tableleft">真实姓名</td>
-            <td><input onblur="trueNameCheck(this.value)" type="text" name="uTrueName" value=""/></td>
+            <td>
+                <input onblur="trueNameCheck(this.value)" type="text" name="uTrueName"/>
+                <span id="trueNameTips" style="display:none;color:red;position: relative;top: -4px;margin-left: 5px;">真实姓名不能为空。</span>
+            </td>
         </tr>
         <tr>
             <td class="tableleft">邮箱</td>
@@ -81,12 +92,10 @@
 </body>
 </html>
 <script>
-    let loginNameCheckTime;
     let passwordCheckTime;
     let trueNameCheckTime;
     let emailCheckTime;
     let roleCheckTime;
-    let loginNameCheckFlag = false;
     let roleCheckFlag = true;
     let passwordCheckFlag = true;
     let trueNameCheckFlag = true;
@@ -98,44 +107,6 @@
     // 地址栏获取uId参数
     let uId = document.location.toString().GetValue("uId");
 
-    // 登录名的唯一性验证, 非空
-    function loginNameCheck(uLoginName){
-        loginNameCheckTime = setTimeout(function() {
-            if (uLoginName == null || uLoginName === "" || uLoginName === undefined) {
-                layer.msg("登录名不能为空", function () {
-                })
-                $("input[name='uLoginName']").addClass("warning")
-            } else {
-                if (oldLoginName.trim() == uLoginName) {
-                    loginNameCheckFlag = true;
-                    $("input[name='uLoginName']").removeClass("warning")
-                } else {
-                    $.ajax({
-                        type: "GET",
-                        url: "/user/loginname/" + uLoginName,
-                        data: {jwtToken: jwtToken},
-                        dataType: "json",
-                        async: false,
-                        success: function (data) {
-                            if (data.code == 200) {
-                                loginNameCheckFlag = true;
-                                $("input[name='uLoginName']").removeClass("warning")
-                            } else {
-                                layer.msg("登录名已存在，请重新输入。", function () {
-                                })
-                                loginNameCheckFlag = false;
-                                $("input[name='uLoginName']").addClass("warning");
-                            }
-                        }
-                        // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
-                        , complete: function (xhr, status) {
-                            myComplete(xhr, status);
-                        }
-                    })
-                }
-            }
-        },120)
-    }
     // 密码强度的, 非空验证
     function passwordCheck(uPassword){
         passwordCheckTime = setTimeout(function(){
@@ -144,10 +115,12 @@
             if(reg.test(uPassword)){
                 passwordCheckFlag = true;
                 $("input[name='uPassword']").removeClass("warning")
+                $("#passwordTips").hide();
             } else {
                 layer.msg("密码强度太弱,请重新设置", function(){})
                 passwordCheckFlag = false;
                 $("input[name='uPassword']").addClass("warning")
+                $("#passwordTips").show();
             }
         },50)
     }
@@ -158,9 +131,11 @@
                 layer.msg("姓名不能为空", function(){})
                 trueNameCheckFlag = false;
                 $("input[name='uTrueName']").addClass("warning")
+                $("#trueNameTips").show()
             } else {
                 trueNameCheckFlag = true;
                 $("input[name='uTrueName']").removeClass("warning")
+                $("#trueNameTips").hide()
             }
         },50)
     }
@@ -244,7 +219,6 @@
         // 更新
         $('#userEdit').click(function() {
             // 防止onclick和onblur冲突关闭所有setTime
-            clearTimeout(loginNameCheckTime);
             clearTimeout(passwordCheckTime);
             clearTimeout(trueNameCheckTime);
             clearTimeout(emailCheckTime);
@@ -253,17 +227,14 @@
             let uEmail = $("input[name='uEmail']").val();
             let uTrueName = $("input[name='uTrueName']").val();
             let uPassword = $("input[name='uPassword']").val();
-            let uLoginName = $("input[name='uLoginName']").val();
             let uState = $("input[name='uState']:checked").val();
             // 再次校验所有信息
-            loginNameCheck(uLoginName);
             passwordCheck(uPassword);
             trueNameCheck(uTrueName);
             emailCheck(uEmail);
             roleCheck(rId);
             // 确保ajax已发送
             setTimeout(function() {
-                if( !loginNameCheckFlag ){return false;}
                 if( !passwordCheckFlag ){return false;}
                 if( !trueNameCheckFlag ){return false;}
                 if( !emailCheckFlag ){return false;}
@@ -277,8 +248,8 @@
                         type: "POST",
                         url: "/user/" + uId,
                         data: {
-                            _method: "PUT", rId: rId, uEmail: uEmail, uTrueName: uTrueName,
-                            uPassword: uPassword, uState: uState, uLoginName: uLoginName
+                            _method: "PUT", rId: rId, uEmail: uEmail,
+                            uPassword: uPassword, uState: uState, uTrueName: uTrueName
                         },
                         dataType: "json",
                         success: function (data) {
@@ -304,7 +275,8 @@
 
     // 填充查询数据
     function loadDate(user){
-        $("input[name='uLoginName']").val(user.uLoginName)
+        // $("input[name='uLoginName']").val(user.uLoginName)
+        $("#uLoginName").text(user.uLoginName)
         $("input[name='uPassword']").val(user.uPassword)
         $("input[name='uTrueName']").val(user.uTrueName)
         $("input[name='uEmail']").val(user.uEmail)

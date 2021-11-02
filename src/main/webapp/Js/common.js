@@ -53,7 +53,7 @@ if(globalPageNum == undefined || globalPageNum == '' || globalPageNum == 'null')
 }
 // 首次优先取URI地址参数
 let globalPageSize = document.location.toString().GetValue("pageSize");
-if(globalPageSize == undefined || globalPageSize == '' || globalPageSize == 'null' || firstRead){
+if(globalPageSize == undefined || globalPageSize == '' || globalPageSize == 'null'){
     // URI为空取分页模块参数
     globalPageSize = $("#pageSize").val();
     if(globalPageSize == undefined || globalPageSize == '' || globalPageSize == 'null'){

@@ -82,7 +82,8 @@
     let oldMName;
     // url首次检测标志
     let urlFirstCheck = true;
-
+    // 强制修改url有效标志
+    let forcedModify = false;
     // 资源有效性检测
     function urlCheck(url){
         urlCheckTime = setTimeout(function(){
@@ -96,7 +97,8 @@
                 layer.load(0)
                 $.ajax({
                     type: "GET",
-                    url: "/" + url,
+                    // url: "/" + url,
+                    url: url,
                     async: false,
                     success: function (data) {
                         urlCheckFlat = true;
@@ -112,14 +114,15 @@
                     error: function (){
                         urlCheckFlat = true;
                         layer.closeAll();
-                        // layer.msg("资源url无效！", function(){})
-                        // $("input[name='mUrl']").addClass("warning");
                         urlIsValid = false;
-                        $(':radio[name="mState"]').eq(1).prop("checked",true)
-                        $(':radio[name="mState"]').eq(0).attr("checked",false)
-                        // 不是第一次检测再弹框
-                        if( !urlFirstCheck ) {
-                            layer.msg("检测到URL不可用")
+                        // 没有设置强制设置
+                        if( !forcedModify ){
+                            $(':radio[name="mState"]').eq(1).prop("checked",true)
+                            $(':radio[name="mState"]').eq(0).attr("checked",false)
+                            // 不是第一次检测再弹框
+                            if( !urlFirstCheck ) {
+                                layer.msg("检测到URL不可用")
+                            }
                         }
                         urlFirstCheck = false;
                     }
@@ -193,7 +196,7 @@
                 $.ajax({
                     type: "POST",
                     url: "/menu/" + mId,
-                    data: {mUrl:mUrl,mState:mState,_method:"PUT"},
+                    data: {mUrl:mUrl,mState:mState,mName:mName,_method:"PUT"},
                     dataType: "json",
                     success: function (data) {
                         layer.closeAll()
@@ -260,10 +263,16 @@
         });
         // 监听mState
         $("input[name='mState']").on("click", function(){
-            if(!urlIsValid){
-                $(':radio[name="mState"]').eq(1).prop("checked",true)
-                $(':radio[name="mState"]').eq(0).attr("checked",false)
-                layer.msg("系统检测到URL无效,不能设置为有效",function(){})
+            if(!urlIsValid && $(':radio[name="mState"]').eq(0).prop("checked")){
+                if(confirm("检测到URL无效或非本服务器站点，确定要强制更改为有效使用吗？")){
+                    // 强制修改标志
+                    forcedModify = true;
+                } else {
+                    // 取消强制修改
+                    forcedModify = false;
+                    $(':radio[name="mState"]').eq(1).prop("checked",true)
+                    $(':radio[name="mState"]').eq(0).attr("checked",false)
+                }
             }
         })
     });

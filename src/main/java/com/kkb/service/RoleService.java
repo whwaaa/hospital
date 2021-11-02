@@ -4,10 +4,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.kkb.mapper.RoleMapper;
 import com.kkb.mapper.RoleMenuMapper;
-import com.kkb.pojo.Role;
-import com.kkb.pojo.RoleExample;
-import com.kkb.pojo.RoleMenu;
-import com.kkb.pojo.RoleMenuExample;
+import com.kkb.mapper.UserMapper;
+import com.kkb.pojo.*;
 import com.kkb.vo.RoleQueryVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +30,12 @@ public class RoleService {
 
     @Autowired
     private RoleMenuMapper roleMenuMapper;
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * 新增role数据
@@ -71,6 +75,21 @@ public class RoleService {
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Integer delete(Integer rId){
+        // 删除该角色下所有用户
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        criteria.andRIdEqualTo(rId);
+        criteria.andUIsDelEqualTo(0);
+        List<User> users = userMapper.selectByExample(userExample);
+        for (User user : users) {
+            userService.deleteById(user.getuId());
+        }
+        // 删除与该角色关联的资源信息
+        RoleMenuExample roleMenuExample = new RoleMenuExample();
+        RoleMenuExample.Criteria criteria1 = roleMenuExample.createCriteria();
+        criteria1.andRIdEqualTo(rId);
+        roleMenuMapper.deleteByExample(roleMenuExample);
+        // 删除role表中角色信息
         Role role = new Role();
         role.setrUpdateTime(new Date());
         role.setrIsDel(1);

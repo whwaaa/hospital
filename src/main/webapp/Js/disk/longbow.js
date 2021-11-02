@@ -16,7 +16,7 @@
         PI: Math.PI,
         sliderL: 42,    // 滑块边长
         sliderR: 9,     // 滑块半径
-        offset: 5,      // 容错偏差
+        offset: 14,      // 容错偏差
         loadingText: '正在加载中...',
         failedText: '再试一次',
         barText: '向右滑动填充拼图',

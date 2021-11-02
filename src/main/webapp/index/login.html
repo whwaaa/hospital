@@ -54,9 +54,8 @@
 
     <div class="form-signin">
         <h2 class="form-signin-heading">&nbsp;&nbsp;&nbsp;登录系统</h2>
-        <input type="text" name="username" class="input-block-level" value="abc" placeholder="账号">
-        <input type="password" name="password" class="input-block-level" value="123" placeholder="密码">
-<!--        <input type="text" name="verify" class="input-medium" value="7236" placeholder="验证码">7236-->
+        <input type="text" name="username" class="input-block-level" value="最高指挥官" placeholder="账号">
+        <input type="password" name="password" class="input-block-level" value="abc123." placeholder="密码">
         <div class="container-fluid" style="margin-bottom: 15px; padding-left: 0; padding-right: 0; height: 200px;">
              <div id="captcha"></div>
         </div>
@@ -74,7 +73,7 @@
         let callBackUrL = document.location.toString().GetValue("callBackUrL");
         let username = document.location.toString().GetValue("username");
         if(username == undefined || username == '' || username == 'null'){}else{
-            $("input[name='username']").val(username)
+            // $("input[name='username']").val(username)
         }
 
         $("#login-btn").on("click", function(){
@@ -118,11 +117,11 @@
                             }else {
                                 $("input[name='username']").on("click", function(){
                                     window.location.href = "login.html?username=" + $("input[name='username']").val().trim()
-                                        + "&callBackUrL" + callBackUrL;
+                                        + "&callBackUrL=" + callBackUrL;
                                 })
                                 $("input[name='password']").on("click", function(){
                                     window.location.href = "login.html?username=" + $("input[name='username']").val().trim()
-                                        + "&callBackUrL" + callBackUrL;
+                                        + "&callBackUrL=" + callBackUrL;
                                 })
                                 layer.msg(data.msg,function(){})
                                 $("#loginTips").text(data.msg)
