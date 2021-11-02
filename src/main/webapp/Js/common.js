@@ -51,9 +51,9 @@ if(globalPageNum == undefined || globalPageNum == '' || globalPageNum == 'null')
     }
     globalPageNum = "1";
 }
-// 优先取URI地址参数
+// 首次优先取URI地址参数
 let globalPageSize = document.location.toString().GetValue("pageSize");
-if(globalPageSize == undefined || globalPageSize == '' || globalPageSize == 'null'){
+if(globalPageSize == undefined || globalPageSize == '' || globalPageSize == 'null' || firstRead){
     // URI为空取分页模块参数
     globalPageSize = $("#pageSize").val();
     if(globalPageSize == undefined || globalPageSize == '' || globalPageSize == 'null'){
@@ -91,7 +91,7 @@ function myComplete(xhr, status){
 function fillPageData(pageInfo) {
     // 清空div内容
     $("#pageInfo-box").empty();
-    let box = "<span id='total'>"+pageInfo.total+"</span> 条记录 <span id='pages'>"+pageInfo.pageNum+"</span>/<span id='pages'>"+pageInfo.pages+"</span>页&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每页显示<select id='pageSize' style='width:42px;position:relative;top:3px;'><option value='5'>5<option value='10'>10</select>条&nbsp;<a id='prePage' href='javascript:queryList("+pageInfo.prePage+")'>上一页</a>";
+    let box = "<span id='total'>"+pageInfo.total+"</span> 条记录 <span id='pages'>"+pageInfo.pageNum+"</span>/<span id='pages'>"+pageInfo.pages+"</span>页&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每页显示<select id='pageSize' style='width:42px;position:relative;top:3px;'><option value='5'>5<option value='10'>10<option value='14'>14</select>条&nbsp;<a id='prePage' href='javascript:queryList("+pageInfo.prePage+")'>上一页</a>";
     // 例: 总页数16, 当前页13, 则显示(Math.ceil(13/5)*5-4)=10 - (Math.ceil(13/5)*4)=15   11-15
     let showPages_start = Math.ceil(pageInfo.pageNum/5)*5 - 4;
     let showPages_end = Math.ceil(pageInfo.pageNum/5)*5<=pageInfo.pages ? Math.ceil(pageInfo.pageNum/5)*5 : pageInfo.pages;
@@ -123,6 +123,7 @@ function fillPageData(pageInfo) {
     // 监听每页显示的值发生变化
     $("#pageSize").bind("input propertychange", function (){
         // 再次查询
+        globalPageSize = $("#pageSize").val();
         queryList(pageInfo.pageNum);
     })
 }
