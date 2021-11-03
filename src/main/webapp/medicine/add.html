@@ -46,7 +46,7 @@
     <table class="table table-bordered table-hover definewidth m10">
         <tr>
             <td width="10%" class="tableleft">药品编号</td>
-            <td><input type="text" name="drId" value=""/></td>
+            <td><input type="text" name="drId" value="" required/></td>
         </tr>
         <tr>
             <td width="10%" class="tableleft">图片</td>
@@ -71,9 +71,9 @@
         <tr>
             <td width="10%" class="tableleft">药品类型</td>
             <td>
-                <input type="radio" name="drType" value="" checked/>处方药
-                &nbsp;&nbsp;&nbsp;<input type="radio" name="drType" value=""/>中药&nbsp;&nbsp;&nbsp;
-                <input type="radio" name="drType" value=""/>西药
+                <input type="radio" name="drType" value="处方药" checked/>处方药
+                &nbsp;&nbsp;&nbsp;<input type="radio" name="drType" value="中药"/>中药&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="drType" value="西药"/>西药
             </td>
         </tr>
         <tr>
@@ -127,6 +127,7 @@
                 type: "post",
                 url: "/upload/picture",
                 data: picData,
+                async: false,
                 contentType: false,
                 //默认文件类型application/x-www-form-urlencoded  设置之后multipart/form-data
                 processData: false,
