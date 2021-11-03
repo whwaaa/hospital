@@ -49,7 +49,6 @@ if(globalPageNum == undefined || globalPageNum == '' || globalPageNum == 'null')
         // 分页为空赋初值
         globalPageNum = 1;
     }
-    globalPageNum = "1";
 }
 // 首次优先取URI地址参数
 let globalPageSize = document.location.toString().GetValue("pageSize");
@@ -58,7 +57,7 @@ if(globalPageSize == undefined || globalPageSize == '' || globalPageSize == 'nul
     globalPageSize = $("#pageSize").val();
     if(globalPageSize == undefined || globalPageSize == '' || globalPageSize == 'null'){
         // 分页为空赋初值
-        globalPageSize = 5;
+        globalPageSize = 10;
     }
 }
 
@@ -91,7 +90,7 @@ function myComplete(xhr, status){
 function fillPageData(pageInfo) {
     // 清空div内容
     $("#pageInfo-box").empty();
-    let box = "<span id='total'>"+pageInfo.total+"</span> 条记录 <span id='pages'>"+pageInfo.pageNum+"</span>/<span id='pages'>"+pageInfo.pages+"</span>页&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每页显示<select id='pageSize' style='width:42px;position:relative;top:3px;'><option value='5'>5<option value='10'>10<option value='13'>13</select>条&nbsp;<a id='prePage' href='javascript:queryList("+pageInfo.prePage+")'>上一页</a>";
+    let box = "<span></span>共 <span id='total'>"+pageInfo.total+"</span>条记录 <span id='pages'>"+pageInfo.pageNum+"</span>/<span id='pages'>"+pageInfo.pages+"</span>页&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;每页显示<select id='pageSize' style='width:42px;position:relative;top:3px;'><option value='5'>5<option value='7'>7<option value='10'>10<option value='13'>13</select>条&nbsp;<a id='firstPage' href='javascript:queryList(1)'>首页</a><a id='prePage' href='javascript:queryList("+pageInfo.prePage+")'>上一页</a>";
     // 例: 总页数16, 当前页13, 则显示(Math.ceil(13/5)*5-4)=10 - (Math.ceil(13/5)*4)=15   11-15
     let showPages_start = Math.ceil(pageInfo.pageNum/5)*5 - 4;
     let showPages_end = Math.ceil(pageInfo.pageNum/5)*5<=pageInfo.pages ? Math.ceil(pageInfo.pageNum/5)*5 : pageInfo.pages;
@@ -109,8 +108,9 @@ function fillPageData(pageInfo) {
     }
     box += "<a id='nextPage' href='javascript:queryList("+pageInfo.nextPage+")'>下一页</a><a id='lastPage' href='javascript:queryList("+pageInfo.pages+")'>最后一页</a>";
     $("#pageInfo-box").append($(box));
-    // 如果当前页是第一页: 上一页不可用
+    // 如果当前页是第一页: 上一页,首页不可用
     if(pageInfo.pageNum == 1){
+        $("#firstPage").removeAttr("href");
         $("#prePage").removeAttr("href");
     }
     // 如果是尾页: 尾页和下一页不可用
