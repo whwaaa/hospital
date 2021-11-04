@@ -2,6 +2,7 @@ package com.kkb.constant;
 
 /**
  * show 上传使用到的常量
+ * TODO: 可以考虑将这里的参数配置到app。properties，然后把这个类对象初始化成Bean
  *
  * @author guguofu
  * @since 2021/11/1
