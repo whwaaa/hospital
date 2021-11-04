@@ -35,23 +35,19 @@
 
     </style>
     <script>
-        String.prototype.GetValue= function(para) {
-            let reg = new RegExp("(^|&)"+ para +"=([^&]*)(&|$)");
-            let r = this.substr(this.indexOf("\?")+1).match(reg);
-            if (r!=null) return unescape(r[2]); return null;
-        }
-        // 地址参数
-        let pageNum = document.location.toString().GetValue("pageNum");
-        let pageSize = document.location.toString().GetValue("pageSize");
-
-        let urlCheckFlat = false;   // url检测通过标志
+        // url是否检测标志
+        let urlCheckFlat = false;
+        // url是否可用标志
         let urlIsValid = true;
-        let mNameCheckFlag = false; // mName检测通过标志
-        // 刚按下提交, 被验证拦截时的标志 true刚按下
-        let presBtnFlag = false;
+        // mName检测通过标志
+        let mNameCheckFlag = false;
+        // 发送添加标志,一旦发送即锁死,防止多次添加
+        let sendAddFlag = true;
         // 设置定时器, 防止onblur和onclick发生冲突, 确保onclick先执行
         let mNameCheckTime;
         let urlCheckTime;
+        // 强制修改url有效标志
+        let forcedModify = false;
 
         // 资源名的唯一性验证, 非空
         function mNameCheck(mName){
@@ -65,16 +61,11 @@
                         url: "/menu/m-name/" + mName,
                         data: {jwtToken:jwtToken},
                         dataType: "json",
+                        async: false,
                         success: function (data) {
                             if (data.code == 200){
                                 mNameCheckFlag = true;
                                 $("input[name='mName']").removeClass("warning")
-                                if(presBtnFlag){
-                                    // 防止重复提交
-                                    presBtnFlag = false;
-                                    // ajax查询有延迟,可在此处可设置再次自动提交
-                                    addMenu();
-                                }
                             }else{
                                 layer.msg("资源名已存在，请重新输入。", function(){})
                                 mNameCheckFlag = false;
@@ -86,13 +77,11 @@
                         }
                     })
                 }
-            }, 100)
+            }, 120)
         }
         // 资源有效性检测
         function urlCheck(url){
             urlCheckTime = setTimeout(function(){
-                // 只要修改url,就必须等待检测完成才能提交
-                urlCheckFlat = false;
                 if(url.trim() === "" ){
                     layer.msg("资源URL不能为空", function(){})
                     $("input[name='mUrl']").addClass("warning");
@@ -101,7 +90,9 @@
                     layer.load(0)
                     $.ajax({
                         type: "GET",
-                        url: "/" + url,
+                        // url: "/" + url,
+                        url: url,
+                        async: false,
                         success: function (data) {
                             urlCheckFlat = true;
                             layer.closeAll();
@@ -110,35 +101,21 @@
                             $(':radio[name="mState"]').eq(0).prop("checked",true)
                             $(':radio[name="mState"]').eq(1).attr("checked",false)
                             layer.msg("检测URL可用")
-                            if(presBtnFlag){
-                                // 防止重复提交
-                                presBtnFlag = false;
-                                // ajax查询有延迟,可在此处可设置再次自动提交
-                                addMenu();
-                            }
                         },
                         error: function (){
                             urlCheckFlat = true;
                             layer.closeAll();
-                            // layer.msg("资源url无效！", function(){})
-                            // $("input[name='mUrl']").addClass("warning");
                             urlIsValid = false;
-                            $(':radio[name="mState"]').eq(1).prop("checked",true)
-                            $(':radio[name="mState"]').eq(0).attr("checked",false)
-                            layer.msg("检测到URL不可用")
-                            if(presBtnFlag){
-                                // 防止重复提交
-                                presBtnFlag = false;
-                                // ajax查询有延迟,可在此处可设置再次自动提交
-                                setTimeout(function(){
-                                    addMenu();
-                                },500)
+                            // 没有设置强制设置
+                            if( !forcedModify ){
+                                $(':radio[name="mState"]').eq(1).prop("checked",true)
+                                $(':radio[name="mState"]').eq(0).attr("checked",false)
+                                layer.msg("检测到URL不可用")
                             }
                         }
                     })
                 }
-            },100)
-
+            },120)
         }
 
         // 添加
@@ -147,63 +124,61 @@
             clearTimeout(mNameCheckTime);
             clearTimeout(urlCheckTime);
             let mUrl = $("input[name='mUrl']").val();
-            let mName = $("input[name='mName']").val()
-            let mState = $("input[name='mState']:checked").val()
+            let mName = $("input[name='mName']").val();
             // 资源名的唯一性验证
-            if(mNameCheckFlag === false){
-                presBtnFlag = true;
-                mNameCheck(mName);
-                return false;
-            }
+            mNameCheck(mName);
             // 资源有效性检测
-            if(urlCheckFlat === false){
-                presBtnFlag = true;
-                urlCheck(mUrl);
-                return false;
-            }
-            // 防止重复添加
-            presBtnFlag = false;
-            layer.load(0)
-            $.ajax({
-                type: "POST",
-                url: "/menu",
-                data: {jwtToken:jwtToken,mUrl:mUrl,mState:mState,mName:mName},
-                dataType: "json",
-                success: function (data) {
-                    layer.closeAll()
-                    if (data.code == 201){
-                        layer.msg("添加成功")
-                        setTimeout(function(){
-                            // 返回index
-                            $('#backid').trigger("click");
-                        },500)
-                    }else{
-                        layer.msg(data.msg,function(){})
-                    }
-                },
-                complete : function(xhr, status) {
-                    myComplete(xhr, status);
+            urlCheck(mUrl);
+            setTimeout(function(){
+                if(mNameCheckFlag === false){return false;}
+                if(urlCheckFlat === false){return false;}
+                if(sendAddFlag){
+                    // 执行即死锁, 防止重复添加
+                    sendAddFlag = false;
+                    layer.load(0)
+                    $.ajax({
+                        type: "POST",
+                        url: "/menu",
+                        data: {mUrl:mUrl,mState:$("input[name='mState']:checked").val(),mName:mName},
+                        dataType: "json",
+                        async: false,
+                        success: function (data) {
+                            layer.closeAll()
+                            if (data.code == 201){
+                                layer.msg("添加成功")
+                                setTimeout(function(){
+                                    // 返回index
+                                    $('#backid').trigger("click");
+                                },500)
+                            }else{
+                                layer.msg(data.msg,function(){})
+                            }
+                        },
+                        complete : function(xhr, status) {
+                            myComplete(xhr, status);
+                        }
+                    })
                 }
-            })
-
+            }, 150)
         }
 
         $(function () {
             // 返回列表
             $('#backid').click(function(){
-                // if(pageSize == 'null')
-                //     pageSize = "";
-                // if(pageNum == 'null')
-                //     pageNum = "";
-                // window.location.href="index.html?pageNum=" + pageNum + "&pageSize=" + pageSize;
-                window.location.href="index.html";
+                window.location.href="index.html?pageNum=" + globalPageNum + "&pageSize=" + globalPageSize;
             });
             // 监听mState
             $("input[name='mState']").on("click", function(){
-                if(!urlIsValid){
-                    $(':radio[name="mState"]').eq(1).prop("checked",true)
-                    $(':radio[name="mState"]').eq(0).attr("checked",false)
-                    layer.msg("检测到URL无效,不能设置为有效",function(){})
+                if(!urlIsValid && $(':radio[name="mState"]').eq(0).prop("checked")){
+                    if(confirm("检测到URL无效或非本服务器站点，确定要强制更改为有效使用吗？")){
+                        // 强制修改标志
+                        forcedModify = true;
+                    } else {
+                        // 取消强制修改
+                        forcedModify = false;
+                        $(':radio[name="mState"]').eq(1).prop("checked",true)
+                        $(':radio[name="mState"]').eq(0).attr("checked",false)
+                    }
                 }
             })
         });

@@ -166,6 +166,76 @@ public class BeHospitalExample {
             return (Criteria) this;
         }
 
+        public Criteria andBehNameIsNull() {
+            addCriterion("beh_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBehNameIsNotNull() {
+            addCriterion("beh_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBehNameEqualTo(String value) {
+            addCriterion("beh_name =", value, "behName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBehNameNotEqualTo(String value) {
+            addCriterion("beh_name <>", value, "behName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBehNameGreaterThan(String value) {
+            addCriterion("beh_name >", value, "behName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBehNameGreaterThanOrEqualTo(String value) {
+            addCriterion("beh_name >=", value, "behName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBehNameLessThan(String value) {
+            addCriterion("beh_name <", value, "behName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBehNameLessThanOrEqualTo(String value) {
+            addCriterion("beh_name <=", value, "behName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBehNameLike(String value) {
+            addCriterion("beh_name like", value, "behName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBehNameNotLike(String value) {
+            addCriterion("beh_name not like", value, "behName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBehNameIn(List<String> values) {
+            addCriterion("beh_name in", values, "behName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBehNameNotIn(List<String> values) {
+            addCriterion("beh_name not in", values, "behName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBehNameBetween(String value1, String value2) {
+            addCriterion("beh_name between", value1, value2, "behName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBehNameNotBetween(String value1, String value2) {
+            addCriterion("beh_name not between", value1, value2, "behName");
+            return (Criteria) this;
+        }
+
         public Criteria andBehNursePeopleIsNull() {
             addCriterion("beh_nurse_people is null");
             return (Criteria) this;

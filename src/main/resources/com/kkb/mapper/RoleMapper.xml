@@ -110,6 +110,9 @@
       #{uId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.kkb.pojo.Role">
+    <selectKey keyProperty="rId" order="AFTER" resultType="java.lang.Integer">
+      select LAST_INSERT_ID()
+    </selectKey>
     insert into role
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="rId != null">

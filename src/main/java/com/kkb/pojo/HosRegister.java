@@ -6,6 +6,8 @@ import java.util.Date;
 public class HosRegister {
     private Integer hosrId;
 
+    private String hosrName;
+
     private String hosrIdcar;
 
     private String hosrMedical;
@@ -44,6 +46,14 @@ public class HosRegister {
 
     public void setHosrId(Integer hosrId) {
         this.hosrId = hosrId;
+    }
+
+    public String getHosrName() {
+        return hosrName;
+    }
+
+    public void setHosrName(String hosrName) {
+        this.hosrName = hosrName == null ? null : hosrName.trim();
     }
 
     public String getHosrIdcar() {

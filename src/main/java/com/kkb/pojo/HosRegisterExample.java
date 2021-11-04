@@ -166,6 +166,76 @@ public class HosRegisterExample {
             return (Criteria) this;
         }
 
+        public Criteria andHosrNameIsNull() {
+            addCriterion("hosr_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosrNameIsNotNull() {
+            addCriterion("hosr_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosrNameEqualTo(String value) {
+            addCriterion("hosr_name =", value, "hosrName");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosrNameNotEqualTo(String value) {
+            addCriterion("hosr_name <>", value, "hosrName");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosrNameGreaterThan(String value) {
+            addCriterion("hosr_name >", value, "hosrName");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosrNameGreaterThanOrEqualTo(String value) {
+            addCriterion("hosr_name >=", value, "hosrName");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosrNameLessThan(String value) {
+            addCriterion("hosr_name <", value, "hosrName");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosrNameLessThanOrEqualTo(String value) {
+            addCriterion("hosr_name <=", value, "hosrName");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosrNameLike(String value) {
+            addCriterion("hosr_name like", value, "hosrName");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosrNameNotLike(String value) {
+            addCriterion("hosr_name not like", value, "hosrName");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosrNameIn(List<String> values) {
+            addCriterion("hosr_name in", values, "hosrName");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosrNameNotIn(List<String> values) {
+            addCriterion("hosr_name not in", values, "hosrName");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosrNameBetween(String value1, String value2) {
+            addCriterion("hosr_name between", value1, value2, "hosrName");
+            return (Criteria) this;
+        }
+
+        public Criteria andHosrNameNotBetween(String value1, String value2) {
+            addCriterion("hosr_name not between", value1, value2, "hosrName");
+            return (Criteria) this;
+        }
+
         public Criteria andHosrIdcarIsNull() {
             addCriterion("hosr_idcar is null");
             return (Criteria) this;

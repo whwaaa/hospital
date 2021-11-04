@@ -3,6 +3,7 @@
 <mapper namespace="com.kkb.mapper.HosRegisterMapper">
   <resultMap id="BaseResultMap" type="com.kkb.pojo.HosRegister">
     <id column="hosr_id" jdbcType="INTEGER" property="hosrId" />
+    <result column="hosr_name" jdbcType="VARCHAR" property="hosrName" />
     <result column="hosr_idcar" jdbcType="VARCHAR" property="hosrIdcar" />
     <result column="hosr_medical" jdbcType="VARCHAR" property="hosrMedical" />
     <result column="hosr_reg_price" jdbcType="DECIMAL" property="hosrRegPrice" />
@@ -79,8 +80,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    hosr_id, hosr_idcar, hosr_medical, hosr_reg_price, hosr_phone, hosr_self_price, hosr_sex, 
-    hosr_age, hosr_work, hosr_look_doctor, d_id, hosr_remark, hosr_state, hosr_is_del, 
+    hosr_id, hosr_name, hosr_idcar, hosr_medical, hosr_reg_price, hosr_phone, hosr_self_price, 
+    hosr_sex, hosr_age, hosr_work, hosr_look_doctor, d_id, hosr_remark, hosr_state, hosr_is_del, 
     hosr_create_time, hosr_update_time, u_id
   </sql>
   <select id="selectByExample" parameterType="com.kkb.pojo.HosRegisterExample" resultMap="BaseResultMap">
@@ -114,24 +115,29 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.kkb.pojo.HosRegister">
-    insert into hos_register (hosr_id, hosr_idcar, hosr_medical, 
-      hosr_reg_price, hosr_phone, hosr_self_price, 
-      hosr_sex, hosr_age, hosr_work, 
-      hosr_look_doctor, d_id, hosr_remark, 
-      hosr_state, hosr_is_del, hosr_create_time, 
-      hosr_update_time, u_id)
-    values (#{hosrId,jdbcType=INTEGER}, #{hosrIdcar,jdbcType=VARCHAR}, #{hosrMedical,jdbcType=VARCHAR}, 
-      #{hosrRegPrice,jdbcType=DECIMAL}, #{hosrPhone,jdbcType=VARCHAR}, #{hosrSelfPrice,jdbcType=INTEGER}, 
-      #{hosrSex,jdbcType=INTEGER}, #{hosrAge,jdbcType=INTEGER}, #{hosrWork,jdbcType=VARCHAR}, 
-      #{hosrLookDoctor,jdbcType=VARCHAR}, #{dId,jdbcType=INTEGER}, #{hosrRemark,jdbcType=VARCHAR}, 
-      #{hosrState,jdbcType=INTEGER}, #{hosrIsDel,jdbcType=INTEGER}, #{hosrCreateTime,jdbcType=TIMESTAMP}, 
-      #{hosrUpdateTime,jdbcType=TIMESTAMP}, #{uId,jdbcType=INTEGER})
+    insert into hos_register (hosr_id, hosr_name, hosr_idcar, 
+      hosr_medical, hosr_reg_price, hosr_phone, 
+      hosr_self_price, hosr_sex, hosr_age, 
+      hosr_work, hosr_look_doctor, d_id, 
+      hosr_remark, hosr_state, hosr_is_del, 
+      hosr_create_time, hosr_update_time, u_id
+      )
+    values (#{hosrId,jdbcType=INTEGER}, #{hosrName,jdbcType=VARCHAR}, #{hosrIdcar,jdbcType=VARCHAR}, 
+      #{hosrMedical,jdbcType=VARCHAR}, #{hosrRegPrice,jdbcType=DECIMAL}, #{hosrPhone,jdbcType=VARCHAR}, 
+      #{hosrSelfPrice,jdbcType=INTEGER}, #{hosrSex,jdbcType=INTEGER}, #{hosrAge,jdbcType=INTEGER}, 
+      #{hosrWork,jdbcType=VARCHAR}, #{hosrLookDoctor,jdbcType=VARCHAR}, #{dId,jdbcType=INTEGER}, 
+      #{hosrRemark,jdbcType=VARCHAR}, #{hosrState,jdbcType=INTEGER}, #{hosrIsDel,jdbcType=INTEGER}, 
+      #{hosrCreateTime,jdbcType=TIMESTAMP}, #{hosrUpdateTime,jdbcType=TIMESTAMP}, #{uId,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.kkb.pojo.HosRegister">
     insert into hos_register
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="hosrId != null">
         hosr_id,
+      </if>
+      <if test="hosrName != null">
+        hosr_name,
       </if>
       <if test="hosrIdcar != null">
         hosr_idcar,
@@ -185,6 +191,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="hosrId != null">
         #{hosrId,jdbcType=INTEGER},
+      </if>
+      <if test="hosrName != null">
+        #{hosrName,jdbcType=VARCHAR},
       </if>
       <if test="hosrIdcar != null">
         #{hosrIdcar,jdbcType=VARCHAR},
@@ -248,6 +257,9 @@
       <if test="record.hosrId != null">
         hosr_id = #{record.hosrId,jdbcType=INTEGER},
       </if>
+      <if test="record.hosrName != null">
+        hosr_name = #{record.hosrName,jdbcType=VARCHAR},
+      </if>
       <if test="record.hosrIdcar != null">
         hosr_idcar = #{record.hosrIdcar,jdbcType=VARCHAR},
       </if>
@@ -304,6 +316,7 @@
   <update id="updateByExample" parameterType="map">
     update hos_register
     set hosr_id = #{record.hosrId,jdbcType=INTEGER},
+      hosr_name = #{record.hosrName,jdbcType=VARCHAR},
       hosr_idcar = #{record.hosrIdcar,jdbcType=VARCHAR},
       hosr_medical = #{record.hosrMedical,jdbcType=VARCHAR},
       hosr_reg_price = #{record.hosrRegPrice,jdbcType=DECIMAL},
@@ -327,6 +340,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.kkb.pojo.HosRegister">
     update hos_register
     <set>
+      <if test="hosrName != null">
+        hosr_name = #{hosrName,jdbcType=VARCHAR},
+      </if>
       <if test="hosrIdcar != null">
         hosr_idcar = #{hosrIdcar,jdbcType=VARCHAR},
       </if>
@@ -380,7 +396,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.kkb.pojo.HosRegister">
     update hos_register
-    set hosr_idcar = #{hosrIdcar,jdbcType=VARCHAR},
+    set hosr_name = #{hosrName,jdbcType=VARCHAR},
+      hosr_idcar = #{hosrIdcar,jdbcType=VARCHAR},
       hosr_medical = #{hosrMedical,jdbcType=VARCHAR},
       hosr_reg_price = #{hosrRegPrice,jdbcType=DECIMAL},
       hosr_phone = #{hosrPhone,jdbcType=VARCHAR},

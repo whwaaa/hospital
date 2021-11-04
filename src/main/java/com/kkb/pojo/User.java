@@ -1,6 +1,7 @@
 package com.kkb.pojo;
 
 import java.util.Date;
+import java.util.List;
 
 public class User {
     private Integer uId;
@@ -24,6 +25,16 @@ public class User {
     private Date uUpdateTime;
 
     private Role role;
+
+    private List<Menu> menuList;
+
+    public List<Menu> getMenuList() {
+        return menuList;
+    }
+
+    public void setMenuList(List<Menu> menuList) {
+        this.menuList = menuList;
+    }
 
     public Role getRole() {
         return role;

@@ -65,4 +65,18 @@ public class ChargeService {
         chargeProject.setChapCreateTime(new Date());
         return chargeProjectMapper.insertSelective(chargeProject);
     }
+    //收费项目名称唯一性验证
+    @Transactional(propagation = Propagation.REQUIRED,readOnly = true)
+    public int queryName(String name) {
+        ChargeProjectExample chargeProjectExample = new ChargeProjectExample();
+        //创建查询条件容器
+        ChargeProjectExample.Criteria criteria = chargeProjectExample.createCriteria();
+
+        if (name != null && !"".equals(name.trim())) {
+            criteria.andChapNameEqualTo(name);
+        }
+        List<ChargeProject> list = chargeProjectMapper.selectByExample(chargeProjectExample);
+        return list.size();
+    }
+
     }

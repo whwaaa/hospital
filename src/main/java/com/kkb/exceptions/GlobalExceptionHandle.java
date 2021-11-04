@@ -25,9 +25,15 @@ public class GlobalExceptionHandle implements HandlerExceptionResolver {
         ModelAndView mv = new ModelAndView();
         // JWTToken验证失败异常
         if(e instanceof JWTTokenInvalidException){
-            logger.debug(e.getMessage());
+            String message = e.getMessage();
+            logger.debug(message);
             // 判断请求的如果是ajax
             if("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))){
+                if("token失效".equals(message)){
+                    response.setHeader("TOKEN-MSG", "token-invalid");
+                }else if("没有token".equals(message)){
+                    response.setHeader("TOKEN-MSG", "no-token");
+                }
                 // 返回重定向head标志给前端ajax
                 response.setHeader("REDIRECT", "REDIRECT");
                 // 返回重定向路径给前端ajax

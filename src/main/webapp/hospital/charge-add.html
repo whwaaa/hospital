@@ -74,6 +74,7 @@
     let pageSize = document.location.toString().GetValue("pageSize");
 
     $("#sub").click(function() {
+
         let chapName = $("#chapName").val();
         let chapMoney = $("#chapMoney").val();
         $.ajax({
@@ -85,12 +86,17 @@
                 chapMoney:chapMoney,
             },
             success: function (data) {
-                alert(data.code);
                 if(data.code == 200){
+                    layer.msg("添加成功！", function(){})
                     window.location.href = "charge.html?pageNum=" + pageNum + "&pageSize=" + pageSize;
                 }else{
-                    alert("添加失败！"+data.msg);
+                    // alert("添加失败！"+data.msg);
+                    layer.msg(data.msg, function(){})
+                    if(data.code == 400){
+                        $("#chapName").focus();
+                    }
                 }
+
             }
             // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
             ,complete : function(xhr, status) {
