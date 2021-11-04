@@ -1,11 +1,15 @@
 package com.kkb.pojo;
 
+import java.util.Date;
+
 public class PricePeople {
     private Integer pId;
 
     private Integer chapId;
 
     private Integer behId;
+
+    private Date createTime;
 
     public Integer getpId() {
         return pId;
@@ -29,5 +33,13 @@ public class PricePeople {
 
     public void setBehId(Integer behId) {
         this.behId = behId;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

@@ -23,7 +23,7 @@ import java.util.Map;
  */
 public class JWTUtil {
 
-    // JWT使用的密钥,自定义, 不可泄漏, 作为jwt数字验证加密时加的盐
+    // JWT使用的密钥,自定义, 不可泄漏, 作为jwt数字验证经MD5加的盐
     public static final String sercetKey = "BSftz3q8uJqgpf";
 
     // Token过期时间: 1800000毫秒 : 30分钟

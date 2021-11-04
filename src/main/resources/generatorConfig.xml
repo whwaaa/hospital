@@ -46,9 +46,9 @@
         enableSelectByExample:Select多条语句中加入where条件查询，默认为true开启
         selectByExampleQueryId:Select单个对象语句中加入where条件查询，默认为true开启
         -->
-        <table tableName="be_hospital">
-            <property name="useActualColumnNames" value="false"/>
-        </table>
+<!--        <table tableName="be_hospital">-->
+<!--            <property name="useActualColumnNames" value="false"/>-->
+<!--        </table>-->
 <!--        <table tableName="charge_project">-->
 <!--            <property name="useActualColumnNames" value="false"/>-->
 <!--        </table>-->
@@ -67,9 +67,9 @@
 <!--        <table tableName="menu">-->
 <!--            <property name="useActualColumnNames" value="false"/>-->
 <!--        </table>-->
-<!--        <table tableName="price_people">-->
-<!--            <property name="useActualColumnNames" value="false"/>-->
-<!--        </table>-->
+        <table tableName="price_people">
+            <property name="useActualColumnNames" value="false"/>
+        </table>
 <!--        <table tableName="role">-->
 <!--            <property name="useActualColumnNames" value="false"/>-->
 <!--        </table>-->

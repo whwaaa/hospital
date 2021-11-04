@@ -5,6 +5,7 @@
     <id column="p_id" jdbcType="INTEGER" property="pId" />
     <result column="chap_id" jdbcType="INTEGER" property="chapId" />
     <result column="beh_id" jdbcType="INTEGER" property="behId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -65,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    p_id, chap_id, beh_id
+    p_id, chap_id, beh_id, create_time
   </sql>
   <select id="selectByExample" parameterType="com.kkb.pojo.PricePeopleExample" resultMap="BaseResultMap">
     select
@@ -98,10 +99,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.kkb.pojo.PricePeople">
-    insert into price_people (p_id, chap_id, beh_id
-      )
-    values (#{pId,jdbcType=INTEGER}, #{chapId,jdbcType=INTEGER}, #{behId,jdbcType=INTEGER}
-      )
+    insert into price_people (p_id, chap_id, beh_id, 
+      create_time)
+    values (#{pId,jdbcType=INTEGER}, #{chapId,jdbcType=INTEGER}, #{behId,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.kkb.pojo.PricePeople">
     insert into price_people
@@ -115,6 +116,9 @@
       <if test="behId != null">
         beh_id,
       </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="pId != null">
@@ -125,6 +129,9 @@
       </if>
       <if test="behId != null">
         #{behId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -146,6 +153,9 @@
       <if test="record.behId != null">
         beh_id = #{record.behId,jdbcType=INTEGER},
       </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -155,7 +165,8 @@
     update price_people
     set p_id = #{record.pId,jdbcType=INTEGER},
       chap_id = #{record.chapId,jdbcType=INTEGER},
-      beh_id = #{record.behId,jdbcType=INTEGER}
+      beh_id = #{record.behId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -169,13 +180,17 @@
       <if test="behId != null">
         beh_id = #{behId,jdbcType=INTEGER},
       </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where p_id = #{pId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.kkb.pojo.PricePeople">
     update price_people
     set chap_id = #{chapId,jdbcType=INTEGER},
-      beh_id = #{behId,jdbcType=INTEGER}
+      beh_id = #{behId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
     where p_id = #{pId,jdbcType=INTEGER}
   </update>
 </mapper>
