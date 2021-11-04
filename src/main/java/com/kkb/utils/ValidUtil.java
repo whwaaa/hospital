@@ -20,8 +20,9 @@ public class ValidUtil {
             StringBuilder errorMessage = new StringBuilder();
             List<FieldError> errors = result.getFieldErrors();
             for (FieldError fe : errors){
-                errorMessage.append(fe.getField());
-                errorMessage.append(":");
+                /* 这个是测试用来提示哪个字段不正确使用的 */
+//                errorMessage.append(fe.getField());
+//                errorMessage.append(":");
                 errorMessage.append(fe.getDefaultMessage());
                 errorMessage.append(";");
             }

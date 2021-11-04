@@ -11,8 +11,6 @@
     <script type="text/javascript" src="../Js/ckform.js"></script>
     <script type="text/javascript" src="../Js/common.js"></script>
     <script type="text/javascript" src="../Js/ckeditor/ckeditor.js"></script>
-
-
     <style type="text/css">
         body {
             padding-bottom: 40px;
@@ -116,6 +114,8 @@
 <!-- 提交添加信息的js脚本 -->
 <script>
     $(function () {
+        /* TODO: 可能需要添加一下前端的校验 */
+
         // 先进行图片上传，成功后进行文本信息保存
         $("#saveBtn").on("click", function () {
             // jq获取文件
