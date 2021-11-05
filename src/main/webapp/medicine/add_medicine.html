@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>添加药品--中软高科-2015</title>
+    <title>添加药品</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="../Css/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
     <link rel="stylesheet" type="text/css" href="../Css/style.css" />
     <script type="text/javascript" src="../Js/jquery.js"></script>
-    <script type="text/javascript" src="../Js/jquery.sorted.js"></script>
     <script type="text/javascript" src="../Js/bootstrap.js"></script>
     <script type="text/javascript" src="../Js/ckform.js"></script>
     <script type="text/javascript" src="../Js/common.js"></script>
@@ -46,34 +45,88 @@
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
         <td width="10%" class="tableleft">药品编号</td>
-        <td>J1121</td>
-    </tr> 
-	
+        <td id="drId">J1121</td>
+    </tr>
     <tr>
         <td width="10%" class="tableleft">药品名称</td>
-        <td>感冒药</td>
+        <td id="drName">感冒药</td>
     </tr>    
 	<tr>
         <td width="10%" class="tableleft">余量</td>
-        <td>300</td>
-    </tr>    
-	
+        <td id="drNumber">300</td>
+    </tr>
     <tr>
         <td width="10%" class="tableleft">数量</td>
         <td>
-			<input type="text" value="300" />
+			<input id="addDrNumber" type="text" value="100" />
 		</td>
     </tr>
-	
-
     <tr>
         <td colspan="2">
 			<center>
-				<button type="submit" class="btn btn-primary" type="button">保存</button> &nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
-			</center
+				<button type="button" id="addNumBtn" class="btn btn-primary" >添加</button>
+                &nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
+			</center>
 		</td>
     </tr>
 </table>
 </form>
+<!-- JS 脚本设置-->
+<script>
+    $(function () {
+        let drId = document.location.toString().GetValue("drId");
+        // 请求待修改的数据，并显示到页面上
+        $.ajax({
+            type: "GET",
+            url: "/drug/"+drId,
+            success: function (data) {
+                if(data.code === 200){
+                    let obj = data.obj;
+                    // 显示数据
+                    $("#drId").html(obj.drId);
+                    $("#drName").html(obj.drName);
+                    $("#drNumber").html(obj.drNumber);
+                }else{
+                    alert("操作失败!");
+                }
+            }
+            // 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+            ,complete : function(xhr, status) {
+                myComplete(xhr, status);
+            }
+        });
+
+        /* TODO: 可能需要添加一下前端的校验 */
+        // 先进行图片上传，成功后进行文本信息保存
+        $("#addNumBtn").on("click", function () {
+            let addDrNumber = $("#addDrNumber").val();
+            if (isNaN(addDrNumber)){
+                alert("请输入数字！");
+                return false;
+            }
+            let drugForm = "drNumber="+addDrNumber;
+            drugForm += "&jwtToken=" + jwtToken;
+            drugForm += "&_method=PUT";
+            $.ajax({
+                type: "post",
+                url: "/drug/addDrNumber/"+drId,
+                data: drugForm,
+                dataType: "json",
+                success: function (vo) {
+                    if (vo.code == 200) {
+                        alert("添加成功!");
+                        window.location.href = "index.html";
+                    } else {
+                        alert(vo.msg);
+                    }
+                }
+                // 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+                ,complete : function(xhr, status) {
+                    myComplete(xhr, status);
+                }
+            });
+        });
+    })
+</script>
 </body>
 </html>

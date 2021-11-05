@@ -58,7 +58,7 @@ public class DrugService {
 
     /**
      *  更新药品信息
-     * @param drug
+     * @param drug 待更新的信息
      * @return 更新情况.-1表示没有当前的药品，1表示更新成功，其他表示更新失败
      */
     public int updateDrug(Drug drug) {
@@ -67,9 +67,17 @@ public class DrugService {
         return drugMapper.updateByPrimaryKeySelective(drug);
     }
 
-    // 通过药品编码查询药品信息
+    /**
+     * 通过药品编码查询药品信息
+     * @param drId 药品编码
+     * @return 查询的药品信息
+     */
     public Drug findDrugById(String drId) {
-        return drugMapper.selectByPrimaryKey(drId);
+        // 对于前后空格的处理
+        String drIdTrim = drId.trim();
+        if (drIdTrim.length()==0)
+            return null;
+        return drugMapper.selectByPrimaryKey(drIdTrim);
     }
 
     /**
