@@ -142,15 +142,18 @@ public class DrugController {
      */
     @RequestMapping(value = "addDrNumber/{drId}",method = RequestMethod.PUT)
     public AjaxResultVo updateDrug(@PathVariable("drId")String drId, Integer drNumber, HttpServletRequest request){
+       if (drNumber==null){
+           return new AjaxResultVo(400,"未设置添加数量！");
+       }
         Drug drug = drugService.findDrugById(drId);
         // 该编码不存在存在
         if (drug==null){
-            return new AjaxResultVo(400,"药品编码不存在,添加库存失败");
+            return new AjaxResultVo(400,"药品编码不存在,添加库存失败！");
         }
         // 保存药品
         Drug addDrugBean = new Drug();
         addDrugBean.setDrId(drId);
-        addDrugBean.setDrNumber(drNumber);
+        addDrugBean.setDrNumber(drug.getDrNumber() + drNumber);
         // 设置创建人和创建时间
         try {
             addDrugBean.setuId(accessService.paseUserMessage(request).getuId());
