@@ -7,7 +7,6 @@
     <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css"/>
     <link rel="stylesheet" type="text/css" href="../Css/style.css"/>
     <script type="text/javascript" src="../Js/jquery.js"></script>
-    <script type="text/javascript" src="../Js/jquery.sorted.js"></script>
     <script type="text/javascript" src="../Js/bootstrap.js"></script>
     <script type="text/javascript" src="../Js/ckform.js"></script>
     <script type="text/javascript" src="../Js/common.js"></script>
@@ -35,9 +34,71 @@
     <script type="text/javascript">
         $(function () {
             $('#newNav').click(function () {
-                window.location.href = "add.html";
+                window.location.href = "add.html?pageSize=" + globalPageSize + "&pageNum=" + globalPageNum;
             });
+            queryList(1);
         });
+
+        // 重写queryList(分页查询方法)
+        queryList = function(pageNum){
+            // 查询的条件
+            let drName = $("#drName").val();
+            let drType = $("#drType").val();
+            let reqData = {
+                pageNum:pageNum,
+                pageSize:globalPageSize,
+                drName:drName,
+                drType:drType
+            };
+            layer.load(0)
+            $.ajax({
+                type: "GET",
+                url: "/drug/list",
+                data: reqData,
+                success: function (data) {
+                    layer.closeAll()
+                    if(data.code === 200){
+                        // 更新全局分页参数
+                        globalPageSize = data.obj.pageSize;
+                        globalPageNum = data.obj.pageNum;
+                        // 填充分页
+                        fillPageData(data.obj);
+                        // 填充内容
+                        fillContent(data.obj);
+                        $("#checkall").removeAttr("checked");
+                    }else{
+                        layer.msg(data.msg, function(){});
+                    }
+                }
+                // 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+                ,complete : function(xhr, status) {
+                    myComplete(xhr, status);
+                }
+            });
+        }
+
+        // 填充列表数据
+        function fillContent(pageInfo){
+            $("#mycon").find("tbody").empty()
+            $.each(pageInfo.list, function(){
+                let state = this.drIsDel == 0?'销售中':'已下架'
+                let con = "<tr>\n" +
+                    "             <td style='vertical-align:middle;'><input type='checkbox' name='check' value='"+ this.drId +"'></td>\n" +
+                    "             <td>"+ this.drId +"</td>\n" +
+                    "             <td>"+ this.drName +"</td>\n" +
+                    "             <td>"+ this.drType +"</td>\n" +
+                    "             <td>"+ this.drSimDesc +"</td>\n" +
+                    "             <td>"+ state +"</td>\n" +
+                    "             <td>"+ this.drNumber +"</td>\n" +
+                    "             <td>\n" +
+                    "                 <a href='add.html?pageNum="+ pageInfo.pageNum +"&pageSize="+ pageInfo.pageSize +"&drId="+ this.drId +"'>更改</a>&nbsp;&nbsp;&nbsp;"
+                                    +"<a href='add_medicine.html?pageNum="+ pageInfo.pageNum +"&pageSize="+ pageInfo.pageSize +"&drId="+ this.drId +"'>添加库存</a>&nbsp;&nbsp;&nbsp;"
+                                    +"<a href='look.html?pageNum="+ pageInfo.pageNum +"&pageSize="+ pageInfo.pageSize +"&drId="+ this.drId +"'>详情</a>\n"+
+                    "             </td>\n" +
+                    "         </tr>"
+                $("#mycon").find("tbody").append($(con))
+            })
+        }
 
         function checkall() {
             var alls = document.getElementsByName("check");
@@ -77,27 +138,27 @@
     <table class="table table-bordered table-hover definewidth m10">
         <tr>
             <td width="10%" class="tableleft">药品名称：</td>
-            <td><input type="text" name="pname" value=""/></td>
+            <td><input type="text" name="drName" id="drName" value=""/></td>
             <td width="10%" class="tableleft">药品类型：</td>
-            <td><select>
-                <option>中药</option>
-                <option>西药</option>
-                <option>处方</option>
-                <option>非处方</option>
+            <td><select name="drType" id="drType">
+                <option value="">未选择</option>
+                <option value="中药">中药</option>
+                <option value="西药">西药</option>
+                <option value="处方">处方</option>
             </select></td>
         </tr>
         <tr>
             <td colspan="4">
                 <center>
-                    <button type="submit" class="btn btn-primary" type="button">查询</button>
-                    <button type="submit" class="btn btn-primary" type="button">清空</button>
+                    <button type="button" onclick="queryList(1)" class="btn btn-primary" >查询</button>
+                    <button type="reset" class="btn btn-primary" >清空</button>
                 </center>
             </td>
         </tr>
     </table>
 </form>
 
-<table class="table table-bordered table-hover definewidth m10">
+<table id="mycon" class="table table-bordered table-hover definewidth m10">
     <thead>
     <tr>
         <th><input type="checkbox" id="checkall" onChange="checkall();"></th>
@@ -110,86 +171,15 @@
         <th>操作</th>
     </tr>
     </thead>
-    <tr>
-        <td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
-        <td style="vertical-align:middle;">J1121</td>
-        <td style="vertical-align:middle;">感冒药</td>
-        <td style="vertical-align:middle;">处方</td>
-        <td style="vertical-align:middle;">用于普通感冒</td>
-        <td style="vertical-align:middle;">销售中</td>
-        <td style="vertical-align:middle;">1000袋</td>
-        <td style="vertical-align:middle;">
-            <a href="add.html">更改</a>&nbsp;&nbsp;&nbsp;
-            <a href="add_medicine.html">添加库存</a>&nbsp;&nbsp;&nbsp;
-            <a href="look.html">详情>>></a>
-        </td>
-    </tr>
-    <tr>
-        <td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
-        <td style="vertical-align:middle;">J1121</td>
-        <td style="vertical-align:middle;">感冒药</td>
-        <td style="vertical-align:middle;">处方</td>
-        <td style="vertical-align:middle;">用于普通感冒</td>
-        <td style="vertical-align:middle;">销售中</td>
-        <td style="vertical-align:middle;">1000袋</td>
-        <td style="vertical-align:middle;">
-            <a href="add.html">更改</a>&nbsp;&nbsp;&nbsp;
-            <a href="add_medicine.html">添加库存</a>&nbsp;&nbsp;&nbsp;
-            <a href="look.html">详情>>></a>
-        </td>
-    </tr>
-    <tr>
-        <td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
-        <td style="vertical-align:middle;">J1121</td>
-        <td style="vertical-align:middle;">感冒药</td>
-        <td style="vertical-align:middle;">处方</td>
-        <td style="vertical-align:middle;">用于普通感冒</td>
-        <td style="vertical-align:middle;">销售中</td>
-        <td style="vertical-align:middle;">1000袋</td>
-        <td style="vertical-align:middle;">
-            <a href="add.html">更改</a>&nbsp;&nbsp;&nbsp;
-            <a href="add_medicine.html">添加库存</a>&nbsp;&nbsp;&nbsp;
-            <a href="look.html">详情>>></a>
-        </td>
-    <tr>
-        <td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
-        <td style="vertical-align:middle;">J1121</td>
-        <td style="vertical-align:middle;">感冒药</td>
-        <td style="vertical-align:middle;">处方</td>
-        <td style="vertical-align:middle;">用于普通感冒</td>
-        <td style="vertical-align:middle;">销售中</td>
-        <td style="vertical-align:middle;">1000袋</td>
-        <td style="vertical-align:middle;">
-            <a href="add.html">更改</a>&nbsp;&nbsp;&nbsp;
-            <a href="add_medicine.html">添加库存</a>&nbsp;&nbsp;&nbsp;
-            <a href="look.html">详情>>></a>
-        </td>
-    </tr>
-    <tr>
-        <td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
-        <td style="vertical-align:middle;">J1121</td>
-        <td style="vertical-align:middle;">感冒药</td>
-        <td style="vertical-align:middle;">处方</td>
-        <td style="vertical-align:middle;">用于普通感冒</td>
-        <td style="vertical-align:middle;">销售中</td>
-        <td style="vertical-align:middle;">1000袋</td>
-        <td style="vertical-align:middle;">
-            <a href="add.html">更改</a>&nbsp;&nbsp;&nbsp;
-            <a href="add_medicine.html">添加库存</a>&nbsp;&nbsp;&nbsp;
-            <a href="look.html">详情>>></a>
-        </td>
-    </tr>
-
+    <!-- 列表数据 -->
+    <tbody>
+    </tbody>
 </table>
 
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
         <th colspan="5">
-            <div class="inline pull-right page">
-                <a href='#'>第一页</a> <a href='#'>上一页</a> <span class='current'>1</span><a href='#'>2</a><a
-                    href='/chinapost/index.php?m=Label&a=index&p=3'>3</a><a href='#'>4</a><a href='#'>5</a> <a href='#'>下一页</a>
-                <a href='#'>最后一页</a>
-                &nbsp;&nbsp;&nbsp;共<span class='current'>32</span>条记录<span class='current'> 1/33 </span>页
+            <div id="pageInfo-box" class="inline pull-right page">
             </div>
             <div>
                 <button type="button" class="btn btn-success" id="newNav">添加新药</button>
