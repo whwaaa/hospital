@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>药品查询--中软高科-2015</title>
+    <title>药品查询</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="../Css/bootstrap.css"/>
     <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css"/>
@@ -111,23 +111,6 @@
                 for (var i = 0; i < alls.length; i++) {
                     alls[i].checked = false;
                 }
-            }
-        }
-
-        function delAll() {
-            var alls = document.getElementsByName("check");
-            var ids = new Array();
-            for (var i = 0; i < alls.length; i++) {
-                if (alls[i].checked) {
-                    ids.push(alls[i].value);
-                }
-            }
-            if (ids.length > 0) {
-                if (confirm("确认操作?")) {
-                    alert("成功!");
-                }
-            } else {
-                alert("请选中要操作的项");
             }
         }
     </script>
