@@ -114,6 +114,7 @@ public class DrugController {
             return new AjaxResultVo(400,"药品编码不存在,更新失败");
         }
         drug.setDrId(drId);
+        // 没有对图片不修改的处理
         // 设置创建人和创建时间
         try {
             drug.setuId(accessService.paseUserMessage(request).getuId());

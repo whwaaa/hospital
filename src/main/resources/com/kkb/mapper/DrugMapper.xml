@@ -81,8 +81,7 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-        dr_id
-        , dr_url, dr_inprice, dr_outprice, dr_name, dr_type, dr_sim_desc, dr_expire_date,
+        dr_id, dr_url, dr_inprice, dr_outprice, dr_name, dr_type, dr_sim_desc, dr_expire_date,
     dr_deta_desc, dr_fatory, dr_direction, dr_remark, dr_number, dr_is_del, dr_create_time, 
     dr_update_time, u_id
     </sql>
@@ -235,7 +234,7 @@
             <include refid="Example_Where_Clause"/>
         </if>
     </select>
-    <select id="selectByPrimaryKey" resultType="com.kkb.pojo.Drug">
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
       select
       <include refid="Base_Column_List"/>
       from drug

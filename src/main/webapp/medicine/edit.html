@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>更改药品</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css"/>
+    <link rel="stylesheet" type="text/css" href="../Css/style.css"/>
+    <script type="text/javascript" src="../Js/jquery3.min.js"></script>
+    <script type="text/javascript" src="../Js/bootstrap.js"></script>
+    <script type="text/javascript" src="../Js/ckform.js"></script>
+    <script type="text/javascript" src="../Js/common.js"></script>
+    <script type="text/javascript" src="../Js/ckeditor/ckeditor.js"></script>
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            $('#backid').click(function () {
+                window.location.href = "index.html";
+            });
+        });
+    </script>
+</head>
+<body>
+<form id="myForm" action="index.html" method="post" class="definewidth m20" enctype="multipart/form-data">
+    <table class="table table-bordered table-hover definewidth m10">
+        <tr>
+            <td width="10%" class="tableleft">药品编号</td>
+            <td><input type="text" id="drId" name="drId" value="" disabled required/></td>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft">图片</td>
+            <td>
+                <input id="pictureFile" type="file" value="" name="pictureFile" multiple="multiple"/>
+                <!-- 图片路径 -->
+                <input id="drUrl" type="hidden" name="drUrl" value=""/>
+            </td>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft">进价</td>
+            <td><input type="text" name="drInprice" value=""/></td>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft">售价</td>
+            <td><input type="text" name="drOutprice" value=""/></td>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft">药品名称</td>
+            <td><input type="text" name="drName" value=""/></td>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft">药品类型</td>
+            <td>
+                <input type="radio" name="drType" value="处方药"/>处方药
+                &nbsp;&nbsp;&nbsp;<input type="radio" name="drType" value="中药"/>中药&nbsp;&nbsp;&nbsp;
+                <input type="radio" name="drType" value="西药"/>西药
+            </td>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft">简单描述</td>
+            <td><input type="text" name="drSimDesc" value=""/></td>
+        </tr>
+
+        <tr>
+            <td width="10%" class="tableleft">保质期</td>
+            <td><input type="text" name="drExpireDate" value="36"/>月</td>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft">详细描述</td>
+            <td><textarea name="drDetaDesc"></textarea></td>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft">生产厂商</td>
+            <td><textarea name="drFatory"></textarea></td>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft">服用说明</td>
+            <td><input type="text" name="drDirection" value=""/></td>
+        </tr>
+
+        <tr>
+            <td width="10%" class="tableleft">备注</td>
+            <td><textarea name="drRemark"></textarea></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <center>
+                    <button id="saveBtn" class="btn btn-primary" type="button">保存</button> &nbsp;&nbsp;<button
+                        type="button" class="btn btn-success" name="backid" id="backid">返回列表
+                </button>
+                </center>
+            </td>
+        </tr>
+    </table>
+</form>
+<!-- 提交添加信息的js脚本 -->
+<script>
+    $(function () {
+        let drId = document.location.toString().GetValue("drId");
+        // 请求待修改的数据，并显示到页面上
+        $.ajax({
+            type: "GET",
+            url: "/drug/"+drId,
+            success: function (data) {
+                if(data.code === 200){
+                    let obj = data.obj;
+                   // 显示数据
+                    $("input[name='drId']").val(obj.drId);
+                    $("input[name='drUrl']").val(obj.drUrl);
+                    $("input[name='drInprice']").val(obj.drInprice);
+                    $("input[name='drOutprice']").val(obj.drOutprice);
+                    $("input[name='drName']").val(obj.drName);
+                    var drTypes = document.getElementsByName("drType");
+                    for (var i = 0; i < drTypes.length; i++) {
+                        if (drTypes[i].value==obj.drType){
+                            drTypes[i].checked = true;
+                        }
+                    }
+                    $("input[name='drSimDesc']").val(obj.drSimDesc);
+                    $("input[name='drExpireDate']").val(obj.drExpireDate);
+                    $("textarea[name='drDetaDesc']").val(obj.drDetaDesc);
+                    $("textarea[name='drFatory']").val(obj.drFatory);
+                    $("input[name='drDirection']").val(obj.drDirection);
+                    $("textarea[name='drRemark']").val(obj.drRemark);
+                }else{
+                     alert("操作失败!");
+                }
+            }
+            // 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+            ,complete : function(xhr, status) {
+                myComplete(xhr, status);
+            }
+        });
+
+        /* TODO: 可能需要添加一下前端的校验 */
+        // 先进行图片上传，成功后进行文本信息保存
+        $("#saveBtn").on("click", function () {
+            // jq获取文件
+            let file = $("#pictureFile")[0].files[0];
+            if (file!=null){
+                // 更改了图片
+                let picData = new FormData();
+                picData.append("file", file);
+                picData.append("jwtToken", jwtToken)
+                $.ajax({
+                    type: "post",
+                    url: "/upload/picture",
+                    data: picData,
+                    async: false,
+                    contentType: false,
+                    //默认文件类型application/x-www-form-urlencoded  设置之后multipart/form-data
+                    processData: false,
+                    // 默认情况下会对发送的数据转化为对象 不需要转化的信息
+                    success: function (res) {
+                        // 图片上传成功后，保存文本信息
+                        if (res.code == 200) {  // 上传成功
+                            updateDrug();
+                            // 上传失败
+                        } else {
+                            alert(res.msg);
+                        }
+                    },
+                    error: function (res) {
+                        alert("图片上传失败！");
+                    }
+                });
+            }else {
+                // 没有修改图片
+                updateDrug();
+            }
+
+        });
+
+        // 进行数据库保存的编辑请求
+        function updateDrug(){
+            $("#myForm").serialize();
+            let drugForm = $('#myForm').serialize();
+            drugForm += "&jwtToken=" + jwtToken;
+            drugForm += "&_method=PUT";
+            $.ajax({
+                type: "post",
+                url: "/drug/"+drId,
+                data: drugForm,
+                dataType: "json",
+                success: function (vo) {
+                    if (vo.code == 200) {
+                        alert("更改成功!");
+                        window.location.href = "index.html";
+                    } else {
+                        alert(vo.msg);
+                    }
+                }
+            });
+        }
+
+    })
+</script>
+</body>
+</html>
