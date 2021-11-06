@@ -7,12 +7,12 @@
     <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
     <link rel="stylesheet" type="text/css" href="../Css/style.css" />
     <script type="text/javascript" src="../Js/jquery.js"></script>
-    <script type="text/javascript" src="../Js/jquery.sorted.js"></script>
     <script type="text/javascript" src="../Js/bootstrap.js"></script>
     <script type="text/javascript" src="../Js/ckform.js"></script>
     <script type="text/javascript" src="../Js/common.js"></script>
     <script type="text/javascript" src="../Js/ckeditor/ckeditor.js"></script>
- 
+    <script type="text/javascript" src="../Js/medicine/drug.js"></script>
+
 
     <style type="text/css">
         body {
@@ -36,7 +36,7 @@
     <script type="text/javascript">
     $(function () {       
 		$('#backid').click(function(){
-				window.location.href="index.html";
+            returnToIndex();
 		 });
     });
     </script>
@@ -46,69 +46,101 @@
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
         <td width="10%" class="tableleft">药品编号</td>
-        <td>J6764</td>
+        <td name="drId"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">图片</td>
-        <td><img src="1.png"/></td>
+        <td><img name="drUrl" /></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">进价</td>
-        <td>2元</td>
+        <td name="drInprice"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">售价</td>
-        <td>128.9元</td>
+        <td name="drOutprice"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">药品名称</td>
-        <td>感冒药</td>
+        <td name="drName"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">药品类型</td>
-        <td>处方药</td>
+        <td name="drType"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">简单描述</td>
-        <td>用于普通感冒</td>
+        <td name="drSimDesc"></td>
     </tr>
 
     <tr>
-        <td width="10%" class="tableleft">过期日期</td>
-        <td>2016年01月01日</td>
+        <td width="10%" class="tableleft">保质期</td>
+        <td name="drExpireDate"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">详细描述</td>
-        <td>该药仅用于普通的流行性感冒,孕妇小孩慬用……</td>
+        <td name="drDetaDesc"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">生产厂商</td>
-        <td>哈药六厂生产</td>
+        <td name="drFatory"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">服用说明</td>
-        <td>一次两粒一日三次</td>
+        <td name="drDirection"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">库存</td>
-        <td>3000袋</td>
-    </tr>
-    <tr>
-        <td width="10%" class="tableleft">剩余量</td>
-        <td>1000袋</td>
+        <td name="drNumber"></td>
     </tr>
 	<tr>
         <td width="10%" class="tableleft">备注</td>
-        <td>暂无服用后不良记录</td>
+        <td name="drRemark"></td>
 	</tr>
     <tr>
         <td colspan="2">
 			<center>
 				<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
-			</center
+			</center>
 		</td>
     </tr>
 </table>
 </form>
+<!-- JS脚本 -->
+<script>``
+    $(function () {
+        let drId = document.location.toString().GetValue("drId");
+        // 请求待修改的数据，并显示到页面上
+        $.ajax({
+            type: "GET",
+            url: "/drug/"+drId,
+            success: function (data) {
+                if(data.code === 200){
+                    let obj = data.obj;
+                    // 显示数据
+                    $("td[name='drId']").text(obj.drId);
+                    $("img[name='drUrl']").attr("src",obj.drUrl);
+                    $("td[name='drInprice']").text(obj.drInprice+'元');
+                    $("td[name='drOutprice']").text(obj.drOutprice+'元');
+                    $("td[name='drName']").text(obj.drName);
+                    $("td[name='drType']").text(obj.drType);
+                    $("td[name='drSimDesc']").text(obj.drSimDesc);
+                    $("td[name='drExpireDate']").text(obj.drExpireDate + '月');
+                    $("td[name='drDetaDesc']").text(obj.drDetaDesc);
+                    $("td[name='drFatory']").text(obj.drFatory);
+                    $("td[name='drDirection']").text(obj.drDirection);
+                    $("td[name='drNumber']").text(obj.drNumber);
+                    $("td[name='drRemark']").text(obj.drRemark);
+                }else{
+                    alert("操作失败!");
+                }
+            }
+            // 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+            ,complete : function(xhr, status) {
+                myComplete(xhr, status);
+            }
+        });
+    })
+</script>
 </body>
 </html>

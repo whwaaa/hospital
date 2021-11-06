@@ -36,7 +36,19 @@
             $('#newNav').click(function () {
                 window.location.href = "add.html?pageSize=" + globalPageSize + "&pageNum=" + globalPageNum;
             });
-            queryList(1);
+            var indexUrl = decodeURI(document.location.toString());
+            let pageNum = indexUrl.GetValue("pageNum");
+            let drName =indexUrl.GetValue("drName");
+            let drType = indexUrl.GetValue("drType");
+            // 默认进来的处理
+            if (pageNum==null){
+                queryList(1);
+            }else {
+                // 从编辑页面或者look页面返回的时候
+                $("#drName").val(drName);
+                $("#drType").val(drType);
+                queryList(pageNum);
+            }
         });
 
         // 重写queryList(分页查询方法)
@@ -79,9 +91,15 @@
 
         // 填充列表数据
         function fillContent(pageInfo){
-            $("#mycon").find("tbody").empty()
+            $("#mycon").find("tbody").empty();
+            // 查询的条件
+            let drName = $("#drName").val();
+            let drType = $("#drType").val();
             $.each(pageInfo.list, function(){
-                let state = this.drIsDel == 0?'销售中':'已下架'
+                let state = this.drIsDel == 0?'销售中':'已下架';
+                let editUrl = 'edit.html?pageNum='+ pageInfo.pageNum +'&pageSize='+ pageInfo.pageSize +'&drId='+ this.drId +'&drName='+ drName + '&drType='+ drType;
+                let lookUrl = 'look.html?pageNum='+ pageInfo.pageNum +'&pageSize='+ pageInfo.pageSize +'&drId='+ this.drId +'&drName='+ drName + '&drType='+ drType;
+                let add_medicineUrl = 'add_medicine.html?pageNum='+ pageInfo.pageNum +'&pageSize='+ pageInfo.pageSize +'&drId='+ this.drId +'&drName='+ drName + '&drType='+ drType;
                 let con = "<tr>\n" +
                     "             <td style='vertical-align:middle;'><input type='checkbox' name='check' value='"+ this.drId +"'></td>\n" +
                     "             <td>"+ this.drId +"</td>\n" +
@@ -91,9 +109,9 @@
                     "             <td>"+ state +"</td>\n" +
                     "             <td>"+ this.drNumber +"</td>\n" +
                     "             <td>\n" +
-                    "                 <a href='edit.html?pageNum="+ pageInfo.pageNum +"&pageSize="+ pageInfo.pageSize +"&drId="+ this.drId +"'>更改</a>&nbsp;&nbsp;&nbsp;"
-                                    +"<a href='add_medicine.html?pageNum="+ pageInfo.pageNum +"&pageSize="+ pageInfo.pageSize +"&drId="+ this.drId +"'>添加库存</a>&nbsp;&nbsp;&nbsp;"
-                                    +"<a href='look.html?pageNum="+ pageInfo.pageNum +"&pageSize="+ pageInfo.pageSize +"&drId="+ this.drId +"'>详情</a>\n"+
+                    "                 <a href='"+editUrl+"'>更改</a>&nbsp;&nbsp;&nbsp;"
+                                    +"<a href='"+add_medicineUrl+"'>添加库存</a>&nbsp;&nbsp;&nbsp;"
+                                    +"<a href='"+lookUrl+"'>详情</a>\n"+
                     "             </td>\n" +
                     "         </tr>"
                 $("#mycon").find("tbody").append($(con))
