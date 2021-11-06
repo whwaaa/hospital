@@ -15,6 +15,26 @@ public class ChargeProject implements Serializable {
     private BigDecimal chapMoney;
 
     private Integer chapIsDel;
+    private BeHospital beHospital;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date beChargeTime;
+
+    public BeHospital getBeHospital() {
+        return beHospital;
+    }
+
+    public void setBeHospital(BeHospital beHospital) {
+        this.beHospital = beHospital;
+    }
+
+    public Date getBeChargeTime() {
+        return beChargeTime;
+    }
+
+    public void setBeChargeTime(Date beChargeTime) {
+        this.beChargeTime = beChargeTime;
+    }
 
     @Override
     public String toString() {
@@ -92,4 +112,5 @@ public class ChargeProject implements Serializable {
     public void setuId(Integer uId) {
         this.uId = uId;
     }
+
 }
