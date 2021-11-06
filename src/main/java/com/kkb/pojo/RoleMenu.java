@@ -1,6 +1,8 @@
 package com.kkb.pojo;
 
-public class RoleMenu {
+import java.io.Serializable;
+
+public class RoleMenu implements Serializable {
     private Integer rmId;
 
     private Integer rId;

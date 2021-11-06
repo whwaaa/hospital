@@ -1,6 +1,8 @@
 package com.kkb.pojo;
 
-public class DrugPeople {
+import java.io.Serializable;
+
+public class DrugPeople implements Serializable {
     private Integer drbehId;
 
     private Integer drId;

@@ -1,9 +1,10 @@
 package com.kkb.pojo;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class HosRegister {
+public class HosRegister implements Serializable {
     private Integer hosrId;
 
     private String hosrName;

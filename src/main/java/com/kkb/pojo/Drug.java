@@ -4,13 +4,14 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * 药瓶实体类
  */
-public class Drug {
+public class Drug implements Serializable {
     /**
      * 药品的编号，1位英文编+7位数字
      * Z 中药

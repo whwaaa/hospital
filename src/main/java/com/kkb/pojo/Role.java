@@ -1,9 +1,10 @@
 package com.kkb.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class Role {
+public class Role implements Serializable {
     private Integer rId;
 
     private String rName;

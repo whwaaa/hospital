@@ -1,8 +1,9 @@
 package com.kkb.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Doctor {
+public class Doctor implements Serializable {
     private Integer dId;
 
     private String dIdCar;

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+">
+
+    <!-- 包扫描 -->
+    <context:component-scan base-package="com.kkb.service,com.kkb.utils"/>
+
+    <!-- 引入MyBatis相关配置 -->
+    <import resource="applicationContext-mybatis.xml"/>
+
+    <!-- 引入redis相关配置 -->
+    <import resource="applicationContext-redis.xml"/>
+
+
+</beans>

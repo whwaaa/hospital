@@ -1,9 +1,10 @@
 package com.kkb.pojo;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class BeHospital {
+public class BeHospital implements Serializable {
     private Integer behId;
 
     private String behName;

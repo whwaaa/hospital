@@ -10,7 +10,7 @@
 ">
 
     <!-- 开启包扫描 -->
-    <context:component-scan base-package="com.kkb.controller,com.kkb.exceptions"/>
+    <context:component-scan base-package="com.kkb.controller,com.kkb.exceptions,com.kkb.constant"/>
 
     <!-- 注解驱动 -->
     <mvc:annotation-driven/>
@@ -37,7 +37,7 @@
     <mvc:resources mapping="/User/**" location="/User/"/>
     <mvc:resources mapping="/index/**" location="/index/"/>
     <!-- 上传的药品图片映射 -->
-    <mvc:resources mapping="${app.file.project.path}" location="${app.file.host.path}"/>
+    <mvc:resources mapping="${app.file.project.path}/**" location="file:///${app.file.host.path}"/>
 
     <!-- 拦截器 -->
     <mvc:interceptors>
@@ -71,13 +71,10 @@
         <property name="defaultEncoding" value="utf-8"/>
     </bean>
 
-<!--    &lt;!&ndash; SpringMVC全局异常处理未捕获到异常BUG定位 https://blog.csdn.net/Stone__Fly/article/details/107082085 &ndash;&gt;-->
-<!--    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver" id="simpleMappingExceptionResolver">-->
-<!--        &lt;!&ndash; 配置异常类型和具体视图页面的对应关系 &ndash;&gt;-->
-<!--        <property name="exceptionMappings">-->
-<!--            <props>-->
-<!--                <prop key="com.kkb.exceptions.GlobalExceptionHandle">admin-login</prop>-->
-<!--            </props>-->
-<!--        </property>-->
-<!--    </bean>-->
+    <!-- constant注入属性 -->
+    <bean id="uploadConstant" class="com.kkb.constant.UploadConstant">
+        <constructor-arg name="uploadFilePath" value="${app.file.host.path}"/>
+        <constructor-arg name="resourcePrefix" value="${app.file.project.path}"/>
+        <constructor-arg name="upLoadFileType" value="${app.file.file_type}"/>
+    </bean>
 </beans>
