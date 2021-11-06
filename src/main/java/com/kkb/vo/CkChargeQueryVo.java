@@ -1,12 +1,16 @@
-package com.kkb.pojo;
+package com.kkb.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class BeHospital {
+/**
+ * @author:XiaoFei
+ * @version:1.0
+ * @Date:2021/10/28/17:54
+ */
+public class CkChargeQueryVo {
     private Integer behId;
 
     private String behName;
@@ -24,18 +28,12 @@ public class BeHospital {
     private Integer behState;
 
     private Integer behIsDel;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date behCreateTime;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date behUpdateTime;
-
-    private Integer uId;
 
     @Override
     public String toString() {
-        return "BeHospital{" +
+        return "CkChargeQueryVo{" +
                 "behId=" + behId +
                 ", behName='" + behName + '\'' +
                 ", behNursePeople='" + behNursePeople + '\'' +
@@ -51,6 +49,11 @@ public class BeHospital {
                 '}';
     }
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date behUpdateTime;
+
+    private Integer uId;
+
     public Integer getBehId() {
         return behId;
     }
@@ -64,7 +67,7 @@ public class BeHospital {
     }
 
     public void setBehName(String behName) {
-        this.behName = behName == null ? null : behName.trim();
+        this.behName = behName;
     }
 
     public String getBehNursePeople() {
@@ -72,7 +75,7 @@ public class BeHospital {
     }
 
     public void setBehNursePeople(String behNursePeople) {
-        this.behNursePeople = behNursePeople == null ? null : behNursePeople.trim();
+        this.behNursePeople = behNursePeople;
     }
 
     public String getBehPatBed() {
@@ -80,7 +83,7 @@ public class BeHospital {
     }
 
     public void setBehPatBed(String behPatBed) {
-        this.behPatBed = behPatBed == null ? null : behPatBed.trim();
+        this.behPatBed = behPatBed;
     }
 
     public BigDecimal getBehAntecedent() {
@@ -96,7 +99,7 @@ public class BeHospital {
     }
 
     public void setBehIllness(String behIllness) {
-        this.behIllness = behIllness == null ? null : behIllness.trim();
+        this.behIllness = behIllness;
     }
 
     public Integer getBehClosePrice() {

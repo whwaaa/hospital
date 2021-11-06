@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>结算详细</title>
+    <title>结算详细--中软高科-2015</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="../Css/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
@@ -79,64 +79,142 @@
 <table class="table table-bordered table-hover definewidth m10" >
    <thead>
     <tr>	    
-        <th>收费项目管理</th>
-        <th>项目名称</th>
+        <th>收费项目ID</th>
+        <th>病人名称</th>
         <th>收费项目</th>
         <th>收费金额</th>
         <th>检查日期</th>
     </tr>
     </thead>
-	     <tr >
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">黄飞鸿</td>
-            <td style="vertical-align:middle;">心脏检查</td>
-            <td style="vertical-align:middle;">200</td>
-            <td style="vertical-align:middle;">2015-01-04 10:33:12</td>
-			</tr>
-	     <tr >
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">黄飞鸿</td>
-            <td style="vertical-align:middle;">心脏手术</td>
-            <td style="vertical-align:middle;">1600</td>
-            <td style="vertical-align:middle;">2015-01-04 12:33:12</td>
-			</tr>
-	     <tr >
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">黄飞鸿</td>
-            <td style="vertical-align:middle;">B超检查</td>
-            <td style="vertical-align:middle;">50</td>
-            <td style="vertical-align:middle;">2015-01-04 09:33:12</td>
-			</tr>
+    <tbody id="tbody">
+<!--	     <tr >-->
+<!--            <td style="vertical-align:middle;">1103</td>-->
+<!--            <td style="vertical-align:middle;">黄飞鸿</td>-->
+<!--            <td style="vertical-align:middle;">心脏检查</td>-->
+<!--            <td style="vertical-align:middle;">200</td>-->
+<!--            <td style="vertical-align:middle;">2015-01-04 10:33:12</td>-->
+<!--			</tr>-->
+<!--	     <tr >-->
+<!--            <td style="vertical-align:middle;">1103</td>-->
+<!--            <td style="vertical-align:middle;">黄飞鸿</td>-->
+<!--            <td style="vertical-align:middle;">心脏手术</td>-->
+<!--            <td style="vertical-align:middle;">1600</td>-->
+<!--            <td style="vertical-align:middle;">2015-01-04 12:33:12</td>-->
+<!--			</tr>-->
+<!--	     <tr >-->
+<!--            <td style="vertical-align:middle;">1103</td>-->
+<!--            <td style="vertical-align:middle;">黄飞鸿</td>-->
+<!--            <td style="vertical-align:middle;">B超检查</td>-->
+<!--            <td style="vertical-align:middle;">50</td>-->
+<!--            <td style="vertical-align:middle;">2015-01-04 09:33:12</td>-->
+<!--			</tr>-->
+    </tbody>
   </table>
   
   <table class="table table-bordered table-hover definewidth m10" >
-  	<tr><th colspan="5">  <div class="inline pull-right page">
-          <a href='#' >第一页</a> <a href='#'>上一页</a>     <span class='current'>1</span><a href='#'>2</a><a href='/chinapost/index.php?m=Label&a=index&p=3'>3</a><a href='#'>4</a><a href='#'>5</a>  <a href='#' >下一页</a> <a href='#' >最后一页</a>
-		  &nbsp;&nbsp;&nbsp;共<span class='current'>32</span>条记录<span class='current'> 1/33 </span>页
+  	<tr>
+        <th colspan="5">
+          <div  id="pageInfo-box" class="inline pull-right page">
+<!--          <a href='#' >第一页</a> <a href='#'>上一页</a>     <span class='current'>1</span><a href='#'>2</a><a href='/chinapost/index.php?m=Label&a=index&p=3'>3</a><a href='#'>4</a><a href='#'>5</a>  <a href='#' >下一页</a> <a href='#' >最后一页</a>-->
+<!--		  &nbsp;&nbsp;&nbsp;共<span class='current'>32</span>条记录<span class='current'> 1/33 </span>页-->
 		  </div>
 		 <div>
 				<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
 				<button type="button" class="btn btn-success" >导出excel</button>
 		 </div>
 		 
-		 </th></tr>
+		 </th>
+    </tr>
   </table>
   
   
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
         <td width="10%" class="tableleft">总花费：</td>
-        <td>1850元</td>
+        <td id="allCast">1850元</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">押金：</td>
-        <td>2000元</td>
+        <td id="behAntecedent">2000元</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">余额：</td>
-        <td>150元</td>
+        <td id="balance">150元</td>
     </tr>
 </table>
   
 </body>
 </html>
+<script>
+    let behId = document.location.toString().GetValue("behId");
+    $(function () {
+
+        queryList(globalPageNum);
+    });
+    queryList = function(pageNum){
+        alert(behId);
+        layer.load(0);
+        $.ajax({
+            type: "GET",
+            url: "/ckcharge/chargelist/?pageNum="+pageNum+"&pageSize="+globalPageSize+"&jwtToken=" + jwtToken,
+            data:{
+                behId:behId,
+            },
+            success: function (data) {
+                layer.closeAll();
+                console.log(data);
+                if(data.code == 200){
+                    // 填充分页
+                    fillPageData(data.obj);
+                    // 更新当前页全局变量
+                    globalPageNum = data.obj.pageNum;
+                    // 更新每页条数全局变量
+                    globalPageSize = data.obj.pageSize;
+                    // 填充内容
+                    loadDate(data);
+                }else{
+                }
+            }
+            // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+            ,complete : function(xhr, status) {
+                myComplete(xhr, status);
+            }
+        });
+    }
+    function loadDate(data) {
+        let list = data.obj.list;
+
+        let str = "";
+        let allCast=0;
+        let behAntecedent = 0;
+        for (let i =0;i<list.length;i++){
+            let obj = list[i];
+            let id=obj.chapId==null?'':obj.chapId;
+            let behName=obj.beHospital.behName==null?'':obj.beHospital.behName;
+            let name=obj.chapName==null?'':obj.chapName;
+            let chapMoney=obj.chapMoney==null?'':obj.chapMoney;
+            let createtime=obj.beChargeTime==null?'':obj.beChargeTime;
+            allCast+=chapMoney;
+            behAntecedent = obj.beHospital.behAntecedent;
+            str+='<tr>' +
+                '            <td>'+id+'</td>' +
+                '            <td>'+behName+'</td>' +
+                '            <td>'+name+'</td>' +
+                '            <td>'+chapMoney+'</td>' +
+                '            <td>'+createtime+'</td>'+
+            '</tr>'
+
+        }
+        let balance = behAntecedent-allCast;
+        if (balance<0){
+         balance = "欠费"+ Math.abs(balance);
+        }
+
+        $("#tbody").html($(str));
+        $("#allCast").html(allCast);
+        $("#balance").html(balance);
+        $("#behAntecedent").html(behAntecedent);
+
+    }
+
+</script>

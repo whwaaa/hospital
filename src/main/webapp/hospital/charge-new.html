@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>添加收费项目</title>
+    <title>添加收费项目--中软高科-2015</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="../Css/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
@@ -42,32 +42,110 @@
     </script>
 </head>
 <body>
-<form action="charge.html" method="post" class="definewidth m20">
+<form class="definewidth m20">
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
         <td width="10%" class="tableleft">病历号</td>
-        <td>1103</td>
+        <td id="behId">1103</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">姓名</td>
-        <td>黄飞鸿</td>
+        <td id="behName">黄飞鸿</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">收费项目</td>
-        <td><input type="text" name="pname" value=""/>输入自动匹配出来</td>
+        <td><input type="text" name="pname"  id="pname" value="" onblur="query()"/>输入自动匹配出来</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">收费金额</td>
-        <td><input type="text" name="pname" value=""/></td>
+        <td><input type="text"  id="chapMoney" value="" readonly="readonly"/></td>
     </tr>
     <tr>
         <td colspan="2">
 			<center>
-				<button type="submit" class="btn btn-primary" type="button">保存</button> &nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
-			</center
+				<button class="btn btn-primary" type="button" onclick="submit">保存</button>
+                &nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
+			</center>
 		</td>
     </tr>
 </table>
 </form>
 </body>
 </html>
+<script>
+    let behId = document.location.toString().GetValue("behId");
+    $("#behId").html(behId);
+    $(function(){
+        $.ajax({
+            type: "GET",
+            url: "/ckcharge/"+behId,
+            data:{
+                jwtToken:jwtToken,
+                behId:behId,
+            },
+            success: function (data) {
+                if(data.code == 200){
+                    $("#behName").html(data.obj.behName)
+                }else{
+                }
+            }
+            // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+            ,complete : function(xhr, status) {
+                myComplete(xhr, status);
+            }
+        });
+    })
+   function query(){
+        let chapName = $("#pname").val()
+       $.ajax({
+           type: "GET",
+           url: "/charge/list",
+           data:{
+               jwtToken:jwtToken,
+               chapName:chapName,
+           },
+           success: function (data) {
+               if(data.code == 200){
+                  let money= data.obj.list[0].chapMoney;
+                   $("#chapMoney").val(data.obj.list[0].chapMoney)
+               }else{
+                   layer.msg("该项目不存在！", function(){})
+               }
+           }
+           // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+           ,complete : function(xhr, status) {
+               myComplete(xhr, status);
+           }
+       });
+    }
+    function submit(){
+        let chapName = $("#chapName").val();
+        let chapMoney = $("#chapMoney").val();
+        $.ajax({
+            type: "POST",
+            url: "/charge", //RESTful风格的API定义
+            data: {
+                jwtToken:jwtToken,
+                chapName:chapName,
+                chapMoney:chapMoney,
+            },
+            success: function (data) {
+                if(data.code == 200){
+                    layer.msg("添加成功！", function(){})
+                    window.location.href = "charge2.html?pageNum=" + pageNum + "&pageSize=" + pageSize;
+                }else{
+                    // alert("添加失败！"+data.msg);
+                    layer.msg(data.msg, function(){})
+                    if(data.code == 400){
+                        $("#chapName").focus();
+                    }
+                }
+
+            }
+            // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+            ,complete : function(xhr, status) {
+                myComplete(xhr, status);
+            }
+        });
+    }
+</script>
