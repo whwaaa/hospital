@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,10 +55,10 @@ public class CheckChargeController {
             pageNum = 1;
         }
         if (pageSize == null || pageSize <=0){
-            pageSize = 5;
+            pageSize = 10;
         }
-        PageHelper.startPage(pageNum,pageSize);
         //查询中间表,获取收费项chapId
+        PageHelper.startPage(pageNum,pageSize);
         List<PricePeople> pricePeoples = pricePeopleService.queryByBehId(vo.getBehId());
         //获取病人信息
         BeHospital beHospital = ckChargeService.queryById(vo.getBehId());
@@ -71,6 +72,7 @@ public class CheckChargeController {
             list.add(chargeProject);
         }
         PageInfo chargePageInfo = new PageInfo(list);
+        chargePageInfo.setPageSize(pageSize);
         return new AjaxResultVo(chargePageInfo);
     }
     @RequestMapping(value = "{behId}",method = RequestMethod.GET)
@@ -78,5 +80,23 @@ public class CheckChargeController {
         BeHospital beHospital = ckChargeService.queryById(behId);
         return new AjaxResultVo(beHospital);
     }
+    //获取余额
+    @RequestMapping(value = "blank",method = RequestMethod.GET)
+    public AjaxResultVo queryBlank(Integer behId){
+        BigDecimal allcast = ckChargeService.queryBlank(behId);
 
+        return new AjaxResultVo(allcast);
+    }
+    //结算操作
+    @RequestMapping(value = "{behId}",method = RequestMethod.PUT)
+    public AjaxResultVo pay(BigDecimal blank,Integer behId){
+        if (blank.compareTo(new BigDecimal("0.00"))>=0) {
+            Integer i = ckChargeService.pay(behId);
+            if (i > 0) {
+                return new AjaxResultVo(200, "ok", null);
+            }
+            return new AjaxResultVo(500,"内部服务器异常，请稍后重试",null);
+        }
+        return new AjaxResultVo(400, "余额不足，请充值！", null);
+    }
 }

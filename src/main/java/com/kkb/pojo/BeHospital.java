@@ -18,6 +18,15 @@ public class BeHospital {
     private BigDecimal behAntecedent;
 
     private String behIllness;
+    private BigDecimal blank;
+
+    public BigDecimal getBlank() {
+        return blank;
+    }
+
+    public void setBlank(BigDecimal blank) {
+        this.blank = blank;
+    }
 
     private Integer behClosePrice;
 
@@ -42,6 +51,7 @@ public class BeHospital {
                 ", behPatBed='" + behPatBed + '\'' +
                 ", behAntecedent=" + behAntecedent +
                 ", behIllness='" + behIllness + '\'' +
+                ", blank=" + blank +
                 ", behClosePrice=" + behClosePrice +
                 ", behState=" + behState +
                 ", behIsDel=" + behIsDel +
@@ -49,6 +59,15 @@ public class BeHospital {
                 ", behUpdateTime=" + behUpdateTime +
                 ", uId=" + uId +
                 '}';
+    }
+    private BigDecimal allCast;
+
+    public BigDecimal getAllCast() {
+        return allCast;
+    }
+
+    public void setAllCast(BigDecimal allCast) {
+        this.allCast = allCast;
     }
 
     public Integer getBehId() {

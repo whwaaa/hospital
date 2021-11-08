@@ -67,11 +67,10 @@
 				alert("请选中要操作的项");
 			}
 		}
-    $(function () {       
-		$('#backid').click(function(){
-				window.location.href="account.html";
-		 });
-    });
+
+		function back() {
+            window.location.href = "account.html";
+        }
     </script>
 </head>
 <body>
@@ -119,7 +118,7 @@
 <!--		  &nbsp;&nbsp;&nbsp;共<span class='current'>32</span>条记录<span class='current'> 1/33 </span>页-->
 		  </div>
 		 <div>
-				<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
+				<button type="button" class="btn btn-success" name="backid" id="backid" onclick="back()">返回列表</button>
 				<button type="button" class="btn btn-success" >导出excel</button>
 		 </div>
 		 
@@ -152,7 +151,6 @@
         queryList(globalPageNum);
     });
     queryList = function(pageNum){
-        alert(behId);
         layer.load(0);
         $.ajax({
             type: "GET",
