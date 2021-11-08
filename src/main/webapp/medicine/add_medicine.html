@@ -11,6 +11,7 @@
     <script type="text/javascript" src="../Js/ckform.js"></script>
     <script type="text/javascript" src="../Js/common.js"></script>
     <script type="text/javascript" src="../Js/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="../Js/medicine/drug.js"></script>
  
 
     <style type="text/css">
@@ -33,10 +34,10 @@
 
     </style>
     <script type="text/javascript">
-    $(function () {       
-		$('#backid').click(function(){
-				window.location.href="index.html";
-		 });
+    $(function () {
+        $('#backid').click(function(){
+           returnToIndex();
+        });
     });
     </script>
 </head>
@@ -115,7 +116,7 @@
                 success: function (vo) {
                     if (vo.code == 200) {
                         alert("添加成功!");
-                        window.location.href = "index.html";
+                        returnToIndex();
                     } else {
                         alert(vo.msg);
                     }

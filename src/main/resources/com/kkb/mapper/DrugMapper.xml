@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kkb.mapper.DrugMapper">
-    <!-- 引入redis第三方缓存 -->
-    <cache type="com.kkb.utils.RedisCache"/>
+    <cache-ref namespace="com.kkb.mapper.UserMapper"/>
     <resultMap id="BaseResultMap" type="com.kkb.pojo.Drug">
         <result column="dr_id" jdbcType="VARCHAR" property="drId"/>
         <result column="dr_url" jdbcType="VARCHAR" property="drUrl"/>
