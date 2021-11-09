@@ -43,7 +43,7 @@ public class CheckChargeController {
             pageNum = 1;
         }
         if (pageSize == null || pageSize <=0){
-            pageSize = 5;
+            pageSize = 10;
         }
         PageInfo chargePageInfo = ckChargeService.queryByPage(pageNum,pageSize,vo);
         return new AjaxResultVo(chargePageInfo);

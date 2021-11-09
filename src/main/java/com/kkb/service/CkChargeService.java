@@ -46,12 +46,16 @@ public class CkChargeService {
         }
         PageHelper.startPage(pageNum,pageSize);
         List<BeHospital> list = beHospitalMapper.selectByExample(beHospitalExample);
+//        PageInfo pageInfo = new PageInfo(list);
+//        for (BeHospital o : (BeHospital)pageInfo.getList()) {
+//
+//        }
         for (BeHospital beHospital : list) {
             BigDecimal allCast = queryBlank(beHospital.getBehId());
             beHospital.setAllCast(allCast);
         }
         return new PageInfo(list);
-//
+
     }
     //根据主键查询
     @Transactional(propagation = Propagation.REQUIRED,readOnly = true)

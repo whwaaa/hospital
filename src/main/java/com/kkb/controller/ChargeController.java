@@ -78,4 +78,13 @@ public class ChargeController {
         }
         return  new AjaxResultVo(400, "该项目名称已存在，请重试！");
     }
+    //按名称查询
+    @RequestMapping(value = "chapname",method = RequestMethod.GET)
+    public AjaxResultVo queryByName(String chapName){
+        ChargeProject chargeProject = chargeService.queryByName(chapName);
+        if (chargeProject !=null) {
+            return new AjaxResultVo(chargeProject);
+        }
+        return new AjaxResultVo(400,"该项目不存在，请重新输入！");
+    }
 }

@@ -78,6 +78,20 @@ public class ChargeService {
         List<ChargeProject> list = chargeProjectMapper.selectByExample(chargeProjectExample);
         return list.size();
     }
+    //按照名称查询
+    public ChargeProject queryByName(String chapName){
+        ChargeQueryVo vo = new ChargeQueryVo();
+        if(chapName !=null) {
+            vo.setChapName(chapName);
+            PageInfo<ChargeProject> chargeProjectPageInfo = queryByPage(1, 5, vo);
+            for (ChargeProject chargeProject : chargeProjectPageInfo.getList()) {
+                if (chapName.trim().equals(chargeProject.getChapName())){
+                    return chargeProject;
+                }
+            }
+        }
+        return null;
+    }
 
 
     }

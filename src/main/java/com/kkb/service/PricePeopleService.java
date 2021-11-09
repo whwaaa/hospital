@@ -1,12 +1,16 @@
 package com.kkb.service;
 
 import com.kkb.mapper.PricePeopleMapper;
+import com.kkb.pojo.ChargeProject;
 import com.kkb.pojo.PricePeople;
 import com.kkb.pojo.PricePeopleExample;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,5 +32,10 @@ public class PricePeopleService {
         List<PricePeople> list = pricePeopleMapper.selectByExample(pricePeopleExample);
 
         return list;
+    }
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = {Exception.class})
+    public Integer addPricePeople(PricePeople pricePeople){
+        pricePeople.setCreateTime(new Date());
+        return pricePeopleMapper.insertSelective(pricePeople);
     }
 }
