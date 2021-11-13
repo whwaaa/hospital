@@ -86,6 +86,15 @@
     dr_deta_desc, dr_fatory, dr_direction, dr_remark, dr_number, dr_is_del, dr_create_time, 
     dr_update_time, u_id
     </sql>
+    <!-- 自定义根据集合查询药品信息 -->
+    <select id="selectByIdList" resultMap="BaseResultMap">
+        select  <include refid="Base_Column_List"/>
+        from drug
+        where drug.dr_id in
+        <foreach collection="list" item="drId" open="(" close=")" separator="," index="i">
+            #{drId}
+        </foreach>
+    </select>
     <select id="selectByExample" parameterType="com.kkb.pojo.DrugExample" resultMap="BaseResultMap">
         select
         <if test="distinct">

@@ -1,21 +1,27 @@
 package com.kkb.controller;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import com.kkb.pojo.Drug;
 import com.kkb.service.AccessService;
 import com.kkb.service.DrugService;
+import com.kkb.utils.excel.ExcelUtil;
 import com.kkb.vo.AjaxResultVo;
 import com.kkb.vo.DrugQueryVo;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * show 药品业务的控制器
@@ -169,6 +175,31 @@ public class DrugController {
         }else {
             return new AjaxResultVo(500,"药品更新失败");
         }
+    }
+
+    /**
+     * 导出查询结果的所有数据
+     * Excel文件下载并且失败的时候返回json（默认失败了会返回一个有部分数据的Excel）
+     *
+     * @param vo 查询数据的条件
+     * @param response 响应对象,导出成功返回.xlsx文件,失败返回提示
+     */
+    @RequestMapping(value = "export",method = RequestMethod.GET)
+    public void exportAll(DrugQueryVo vo,HttpServletResponse response) {
+        PageInfo<Drug> drugByPage = drugService.findDrugByPage(vo, 0, 0);
+        String fileName = "药品信息";
+        ExcelUtil.exportDefault(drugByPage.getList(),fileName,response);
+    }
+
+    /**
+     * 导出传入的药品编码对应的药品信息数据
+     *
+     */
+    @RequestMapping(value = "export/drIds",method = RequestMethod.GET)
+    public void exportByDrIds(@RequestParam("drId")List<String> drIds,HttpServletResponse response){
+        List<Drug> list = drugService.findDrugByIdList(drIds);
+        String fileName = "药品信息";
+        ExcelUtil.exportDefault(list,fileName,response);
     }
 
 

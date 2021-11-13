@@ -94,4 +94,10 @@ public class JWTUtil {
                 .parseClaimsJws(token).getBody();
         return claims;
     }
+
+    public static void main(String[] args) {
+        String str = "eyJhbGciOiJIUzI1NiJ9.eyJ1SWQiOjEsImxvZ2luTmFtZSI6IuacgOmrmOaMh-aMpeWumCIsInJJZCI6MjIsImV4cCI6MTYzNjcyNTE5NX0.L9PhfYnhQMz0CZe3UQxke5Bb52WqMGhP4dp2AJNrSVI";
+        String newJwtToken = JWTUtil.updateToken(str);
+
+    }
 }

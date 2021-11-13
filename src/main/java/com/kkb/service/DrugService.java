@@ -90,7 +90,10 @@ public class DrugService {
      */
     public PageInfo<Drug> findDrugByPage(DrugQueryVo vo, int pageNum, int pageSize) {
         List<Drug> drugs = null;
-        PageHelper.startPage(pageNum,pageSize);
+        // 如果pageNum || pageSize小于0，不进行分页
+        if (pageNum > 0 || pageSize > 0) {
+            PageHelper.startPage(pageNum,pageSize);
+        }
         if (vo!=null){
             // 条件
             DrugExample drugExample = new DrugExample();
@@ -111,5 +114,16 @@ public class DrugService {
         return new PageInfo<>(drugs);
     }
 
+    /**
+     * 根据药品编码集合查询药品信息
+     *
+     * @param drIds 待查询的药品编码集合
+     * @return 返回查询结果
+     */
+    public List<Drug> findDrugByIdList(List<String> drIds){
+        if (drIds ==null|| drIds.size()==0)
+            return null;
+        return drugMapper.selectByIdList(drIds);
+    }
 
 }

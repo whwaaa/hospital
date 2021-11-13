@@ -38,12 +38,12 @@
             });
             var indexUrl = decodeURI(document.location.toString());
             let pageNum = indexUrl.GetValue("pageNum");
-            let drName =indexUrl.GetValue("drName");
+            let drName = indexUrl.GetValue("drName");
             let drType = indexUrl.GetValue("drType");
             // 默认进来的处理
-            if (pageNum==null){
+            if (pageNum == null) {
                 queryList(1);
-            }else {
+            } else {
                 // 从编辑页面或者look页面返回的时候
                 $("#drName").val(drName);
                 $("#drType").val(drType);
@@ -52,15 +52,15 @@
         });
 
         // 重写queryList(分页查询方法)
-        queryList = function(pageNum){
+        queryList = function (pageNum) {
             // 查询的条件
             let drName = $("#drName").val();
             let drType = $("#drType").val();
             let reqData = {
-                pageNum:pageNum,
-                pageSize:globalPageSize,
-                drName:drName,
-                drType:drType
+                pageNum: pageNum,
+                pageSize: globalPageSize,
+                drName: drName,
+                drType: drType
             };
             layer.load(0)
             $.ajax({
@@ -69,7 +69,7 @@
                 data: reqData,
                 success: function (data) {
                     layer.closeAll()
-                    if(data.code === 200){
+                    if (data.code === 200) {
                         // 更新全局分页参数
                         globalPageSize = data.obj.pageSize;
                         globalPageNum = data.obj.pageNum;
@@ -78,40 +78,41 @@
                         // 填充内容
                         fillContent(data.obj);
                         $("#checkall").removeAttr("checked");
-                    }else{
-                        layer.msg(data.msg, function(){});
+                    } else {
+                        layer.msg(data.msg, function () {
+                        });
                     }
                 }
                 // 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
-                ,complete : function(xhr, status) {
+                , complete: function (xhr, status) {
                     myComplete(xhr, status);
                 }
             });
         }
 
         // 填充列表数据
-        function fillContent(pageInfo){
+        function fillContent(pageInfo) {
             $("#mycon").find("tbody").empty();
             // 查询的条件
             let drName = $("#drName").val();
             let drType = $("#drType").val();
-            $.each(pageInfo.list, function(){
-                let state = this.drIsDel == 0?'销售中':'已下架';
-                let editUrl = 'edit.html?pageNum='+ pageInfo.pageNum +'&pageSize='+ pageInfo.pageSize +'&drId='+ this.drId +'&drName='+ drName + '&drType='+ drType;
-                let lookUrl = 'look.html?pageNum='+ pageInfo.pageNum +'&pageSize='+ pageInfo.pageSize +'&drId='+ this.drId +'&drName='+ drName + '&drType='+ drType;
-                let add_medicineUrl = 'add_medicine.html?pageNum='+ pageInfo.pageNum +'&pageSize='+ pageInfo.pageSize +'&drId='+ this.drId +'&drName='+ drName + '&drType='+ drType;
+            $.each(pageInfo.list, function () {
+                let state = this.drIsDel == 0 ? '销售中' : '已下架';
+                let editUrl = 'edit.html?pageNum=' + pageInfo.pageNum + '&pageSize=' + pageInfo.pageSize + '&drId=' + this.drId + '&drName=' + drName + '&drType=' + drType;
+                let lookUrl = 'look.html?pageNum=' + pageInfo.pageNum + '&pageSize=' + pageInfo.pageSize + '&drId=' + this.drId + '&drName=' + drName + '&drType=' + drType;
+                let add_medicineUrl = 'add_medicine.html?pageNum=' + pageInfo.pageNum + '&pageSize=' + pageInfo.pageSize + '&drId=' + this.drId + '&drName=' + drName + '&drType=' + drType;
                 let con = "<tr>\n" +
-                    "             <td style='vertical-align:middle;'><input type='checkbox' name='check' value='"+ this.drId +"'></td>\n" +
-                    "             <td>"+ this.drId +"</td>\n" +
-                    "             <td>"+ this.drName +"</td>\n" +
-                    "             <td>"+ this.drType +"</td>\n" +
-                    "             <td>"+ this.drSimDesc +"</td>\n" +
-                    "             <td>"+ state +"</td>\n" +
-                    "             <td>"+ this.drNumber +"</td>\n" +
+                    "             <td style='vertical-align:middle;'><input type='checkbox' name='check' value='" + this.drId + "'></td>\n" +
+                    "             <td>" + this.drId + "</td>\n" +
+                    "             <td>" + this.drName + "</td>\n" +
+                    "             <td>" + this.drType + "</td>\n" +
+                    "             <td>" + this.drSimDesc + "</td>\n" +
+                    "             <td>" + state + "</td>\n" +
+                    "             <td>" + this.drNumber + "</td>\n" +
                     "             <td>\n" +
-                    "                 <a href='"+editUrl+"'>更改</a>&nbsp;&nbsp;&nbsp;"
-                                    +"<a href='"+add_medicineUrl+"'>添加库存</a>&nbsp;&nbsp;&nbsp;"
-                                    +"<a href='"+lookUrl+"'>详情</a>\n"+
+                    "                 <a href='" + editUrl + "'>更改</a>&nbsp;&nbsp;&nbsp;"
+                    + "<a href='" + add_medicineUrl + "'>添加库存</a>&nbsp;&nbsp;&nbsp;"
+                    + "<a href='" + lookUrl + "'>详情</a>\n" +
                     "             </td>\n" +
                     "         </tr>"
                 $("#mycon").find("tbody").append($(con))
@@ -151,8 +152,8 @@
         <tr>
             <td colspan="4">
                 <center>
-                    <button type="button" onclick="queryList(1)" class="btn btn-primary" >查询</button>
-                    <button type="reset" class="btn btn-primary" >清空</button>
+                    <button type="button" onclick="queryList(1)" class="btn btn-primary">查询</button>
+                    <button type="reset" class="btn btn-primary">清空</button>
                 </center>
             </td>
         </tr>
@@ -184,12 +185,47 @@
             </div>
             <div>
                 <button type="button" class="btn btn-success" id="newNav">添加新药</button>
-                <button type="button" class="btn btn-success" id="delPro">导出Excel</button>
+                <button class="btn btn-success" id="exportByDrIds">导出Excel（选中）</button>
+                <button class="btn btn-success" id="exportExcel">导出Excel（所有数据）</button>
             </div>
 
         </th>
     </tr>
 </table>
+<script>
+    $(function () {
+        // 导出选中的数据
+        $("#exportByDrIds").click(function () {
+            // 获取复选框集合
+            let allCheck = document.getElementsByName("check");
+            // 获取导出数据的主键
+            let drIds = [];
+            for (let i = 0; i < allCheck.length; i++) {
+                if (allCheck[i].checked) {
+                    // 将主键拼接，作为地址参数，以集合的形式
+                    drIds.push(allCheck[i].value);
+                }
+            }
+            if (drIds.length == 0) {
+                layer.msg("没有选中数据，不能导出!");
+            } else {
+                let url = '/drug/export/drIds';
+                reqExport(url, "药品信息", drIds, "drId");
+                // 清除复选框
+                $("input[name='check']:checked").prop("checked", false);
+            }
+        });
+
+        // 请求导出全部的数据，可以设置查询条件，需要拼接到地址后面
+        $("#exportExcel").click(function () {
+            // 查询的条件
+            let drName = $("#drName").val();
+            let drType = $("#drType").val();
+            let url = '/drug/export?drName=' + drName + "&drType=" + drType;
+            reqExport(url, "药品信息", null, "");
+        });
+    })
+</script>
 
 </body>
 </html>

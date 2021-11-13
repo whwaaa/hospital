@@ -134,3 +134,61 @@ function fillPageData(pageInfo) {
     })
 }
 function queryList(pageNum){}
+
+/**
+ *  get请求方式，导出Excel数据
+ * @param url 导出excel的请求地址。如果导出的数据包含查询条件，请拼接到地址中。
+ * @param fileName 导出的文件名，不含后缀
+ * @param list 若选中数据，则传入选中记录的主键数组；否则导出全部的数据，则设置为null或[]。
+ * @param paramName 若导出选中的记录，需要设置与后端@RequestParam的值（value）相同;否则导出全部，则设置为""或null。
+ */
+function reqExport(url,fileName,list,paramName){
+    layer.confirm('确定导出数据吗？', {
+        btn: ['确认','取消'],//按钮
+        title: '提示'
+    }, function(){
+        // list 不为空
+        if (list&&list.length>0){
+            let paramUrl = "";
+            for (let i = 0; i < list.length; i++) {
+                paramUrl = paramUrl + "&" + paramName + "=" + list[i];
+            }
+            url = url + "?"+ paramUrl.substr(1,paramUrl.length-1);
+        }
+        layer.msg('请求已发送', {icon: 1});
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);    // 也可以使用POST方式，根据接口
+        xhr.responseType = "blob";  // 返回类型blob
+        // 定义请求完成的处理函数，请求前也可以增加加载框/禁用下载按钮逻辑
+        xhr.onload = function () {
+            // 请求完成
+            if (this.status === 200) {
+                // 返回200
+                let blob = this.response;
+                let reader = new FileReader();
+                reader.readAsDataURL(blob);  // 转换为base64，可以直接放入a标签的href
+                reader.onload = function (e) {
+                    // 转换完成，创建一个a标签用于下载
+                    var a = document.createElement('a');
+                    a.download = fileName + '.xlsx';
+                    a.href = e.target.result;
+                    $("body").append(a);  // 修复firefox中无法触发click
+                    a.click();
+                    $(a).remove();
+                    layer.msg('导出成功!');
+                }
+                // 导出失败的处理
+                let obj = JSON.parse(this.responseText);
+                if (obj.code!=null){
+                    layer.msg(obj.msg);
+                }
+            }else {
+                layer.msg("导出失败!");
+            }
+        };
+        // 发送ajax请求
+        xhr.send();
+    }, function(){
+        layer.msg('导出已取消');
+    });
+}

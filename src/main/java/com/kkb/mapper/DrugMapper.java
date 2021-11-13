@@ -16,6 +16,8 @@ public interface DrugMapper {
 
     List<Drug> selectByExample(DrugExample example);
 
+    List<Drug> selectByIdList(List<String> IdList);
+
     int updateByExampleSelective(@Param("record") Drug record, @Param("example") DrugExample example);
 
     int updateByExample(@Param("record") Drug record, @Param("example") DrugExample example);
