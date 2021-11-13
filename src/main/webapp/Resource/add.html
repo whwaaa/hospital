@@ -58,7 +58,11 @@
                 }else{
                     $.ajax({
                         type: "GET",
-                        url: "/menu/m-name/" + mName,
+                        url: origin + "/menu/m-name/" + mName,
+						xhrFields: {
+						   withCredentials: true
+						},
+						crossDomain: true,
                         data: {jwtToken:jwtToken},
                         dataType: "json",
                         async: false,
@@ -90,8 +94,12 @@
                     layer.load(0)
                     $.ajax({
                         type: "GET",
-                        // url: "/" + url,
-                        url: url,
+                        // url: origin + "/" + url,
+                        url: origin + url,
+						xhrFields: {
+						   withCredentials: true
+						},
+						crossDomain: true,
                         async: false,
                         success: function (data) {
                             urlCheckFlat = true;
@@ -138,7 +146,11 @@
                     layer.load(0)
                     $.ajax({
                         type: "POST",
-                        url: "/menu",
+                        url: origin + "/menu",
+						xhrFields: {
+						   withCredentials: true
+						},
+						crossDomain: true,
                         data: {mUrl:mUrl,mState:$("input[name='mState']:checked").val(),mName:mName},
                         dataType: "json",
                         async: false,

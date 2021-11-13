@@ -7,7 +7,6 @@
     <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
     <link rel="stylesheet" type="text/css" href="../Css/style.css" />
     <script type="text/javascript" src="../Js/jquery.js"></script>
-    <script type="text/javascript" src="../Js/jquery.sorted.js"></script>
     <script type="text/javascript" src="../Js/bootstrap.js"></script>
     <script type="text/javascript" src="../Js/ckform.js"></script>
     <script type="text/javascript" src="../Js/common.js"></script>
@@ -32,46 +31,106 @@
 
     </style>
     <script type="text/javascript">
-	 $(function () {
-		$('#newNav').click(function(){
-				window.location.href="add.html";
-		 });
+
+    queryList = function(pageNum){
+        layer.load(0)
+        $.ajax({
+            type: "GET",
+            url: origin + "/register/list",
+            data: {pageNum:pageNum,pageSize:globalPageSize},
+            success: function (data) {
+                layer.closeAll();
+                if(data.code === 200){
+                    // 填充分页
+                    fillPageData(data.obj);
+                    // 填充内容
+                    fillContentData(data.obj.list);
+                    // 更新全局页数信息
+                    globalPageSize = data.obj.pageSize;
+                    globalPageNum = data.obj.pageNum;
+                }else{
+                    layer.msg(data.msg,function(){})
+                }
+            },
+            complete : function(xhr, status) {
+                myComplete(xhr, status);
+            }
+        });
+    }
+    $(function () {
+        // 查询第一页
+        queryList(globalPageNum);
+        $('#newNav').click(function(){
+            window.location.href="add.html";
+        });
     });
-	
-    	function checkall(){
-			var alls=document.getElementsByName("check");
-			var ch=document.getElementById("checkall");
-			if(ch.checked){
-				for(var i=0;i<alls.length;i++){
-					alls[i].checked=true;	
-				}	
-			}else{
-				for(var i=0;i<alls.length;i++){
-					alls[i].checked=false;	
-				}	
-			}
-		}
-		function delAll(){
-			var alls=document.getElementsByName("check");
-			var ids=new Array();
-			for(var i=0;i<alls.length;i++){
-				if(alls[i].checked){
-					ids.push(alls[i].value);
-				}		
-			}
-			if(ids.length>0){
-				if(confirm("确认操作?")){
-					alert("成功!");
-				}
-			}else{
-				alert("请选中要操作的项");
-			}
-		}
+
+    // 填充内容
+    function fillContentData(cont){
+        console.log(cont);
+        // 先清空数据
+        $("table.content").find("tbody").empty();
+        $.each(cont, function(){
+            // 挂号状态：0挂号 1已住院 2已出院 3已退号
+            let hosrState = "";
+            if(this.hosrState == 0){
+                hosrState = "挂号";
+            }else if(this.hosrState == 1){
+                hosrState = "已住院";
+            }else if(this.hosrState == 2){
+                hosrState = "已出院";
+            }else if(this.hosrState == 3){
+                hosrState = "已退号";
+            }
+            let con =
+                "<tr>\n" +
+                "            <td style='vertical-align:middle;'><input type='checkbox' name='check' value='1'></td>\n" +
+                "            <td style='vertical-align:middle;'>" + this.hosrId + "</td>\n" +
+                "            <td style='vertical-align:middle;'>" + this.doctorName + "</td>\n" +
+                "            <td style='vertical-align:middle;'>" + this.hosrCreateTimeStr + "</td>\n" +
+                "            <td style='vertical-align:middle;'>" + this.keshi + "</td>\n" +
+                "            <td style='vertical-align:middle;'>" + hosrState + "</td>\n" +
+                "            <td style='vertical-align:middle;'><a href='look.html?pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>详情>>></a>&nbsp;&nbsp;&nbsp;<a href='edit.html?pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>更改</a>&nbsp;&nbsp;&nbsp;<a href='javascript:alert('退号成功！');'>退号</a></td>\n" +
+                "        </tr>"
+            $("table.content").find("tbody").append($(con));
+        })
+
+    }
+
+    function checkall(){
+        var alls=document.getElementsByName("check");
+        var ch=document.getElementById("checkall");
+        if(ch.checked){
+            for(var i=0;i<alls.length;i++){
+                alls[i].checked=true;
+            }
+        }else{
+            for(var i=0;i<alls.length;i++){
+                alls[i].checked=false;
+            }
+        }
+    }
+    function delAll(){
+        var alls=document.getElementsByName("check");
+        var ids=new Array();
+        for(var i=0;i<alls.length;i++){
+            if(alls[i].checked){
+                ids.push(alls[i].value);
+            }
+        }
+        if(ids.length>0){
+            if(confirm("确认操作?")){
+                alert("成功!");
+            }
+        }else{
+            alert("请选中要操作的项");
+        }
+    }
     </script>
 </head>
 <body>
 
-<form action="index.html" method="post" class="definewidth m20">
+<div class="definewidth m20">
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
         <td width="10%" class="tableleft">病历号：</td>
@@ -90,15 +149,14 @@
 		  <td colspan="5">
 			<input type="text" name="pname" value=""/>&nbsp;至&nbsp;<input type="text" name="pname" value=""/>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button type="submit" class="btn btn-primary" type="button">查询</button> 
-            <button type="submit" class="btn btn-primary" type="button">清空</button> 
-			
+            <button type="button" class="btn btn-primary" onclick="queryList(1)">查询</button>
+            <button type="reset" class="btn btn-primary">清空</button>
         </td>
     </tr>
 </table>
-</form>
+</div>
    
-<table class="table table-bordered table-hover definewidth m10" >
+<table class="content table table-bordered table-hover definewidth m10" >
    <thead>
     <tr>
     	<th><input type="checkbox" id="checkall" onChange="checkall();"></th>
@@ -110,61 +168,18 @@
         <th>操作</th>
     </tr>
     </thead>
-	     <tr >
-         	<td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">程俊</td>
-            <td style="vertical-align:middle;">2015-09-09 12：12：12</td>
-            <td style="vertical-align:middle;">血液科</td>
-            <td style="vertical-align:middle;">已挂号</td>
-            <td style="vertical-align:middle;"><a href="look.html">详情>>></a>&nbsp;&nbsp;&nbsp;<a href="edit.html">更改</a>&nbsp;&nbsp;&nbsp;<a href="javascript:alert('退号成功！');">退号</a></td>
-        </tr>
-	     <tr >
-         	<td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
-            <td style="vertical-align:middle;">1104</td>
-            <td style="vertical-align:middle;">王博</td>
-            <td style="vertical-align:middle;">2015-12-09 12：12：12</td>
-            <td style="vertical-align:middle;">骨科</td>
-            <td style="vertical-align:middle;">已住院</td>
-            <td style="vertical-align:middle;"><a href="look.html">详情>>></a>&nbsp;&nbsp;&nbsp;<a href="edit.html">更改</a></td>
-        </tr>
-	     <tr >
-         	<td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
-            <td style="vertical-align:middle;">1105</td>
-            <td style="vertical-align:middle;">沈青川</td>
-            <td style="vertical-align:middle;">2015-02-04 15：11：12</td>
-            <td style="vertical-align:middle;">外科</td>
-            <td style="vertical-align:middle;">已住院</td>
-            <td style="vertical-align:middle;"><a href="look.html">详情>>></a>&nbsp;&nbsp;&nbsp;<a href="edit.html">更改</a></td>
-        </tr>
-	     <tr >
-         	<td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
-            <td style="vertical-align:middle;">1106</td>
-            <td style="vertical-align:middle;">欧阳雨露</td>
-            <td style="vertical-align:middle;">2014-09-05 12：12：12</td>
-            <td style="vertical-align:middle;">急诊科</td>
-            <td style="vertical-align:middle;">已出院</td>
-            <td style="vertical-align:middle;"><a href="look.html">详情>>></td>
-        </tr>
-	     <tr >
-         	<td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
-            <td style="vertical-align:middle;">1107</td>
-            <td style="vertical-align:middle;">艾小天</td>
-            <td style="vertical-align:middle;">2014-02-09 12：12：11</td>
-            <td style="vertical-align:middle;">妇科</td>
-            <td style="vertical-align:middle;">已退号</td>
-            <td style="vertical-align:middle;"><a href="look.html">详情>>></td>
-        </tr>
-  </table>
+    <tbody></tbody>
+
+    </table>
   
   <table class="table table-bordered table-hover definewidth m10" >
-  	<tr><th colspan="5">  <div class="inline pull-right page">
-          <a href='#' >第一页</a> <a href='#'>上一页</a>     <span class='current'>1</span><a href='#'>2</a><a href='/chinapost/index.php?m=Label&a=index&p=3'>3</a><a href='#'>4</a><a href='#'>5</a>  <a href='#' >下一页</a> <a href='#' >最后一页</a>
-		  &nbsp;&nbsp;&nbsp;共<span class='current'>32</span>条记录<span class='current'> 1/33 </span>页
-		  </div>
+  	<tr><th colspan="5">
+
+        <div id="pageInfo-box" class="inline pull-right page"></div>
+
 		 <div><button type="button" class="btn btn-success" id="newNav">门诊挂号</button>&nbsp;&nbsp;&nbsp;
-		 <button type="button" class="btn btn-success" id="delPro" onClick="delAll();">退号</button>&nbsp;&nbsp;&nbsp;
-		 <button type="button" class="btn btn-success" id="delPro">导出Excel</button>
+		 <button type="button" class="btn btn-success" id="delPro1" onClick="delAll();">退号</button>&nbsp;&nbsp;&nbsp;
+		 <button type="button" class="btn btn-success" id="delPro2">导出Excel</button>
 		
 		 
 		 </div>

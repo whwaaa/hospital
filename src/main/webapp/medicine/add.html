@@ -125,7 +125,11 @@
             picData.append("jwtToken", jwtToken)
             $.ajax({
                 type: "post",
-                url: "/upload/picture",
+                url: origin + "/upload/picture",
+				xhrFields: {
+				   withCredentials: true
+				},
+				crossDomain: true,
                 data: picData,
                 async: false,
                 contentType: false,
@@ -142,7 +146,11 @@
                         drugForm += "&jwtToken=" + jwtToken;
                         $.ajax({
                             type: "post",
-                            url: "/drug",
+                            url: origin + "/drug",
+							xhrFields: {
+							   withCredentials: true
+							},
+							crossDomain: true,
                             data: drugForm,
                             dataType: "json",
                             success: function (vo) {

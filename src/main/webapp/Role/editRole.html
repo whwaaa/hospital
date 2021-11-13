@@ -82,10 +82,14 @@
         layer.load(0)
         $.ajax({
             type: "GET",
-            url: "/menu/list",
+            url: origin + "/menu/list",
             data: {pageSize:999,pageNum:1},
             dataType: "json",
             async: false,
+			xhrFields: {
+			   withCredentials: true
+			},
+			crossDomain: true,
             success: function (data) {
                 layer.closeAll()
                 if (data.code == 200){
@@ -119,9 +123,13 @@
         layer.load(0)
         $.ajax({
             type: "GET",
-            url: "/role/" + rId,
+            url: origin + "/role/" + rId,
             data: {},
             dataType: "json",
+			xhrFields: {
+			   withCredentials: true
+			},
+			crossDomain: true,
             success: function (data) {
                 layer.closeAll()
                 if (data.code == 200){
@@ -168,10 +176,14 @@
                     layer.load(0)
                     $.ajax({
                         type: "GET",
-                        url: "/role/r-name/" + rName,
+                        url: origin + "/role/r-name/" + rName,
                         data: {},
                         dataType: "json",
                         async: false,
+						xhrFields: {
+						   withCredentials: true
+						},
+						crossDomain: true,
                         success: function (data) {
                             layer.closeAll()
                             if (data.code == 200){
@@ -216,9 +228,13 @@
                 layer.load(0)
                 $.ajax({
                     type: "POST",
-                    url: "/role/" + rId,
+                    url: origin + "/role/" + rId,
                     data: {rName:rName,rState:rState,menuIds:menuIds,_method:"PUT"},
                     dataType: "json",
+					xhrFields: {
+					   withCredentials: true
+					},
+					crossDomain: true,
                     success: function (data) {
                         layer.closeAll()
                         if (data.code == 200){

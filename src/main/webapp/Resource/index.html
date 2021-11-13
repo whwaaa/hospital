@@ -43,8 +43,12 @@
         layer.load(0)
         $.ajax({
             type: "GET",
-            url: "/menu/list",
+            url: origin + "/menu/list",
             data: {pageNum:pageNum,pageSize:globalPageSize,mName:mName},
+			xhrFields: {
+			   withCredentials: true
+			},
+			crossDomain: true,
             success: function (data) {
                 layer.closeAll();
                 if(data.code === 200){
@@ -103,8 +107,12 @@
             layer.load(0);
             $.ajax({
                 type: "POST",
-                url: "/menu/"+ mId,
+                url: origin + "/menu/"+ mId,
                 data: {_method:"DELETE"},
+				xhrFields: {
+				   withCredentials: true
+				},
+				crossDomain: true,
                 success: function (data) {
                     layer.closeAll();
                     if(data.code === 204){
@@ -148,8 +156,12 @@
                 $.each(ids, function(index,id){
                     $.ajax({
                         type: "POST",
-                        url: "/menu/"+ id,
+                        url: origin + "/menu/"+ id,
                         data: {_method:"DELETE"},
+						xhrFields: {
+						   withCredentials: true
+						},
+						crossDomain: true,
                         success: function (data) {
                             layer.closeAll();
                             if(data.code === 204){

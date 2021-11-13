@@ -1,5 +1,6 @@
 package com.kkb.service;
 
+import com.kkb.exceptions.JWTTokenInvalidException;
 import com.kkb.mapper.MenuMapper;
 import com.kkb.mapper.RoleMenuMapper;
 import com.kkb.mapper.UserMapper;
@@ -44,7 +45,7 @@ public class AccessService {
      * @param user
      * @return
      */
-    public AjaxResultVo createToken(HttpServletResponse response, User user){
+    public AjaxResultVo createToken(HttpServletRequest request, HttpServletResponse response, User user) throws JWTTokenInvalidException {
         // 将用户id,用户名,角色id称封装为map集合
         Map<String, Object> payLoadMap = new HashMap<>();
         payLoadMap.put(JWTUtil.payLoadUserId, user.getuId());
@@ -53,10 +54,17 @@ public class AccessService {
         // 传入map参数, 生成jwtToken令牌
         String jwtToken = JWTUtil.generToken(payLoadMap);
         // 将jwt令牌存入cookie
-        Cookie cookie = new Cookie("jwtToken", jwtToken);
-        cookie.setPath("/");
-        cookie.setMaxAge(3*24*60*60);     // 设置过期时间3天 3*24*60*60秒
-        response.addCookie(cookie);
+        try {
+            Cookie cookie = new Cookie("jwtToken", jwtToken);
+            // 获取前端请求域名
+            String domain = request.getRequestURL().toString().split("/")[2];
+            cookie.setDomain(domain);
+            cookie.setPath("/");
+            cookie.setMaxAge(3*24*60*60);     // 设置过期时间3天 3*24*60*60秒
+            response.addCookie(cookie);
+        } catch (Exception e) {
+            throw new JWTTokenInvalidException("cookie的域名不能设置为ip地址,本地调试请在前端页面改用localhost访问");
+        }
         return new AjaxResultVo();
     }
 

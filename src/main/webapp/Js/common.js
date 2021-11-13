@@ -28,6 +28,37 @@ function U() {
     return _APP_+'?'+arr.join('&');
 }
 
+// TODO: 前后端分离开发配置 -> 分离开发:true, 一体开发:false
+var crossDomainMode = false;
+var origin;
+var projectUrl;
+if(crossDomainMode){
+	// TODO: 配置项一: ajax请求添加跨域配置
+	// xhrFields: {
+	//    // 允许cookie跨域
+	//    withCredentials: true
+	// },
+	// crossDomain: true,
+				
+	// TODO: 配置项二: 后台API请求源(协议域名端口,80可略) ajax请求url加上origin 例: 
+	// {
+	// 	url: origin + "/access/user",
+	// }
+	origin = "http://localhost"
+	
+	// TODO: 配置项三: 前端项目地址
+	// 例: hbuilder 启动项目首页的地址是: http://127.0.0.1:8848/webapp/index/index.html?__hbt=1636802666940
+	// 则配置 projectUrl = "http://127.0.0.1:8848/webapp"
+	projectUrl = "http://localhost:8848/webapp"
+}
+
+
+if(crossDomainMode){
+	// 如果有则去除地址最后斜杠
+	if(projectUrl.lastIndexOf("/")==projectUrl.length-1){
+		projectUrl = projectUrl.substr(0,projectUrl.length-1)
+	}
+}
 
 let jwtToken;
 document.write("<script src=\"https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js\"></script>");
@@ -78,8 +109,11 @@ function myComplete(xhr, status){
         // 跳到登陆界面, 传入当前URL作为参数, 登陆成功再跳回来
         setTimeout(function (){
             let callBackUrL = window.location.href;
-            console.log(callBackUrL)
-            window.location.href = xhr.getResponseHeader("CONTENTPATH") + "?callBackUrL=" + callBackUrL;
+            if(crossDomainMode){
+            	window.location.href = projectUrl + xhr.getResponseHeader("CONTENTPATH") + "?callBackUrL=" + callBackUrL;
+            }else{
+            	window.location.href = projectName + xhr.getResponseHeader("CONTENTPATH") + "?callBackUrL=" + callBackUrL;
+            }
         }, 1500)
     }
 

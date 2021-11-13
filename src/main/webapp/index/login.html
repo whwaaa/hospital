@@ -99,13 +99,13 @@
                     var uPassword = $("input[name='password']").val()
                     $.ajax({
                         type: "POST",
-                        url: "/access/login",
+                        url: origin + "/access/login",
                         data: {uLoginName:uLoginName,uPassword:uPassword},
                         dataType: "json",
-                        // xhrFields: {
-                        //     withCredentials: true
-                        // },
-                        // crossDomain: true,
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        crossDomain: true,
                         success: function (data) {
                             layer.closeAll()
                             if (data.code == 200){

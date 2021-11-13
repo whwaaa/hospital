@@ -3,6 +3,8 @@ package com.kkb.mapper;
 import com.kkb.pojo.Doctor;
 import com.kkb.pojo.DoctorExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface DoctorMapper {
@@ -27,4 +29,7 @@ public interface DoctorMapper {
     int updateByPrimaryKeySelective(Doctor record);
 
     int updateByPrimaryKey(Doctor record);
+
+    // 多条件查询Id集合
+    List<Integer> selectDoctorIdList(DoctorExample example);
 }

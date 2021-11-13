@@ -79,7 +79,11 @@
         // 请求待修改的数据，并显示到页面上
         $.ajax({
             type: "GET",
-            url: "/drug/"+drId,
+            url: origin + "/drug/"+drId,
+			xhrFields: {
+			   withCredentials: true
+			},
+			crossDomain: true,
             success: function (data) {
                 if(data.code === 200){
                     let obj = data.obj;
@@ -110,7 +114,11 @@
             drugForm += "&_method=PUT";
             $.ajax({
                 type: "post",
-                url: "/drug/addDrNumber/"+drId,
+                url: origin + "/drug/addDrNumber/"+drId,
+				xhrFields: {
+				   withCredentials: true
+				},
+				crossDomain: true,
                 data: drugForm,
                 dataType: "json",
                 success: function (vo) {

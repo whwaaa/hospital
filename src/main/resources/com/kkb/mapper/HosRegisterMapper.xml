@@ -85,6 +85,36 @@
     hosr_sex, hosr_age, hosr_work, hosr_look_doctor, d_id, hosr_remark, hosr_state, hosr_is_del, 
     hosr_create_time, hosr_update_time, u_id
   </sql>
+  <!-- 自定义模糊查询 -->
+  <select id="selectByRedefineCondition" parameterType="com.kkb.vo.RegisterQueryVo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from hos_register
+    <where>
+        <if test="hosrId!=null">
+          and hosr_id LIKE concat(concat('%',#{hosrId}),'%')
+        </if>
+        <if test="createTimeStartBlur!=null">
+          and hosr_create_time LIKE concat(concat('%',#{createTimeStartBlur}),'%')
+        </if>
+        <if test="createTimeEndBlur!=null">
+          and hosr_create_time LIKE concat(concat('%',#{createTimeEndBlur}),'%')
+        </if>
+        <if test="createTimeStart!=null">
+          and hosr_create_time&gt;=#{createTimeStart}
+        </if>
+        <if test="createTimeEnd!=null">
+          and hosr_create_time&lt;=#{createTimeEnd}
+        </if>
+        <if test="doctorId != null and doctorId.size()!=0 ">
+          and d_id in
+          <foreach collection="doctorId" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+          </foreach>
+        </if>
+    </where>
+
+  </select>
   <select id="selectByExample" parameterType="com.kkb.pojo.HosRegisterExample" resultMap="BaseResultMap">
     select
     <if test="distinct">

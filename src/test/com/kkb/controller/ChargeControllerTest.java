@@ -17,7 +17,7 @@ import javax.annotation.Resource;
  * @Date:2021/10/28/20:39
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:spring.xml"})
+@ContextConfiguration(locations = {"classpath:applicationContext.xml"})
 public class ChargeControllerTest extends TestCase {
     @Resource
     private ChargeService service;

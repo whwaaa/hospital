@@ -1,4 +1,3 @@
-
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -76,13 +75,13 @@
     function getUserMessage(){
         $.ajax({
             type: "GET",
-            url: "/access/user",
+            url: origin + "/access/user",
             data: {},
             dataType: "json",
-            // xhrFields: {
-            //     withCredentials: true
-            // },
-            // crossDomain: true,
+		    xhrFields: {
+		       withCredentials: true
+		    },
+		    crossDomain: true,
             success: function (data) {
                 if (data.code == 200){
                     $(".dl-log-user").text(data.obj.uLoginName)
@@ -92,6 +91,7 @@
             }
             // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上下面的代码
             ,complete : function(xhr, status) {
+            	let heads = xhr.getAllResponseHeaders()
                 myComplete(xhr, status)
             }
         })
@@ -100,10 +100,17 @@
     $(".dl-log-quit").on("click", function (){
         // 删除cookie
         $.removeCookie('jwtToken');
+		if(crossDomainMode){
+			$.removeCookie("jwtToken",{path:'/',domain: projectUrl.split("/")[2].split(":")[0]})
+		}
         layer.msg("退出登陆成功")
         // 返回登陆界面
         setTimeout(function(){
-            window.location.href = "/index/login.html?callBackUrL=http://localhost";
+			if(crossDomainMode){
+				window.location.href = projectUrl + "/index/login.html?callBackUrL=" + projectUrl + "/index/index.html";
+			}else{
+				window.location.href = "/index/login.html?callBackUrL=http://localhost";
+			}
         }, 1000)
     })
     // 加载导航栏
@@ -124,14 +131,46 @@
             $.each(user.menuList, function(i, v){
                 let myobj = {id:'',text:'',href:''}
                 if(refreshHref === undefined && urlNum == v.mId){
-                    // 获取将要刷新的href
-                    refreshHref = v.mUrl;
+					// 跨域标识
+					if(crossDomainMode){   
+						// 获取将要刷新的href
+						// 非http
+						if(v.mUrl.indexOf("http") != 0){
+							// 前缀有"/"
+							if(v.mUrl.indexOf("/")==0){
+								refreshHref = projectUrl + v.mUrl; 
+							}else{
+								refreshHref = projectUrl + "/" + v.mUrl; 
+							}
+						}else{
+							refreshHref = v.mUrl; 
+						}
+					}else{
+						// 获取将要刷新的href
+						refreshHref = v.mUrl;
+					}
                     // 将要刷新的资源名称
                     refreshName = v.mName;
                 }
+				
                 myobj.id = v.mId;
                 myobj.text = v.mName;
-                myobj.href = v.mUrl;
+				// 跨域标识
+				if(crossDomainMode){   
+					// 非http
+					if(v.mUrl.indexOf("http") != 0){
+						// 前缀有"/"
+						if(v.mUrl.indexOf("/")==0){
+							myobj.href = projectUrl + v.mUrl; 
+						}else{
+							myobj.href = projectUrl + "/" + v.mUrl; 
+						}
+					}else{
+						myobj.href = v.mUrl; 
+					}
+				}else{
+					myobj.href = v.mUrl; 
+				}
                 myarr[i] = myobj;
             })
             // 将用户数据添加进config

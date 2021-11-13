@@ -34,19 +34,28 @@ public class AccessControlInterceptor implements HandlerInterceptor {
         }
         if(jwtToken != null){
             // 验证成功则更新token, 验证失败抛出异常
+            String newJwtToken = null;
             try {
                 // 验证成功并更新token
-                String newJwtToken = JWTUtil.updateToken(jwtToken);
-                Cookie cookie = new Cookie("jwtToken", newJwtToken);
-                cookie.setPath("/");
-                cookie.setMaxAge(3*24*60*60);     // 设置过期时间3天 3*24*60*60秒
-                response.addCookie(cookie);
-                // 放行
-                return true;
+                newJwtToken = JWTUtil.updateToken(jwtToken);
             } catch (Exception e) {
                 // token验证失败
                 throw new JWTTokenInvalidException("token失效");
             }
+            // 更新cookie
+            try {
+                Cookie cookie = new Cookie("jwtToken", newJwtToken);
+                // 获取前端请求域名
+                cookie.setPath("/");
+                String domain = request.getRequestURL().toString().split("/")[2];
+                cookie.setDomain(domain);
+                cookie.setMaxAge(3*24*60*60);     // 设置过期时间3天 3*24*60*60秒
+                response.addCookie(cookie);
+            } catch (Exception e) {
+                throw new JWTTokenInvalidException("cookie的域名不能设置为ip地址,本地调试请在前端页面改用localhost访问");
+            }
+            // 放行
+            return true;
         }
         // 没有token, 跳转登陆
         throw new JWTTokenInvalidException("没有token");

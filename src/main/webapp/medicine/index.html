@@ -65,7 +65,11 @@
             layer.load(0)
             $.ajax({
                 type: "GET",
-                url: "/drug/list",
+                url: origin + "/drug/list",
+				xhrFields: {
+				   withCredentials: true
+				},
+				crossDomain: true,
                 data: reqData,
                 success: function (data) {
                     layer.closeAll()

@@ -83,6 +83,16 @@
     d_id, d_id_car, d_phone, d_telphone, d_sex, d_birthday, d_age, d_email, d_keshi, 
     d_xueli, d_desc, d_intime, d_state, d_is_del, d_create_time, d_update_time, u_id
   </sql>
+  <!-- 多条件查询Id和所属科室 -->
+  <select id="selectDoctorIdList" parameterType="com.kkb.pojo.UserExample" resultType="java.lang.Integer">
+    select d_id docterKeshi from doctor
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" parameterType="com.kkb.pojo.DoctorExample" resultMap="BaseResultMap">
     select
     <if test="distinct">

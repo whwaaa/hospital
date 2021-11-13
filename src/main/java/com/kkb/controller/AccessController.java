@@ -38,7 +38,7 @@ public class AccessController {
 
     // 用户登陆验证
     @RequestMapping(value = "login", method = RequestMethod.POST)
-    public AjaxResultVo login(HttpServletResponse response, User user){
+    public AjaxResultVo login(HttpServletRequest request, HttpServletResponse response, User user) throws JWTTokenInvalidException {
         // 验证用户名密码是否正确
         List<User> users = accessService.queryByUserNameAndPassword(user);
         if(users == null || users.size() == 0){
@@ -57,7 +57,7 @@ public class AccessController {
         }
 
         // 生成token存入cookie
-        return accessService.createToken(response, user);
+        return accessService.createToken(request, response, user);
     }
 
     // 获取用户信息

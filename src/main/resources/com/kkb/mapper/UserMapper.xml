@@ -83,6 +83,15 @@
     u_id, u_login_name, u_password, u_true_name, u_email, u_state, r_id, u_is_del, u_create_time, 
     u_update_time
   </sql>
+  <select id="selectUserIdByExample" parameterType="com.kkb.pojo.UserExample" resultType="java.lang.Integer">
+    select u_id from user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" parameterType="com.kkb.pojo.UserExample" resultMap="BaseResultMap">
     select
     <if test="distinct">

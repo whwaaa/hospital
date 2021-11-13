@@ -79,7 +79,11 @@
             }else{
                 $.ajax({
                     type: "GET",
-                    url: "/role/r-name/" + rName,
+                    url: origin + "/role/r-name/" + rName,
+					xhrFields: {
+					   withCredentials: true
+					},
+					crossDomain: true,
                     data: {},
                     dataType: "json",
                     async: false,
@@ -106,7 +110,11 @@
         layer.load(0)
         $.ajax({
             type: "GET",
-            url: "/menu/list",
+            url: origin + "/menu/list",
+			xhrFields: {
+			   withCredentials: true
+			},
+			crossDomain: true,
             data: {pageSize:999,pageNum:1},
             dataType: "json",
             success: function (data) {
@@ -148,7 +156,11 @@
                 layer.load(0)
                 $.ajax({
                     type: "POST",
-                    url: "/role",
+                    url: origin + "/role",
+					xhrFields: {
+					   withCredentials: true
+					},
+					crossDomain: true,
                     data: {rName:rName,rState:rState,menuIds:menuIds},
                     dataType: "json",
                     success: function (data) {

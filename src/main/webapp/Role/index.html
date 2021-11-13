@@ -42,7 +42,11 @@
              layer.load(0)
              $.ajax({
                  type: "GET",
-                 url: "/role/list",
+                 url: origin + "/role/list",
+				 xhrFields: {
+				    withCredentials: true
+				 },
+				 crossDomain: true,
                  data: {pageNum:pageNum,pageSize:globalPageSize,rName:rName},
                  success: function (data) {
                      layer.closeAll();
@@ -88,7 +92,11 @@
                  layer.load(0);
                  $.ajax({
                      type: "POST",
-                     url: "/role/"+ rId,
+                     url: origin + "/role/"+ rId,
+					 xhrFields: {
+					    withCredentials: true
+					 },
+					 crossDomain: true,
                      data: {_method:"DELETE"},
                      success: function (data) {
                          layer.closeAll();
@@ -116,7 +124,11 @@
              layer.load(0)
              $.ajax({
                  type: "POST",
-                 url: "/role/" + rId,
+                 url: origin + "/role/" + rId,
+				 xhrFields: {
+				    withCredentials: true
+				 },
+				 crossDomain: true,
                  data: {rState:rState,_method:"PUT"},
                  dataType: "json",
                  success: function (data) {
@@ -168,7 +180,11 @@
                     $.each(ids, function(index,id){
                         $.ajax({
                             type: "POST",
-                            url: "/role/"+ id,
+                            url: origin + "/role/"+ id,
+							xhrFields: {
+							   withCredentials: true
+							},
+							crossDomain: true,
                             data: {_method:"DELETE"},
                             success: function (data) {
                                 layer.closeAll();

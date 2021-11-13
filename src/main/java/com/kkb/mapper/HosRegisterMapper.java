@@ -3,6 +3,8 @@ package com.kkb.mapper;
 import com.kkb.pojo.HosRegister;
 import com.kkb.pojo.HosRegisterExample;
 import java.util.List;
+
+import com.kkb.vo.RegisterQueryVo;
 import org.apache.ibatis.annotations.Param;
 
 public interface HosRegisterMapper {
@@ -27,4 +29,7 @@ public interface HosRegisterMapper {
     int updateByPrimaryKeySelective(HosRegister record);
 
     int updateByPrimaryKey(HosRegister record);
+
+    // 自定义条件查询
+    List<HosRegister> selectByRedefineCondition(RegisterQueryVo vo);
 }
