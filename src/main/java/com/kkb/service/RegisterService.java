@@ -11,12 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
 
 /**
  * 挂号表
@@ -47,32 +48,37 @@ public class RegisterService {
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public PageInfo queryList(Integer pageNum, Integer pageSize, RegisterQueryVo vo){;
+    public PageInfo queryList(Integer pageNum, Integer pageSize, RegisterQueryVo vo) throws BindException {;
         // 1. 处理医生姓名, 医生所属科室条件
-        if(vo.getDoctorName()!=null && !"".equals(vo.getDoctorName().trim())) {
-            // 查询名字相似的所有用户id
-            UserExample userExample = new UserExample();
-            UserExample.Criteria criteria = userExample.createCriteria();
-            criteria.andUTrueNameLike("%" + vo.getDoctorName() + "%");
-            List<Integer> userIds = userMapper.selectUserIdByExample(userExample);
-            if(userIds == null || userIds.size()==0){
-                // 模糊查询没有该姓名的用户
-                return null;
-            }
-            // 查询包含userIds和所属科室模糊查得到的医生id集合
+        if(vo.getDoctorName()!=null && !"".equals(vo.getDoctorName().trim()) || vo.getdKeshi()!=null && !"".equals(vo.getdKeshi().trim())) {
             DoctorExample doctorExample = new DoctorExample();
             DoctorExample.Criteria criteria1 = doctorExample.createCriteria();
-            criteria1.andDIdIn(userIds);
+            if(vo.getDoctorName()!=null && !"".equals(vo.getDoctorName().trim())){
+                // 查询名字相似的所有用户id, 设置条件让分页查到0条
+                UserExample userExample = new UserExample();
+                UserExample.Criteria criteria = userExample.createCriteria();
+                criteria.andUTrueNameLike("%" + vo.getDoctorName() + "%");
+                List<Integer> userIds = userMapper.selectUserIdByExample(userExample);
+                if(userIds == null || userIds.size()==0){
+                    // 模糊查询没有该姓名的用户
+                    vo.setHosrId("-1");
+                }else{
+                    // 查询包含userIds和所属科室模糊查得到的医生id集合
+                    criteria1.andUIdIn(userIds);
+                }
+            }
             if(vo.getdKeshi()!=null && !"".equals(vo.getdKeshi().trim())){
                 criteria1.andDKeshiLike("%" + vo.getdKeshi() + "%");
             }
             List<Integer> doctorIds = doctorMapper.selectDoctorIdList(doctorExample);
             if(doctorIds==null || doctorIds.size()==0){
-                // 模糊查询没有符合的医生id
-                return null;
+                // 模糊查询没有符合的医生id, 设置条件让分页查到0条
+                vo.setHosrId("-1");
+            }else{
+                // 以上代码最终目的为获取模糊查询到的医生Id集合
+                vo.setDoctorId(doctorIds);
             }
-            // 以上代码最终目的为获取模糊查询到的医生Id集合
-            vo.setDoctorId(doctorIds);
+
         }
         // 2. 处理单项模糊时间查和多项时间区间查条件
         if(vo.getCreateTimeStartBlur()!=null && !"".equals(vo.getCreateTimeStartBlur().trim()) &&
@@ -89,6 +95,7 @@ public class RegisterService {
                 vo.setCreateTimeEndBlur(null);
             } catch (ParseException e) {
                 // TODO : 格式化时间异常
+                return null;
             }
         }else if(vo.getCreateTimeStartBlur()!=null && !"".equals(vo.getCreateTimeStartBlur().trim())){
             // 仅开始时间不为空
@@ -168,4 +175,101 @@ public class RegisterService {
         hosRegister.setHosrIsDel(1);
         return hosRegisterMapper.updateByPrimaryKeySelective(hosRegister);
     }
+
+    /**
+     * 添加一条挂号信息
+     * @param request
+     * @param hosRegister
+     * @return
+     */
+    @Transactional(propagation =  Propagation.REQUIRED, rollbackFor = {Exception.class})
+    public Integer add(HttpServletRequest request, HosRegister hosRegister){
+        // 获取当前用户id
+        User user = accessService.paseUserMessage(request);
+        hosRegister.setuId(user.getuId());
+        // 添加创建时间
+        hosRegister.setHosrCreateTime(new Date());
+        return hosRegisterMapper.insertSelective(hosRegister);
+    }
+
+
+    /**
+     * 查询所有科室及医生信息
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    public Map<String, List<Doctor>> queryAllDotorMsg() throws Exception {
+        DoctorExample doctorExample = new DoctorExample();
+        DoctorExample.Criteria criteria = doctorExample.createCriteria();
+        // 非删除条件
+        criteria.andDIsDelEqualTo(0);
+        List<Doctor> doctors = doctorMapper.selectByExample(doctorExample);
+        Map<String, List<Doctor>> keshiMap = new HashMap<>();
+        for (Doctor doctor : doctors) {
+            // 查询医生姓名
+            User user = userMapper.selectByPrimaryKey(doctor.getuId());
+            if(user == null){
+                throw new Exception("数据库医生表和用户表uId不匹配");
+            }
+            doctor.setDoctorName(user.getuTrueName());
+            // 封装到map集合
+            List<Doctor> doctorList = keshiMap.get(doctor.getdKeshi());
+            if(doctorList != null){
+                doctorList.add(doctor);
+            }else{
+                doctorList = new ArrayList<>();
+                doctorList.add(doctor);
+                keshiMap.put(doctor.getdKeshi(), doctorList);
+            }
+        }
+        return keshiMap;
+    }
+
+    /**
+     * 更新挂号信息
+     * @param request
+     * @param hosRegister
+     * @param hosrId
+     * @return
+     */
+    @Transactional(propagation =  Propagation.REQUIRED, rollbackFor = {Exception.class})
+    public Integer updateById(HttpServletRequest request, HosRegister hosRegister, Integer hosrId){
+        // 更新的主键
+        hosRegister.setHosrId(hosrId);
+        // 获取当前用户id
+        User user = accessService.paseUserMessage(request);
+        hosRegister.setuId(user.getuId());
+        // 添加修改时间
+        hosRegister.setHosrUpdateTime(new Date());
+        return hosRegisterMapper.updateByPrimaryKeySelective(hosRegister);
+    }
+
+    /**
+     * 根据主键查询挂号信息
+     * @param hosrId
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    public HosRegister queryById(Integer hosrId) throws Exception {
+        if(hosrId != null){
+            HosRegister hosRegister = hosRegisterMapper.selectByPrimaryKey(hosrId);
+            Doctor doctor = doctorMapper.selectByPrimaryKey(hosRegister.getdId());
+            if(doctor == null){
+                throw new Exception("挂号表里的医生id:"+ hosRegister.getdId() +"不存在,请检查数据库");
+            }
+            // 封装医生所属科室
+            hosRegister.setKeshi(doctor.getdKeshi());
+            User user = userMapper.selectByPrimaryKey(doctor.getuId());
+            if(user == null){
+                throw new Exception("医生表里的用户id:"+ doctor.getuId() +"不存在,请检查数据库");
+            }
+            // 封装挂号费
+            hosRegister.setHosrRegPriceStr(hosRegister.getHosrRegPrice().toString() + "元");
+            // 封装医生姓名
+            hosRegister.setDoctorName(user.getuTrueName());
+            return hosRegister;
+        }
+        return null;
+    }
+
 }

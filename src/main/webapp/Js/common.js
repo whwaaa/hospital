@@ -29,7 +29,7 @@ function U() {
 }
 
 // TODO: 前后端分离开发配置 -> 分离开发:true, 一体开发:false
-var crossDomainMode = false;
+var crossDomainMode = true;
 var origin;
 var projectUrl;
 if(crossDomainMode){
@@ -108,11 +108,12 @@ function myComplete(xhr, status){
         }
         // 跳到登陆界面, 传入当前URL作为参数, 登陆成功再跳回来
         setTimeout(function (){
+			
             let callBackUrL = window.location.href;
             if(crossDomainMode){
             	window.location.href = projectUrl + xhr.getResponseHeader("CONTENTPATH") + "?callBackUrL=" + callBackUrL;
             }else{
-            	window.location.href = projectName + xhr.getResponseHeader("CONTENTPATH") + "?callBackUrL=" + callBackUrL;
+            	window.location.href = xhr.getResponseHeader("CONTENTPATH") + "?callBackUrL=" + callBackUrL;
             }
         }, 1500)
     }
@@ -176,6 +177,7 @@ function queryList(pageNum){}
  * @param list 若选中数据，则传入选中记录的主键数组；否则导出全部的数据，则设置为null或[]。
  * @param paramName 若导出选中的记录，需要设置与后端@RequestParam的值（value）相同;否则导出全部，则设置为""或null。
  */
+var tempgloab;
 function reqExport(url,fileName,list,paramName){
     layer.confirm('确定导出数据吗？', {
         btn: ['确认','取消'],//按钮
@@ -193,6 +195,7 @@ function reqExport(url,fileName,list,paramName){
         let xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);    // 也可以使用POST方式，根据接口
         xhr.responseType = "blob";  // 返回类型blob
+		xhr.withCredentials = true;  // 允许跨域带cookie
         // 定义请求完成的处理函数，请求前也可以增加加载框/禁用下载按钮逻辑
         xhr.onload = function () {
             // 请求完成
@@ -202,20 +205,30 @@ function reqExport(url,fileName,list,paramName){
                 let reader = new FileReader();
                 reader.readAsDataURL(blob);  // 转换为base64，可以直接放入a标签的href
                 reader.onload = function (e) {
-                    // 转换完成，创建一个a标签用于下载
-                    var a = document.createElement('a');
-                    a.download = fileName + '.xlsx';
-                    a.href = e.target.result;
-                    $("body").append(a);  // 修复firefox中无法触发click
-                    a.click();
-                    $(a).remove();
-                    layer.msg('导出成功!');
+					if(e.target.result.length < 1000){	// excel至少4000以上
+						// 非excel,是异常
+						let ex = JSON.parse(window.atob(e.target.result.split("base64,")[1]))
+						if(ex.msg != undefined){
+							layer.msg(ex.msg);	// 是用AjaxResoutVo封装的json
+						}else{
+							layer.msg(ex);	// 不是AjaxResoutVo封装
+						}
+					}else{
+						 // 转换完成，创建一个a标签用于下载
+						var a = document.createElement('a');
+						a.download = fileName + '.xlsx';
+						a.href = e.target.result;
+						$("body").append(a);  // 修复firefox中无法触发click
+						a.click();
+						$(a).remove();
+						layer.msg('导出成功!');
+					}
                 }
-                // 导出失败的处理
-                let obj = JSON.parse(this.responseText);
-                if (obj.code!=null){
-                    layer.msg(obj.msg);
-                }
+                // 导出失败的处理  -> responseType是text时, responseText才能读取, 不然总报错
+                // let obj = JSON.parse(this.responseText);
+                // if (obj.code!=null){
+                //     layer.msg(obj.msg);
+                // }
             }else {
                 layer.msg("导出失败!");
             }

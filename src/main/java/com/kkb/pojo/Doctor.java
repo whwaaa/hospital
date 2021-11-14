@@ -38,6 +38,17 @@ public class Doctor implements Serializable {
 
     private Integer uId;
 
+    // 封装医生姓名
+    private String doctorName;
+
+    public String getDoctorName() {
+        return doctorName;
+    }
+
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
+    }
+
     public Integer getdId() {
         return dId;
     }

@@ -91,7 +91,6 @@
             }
             // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上下面的代码
             ,complete : function(xhr, status) {
-            	let heads = xhr.getAllResponseHeaders()
                 myComplete(xhr, status)
             }
         })
