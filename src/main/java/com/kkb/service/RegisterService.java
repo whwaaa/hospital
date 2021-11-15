@@ -211,7 +211,7 @@ public class RegisterService {
             if(user == null){
                 throw new Exception("数据库医生表和用户表uId不匹配");
             }
-            doctor.setDoctorName(user.getuTrueName());
+            //doctor.setDoctorName(user.getuTrueName());
             // 封装到map集合
             List<Doctor> doctorList = keshiMap.get(doctor.getdKeshi());
             if(doctorList != null){
