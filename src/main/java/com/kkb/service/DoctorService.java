@@ -13,11 +13,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Service
-public class DoctorService {
+public class DoctorService implements Serializable {
     @Resource
     private DoctorMapper doctorMapper;
 

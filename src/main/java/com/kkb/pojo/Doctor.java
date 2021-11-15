@@ -3,9 +3,10 @@ package com.kkb.pojo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Doctor {
+public class Doctor implements Serializable {
     private Integer dId;
 
     private String dIdCar;

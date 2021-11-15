@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -26,7 +27,7 @@ import java.util.*;
  * @date 2021/11/12
  */
 @Service
-public class RegisterService {
+public class RegisterService implements Serializable {
 
     @Autowired
     private HosRegisterMapper hosRegisterMapper;
