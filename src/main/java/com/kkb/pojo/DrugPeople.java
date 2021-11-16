@@ -1,55 +1,60 @@
 package com.kkb.pojo;
 
-import java.io.Serializable;
+/**
+ * show 病人购买药品记录表实体类
+ *
+ * @author guguofu
+ * @since 2021/11/16
+ */
+public class DrugPeople {
+    // 主键
+    private Integer drugPeoId;
+    // 药品的编号
+    private String drugId;
+    // 病人挂号表
+    private Integer hosrId;
+    // 预购数量
+    private Integer drugNumber;
+    // 已购数量
+    private Integer drugGiveNumber;
 
-public class DrugPeople implements Serializable {
-    private Integer drbehId;
-
-    private Integer drId;
-
-    private Integer behId;
-
-    private Integer drNumber;
-
-    private Integer drGiveNumber;
-
-    public Integer getDrbehId() {
-        return drbehId;
+    public Integer getDrugPeoId() {
+        return drugPeoId;
     }
 
-    public void setDrbehId(Integer drbehId) {
-        this.drbehId = drbehId;
+    public void setDrugPeoId(Integer drugPeoId) {
+        this.drugPeoId = drugPeoId;
     }
 
-    public Integer getDrId() {
-        return drId;
+    public String getDrugId() {
+        return drugId;
     }
 
-    public void setDrId(Integer drId) {
-        this.drId = drId;
+    public void setDrugId(String drugId) {
+        this.drugId = drugId == null ? null : drugId.trim();
     }
 
-    public Integer getBehId() {
-        return behId;
+    public Integer getHosrId() {
+        return hosrId;
     }
 
-    public void setBehId(Integer behId) {
-        this.behId = behId;
+    public void setHosrId(Integer hosrId) {
+        this.hosrId = hosrId;
     }
 
-    public Integer getDrNumber() {
-        return drNumber;
+    public Integer getDrugNumber() {
+        return drugNumber;
     }
 
-    public void setDrNumber(Integer drNumber) {
-        this.drNumber = drNumber;
+    public void setDrugNumber(Integer drugNumber) {
+        this.drugNumber = drugNumber;
     }
 
-    public Integer getDrGiveNumber() {
-        return drGiveNumber;
+    public Integer getDrugGiveNumber() {
+        return drugGiveNumber;
     }
 
-    public void setDrGiveNumber(Integer drGiveNumber) {
-        this.drGiveNumber = drGiveNumber;
+    public void setDrugGiveNumber(Integer drugGiveNumber) {
+        this.drugGiveNumber = drugGiveNumber;
     }
 }
