@@ -20,6 +20,9 @@ public interface DrugPeopleMapper {
 
     DrugPeople selectByPrimaryKey(Integer drugPeoId);
 
+    // 关联查询病人信息和药品信息
+    List<DrugPeople> selectByPrimaryKeyWithInfo(Integer hosrId);
+
     int updateByExampleSelective(@Param("record") DrugPeople record, @Param("example") DrugPeopleExample example);
 
     int updateByExample(@Param("record") DrugPeople record, @Param("example") DrugPeopleExample example);

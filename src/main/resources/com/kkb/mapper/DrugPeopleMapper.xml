@@ -1,211 +1,235 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kkb.mapper.DrugPeopleMapper">
-  <resultMap id="BaseResultMap" type="com.kkb.pojo.DrugPeople">
-    <id column="drug_peo_id" jdbcType="INTEGER" property="drugPeoId" />
-    <result column="drug_id" jdbcType="VARCHAR" property="drugId" />
-    <result column="hosr_id" jdbcType="INTEGER" property="hosrId" />
-    <result column="drug_number" jdbcType="INTEGER" property="drugNumber" />
-    <result column="drug_give_number" jdbcType="INTEGER" property="drugGiveNumber" />
-  </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
+    <resultMap id="BaseResultMap" type="com.kkb.pojo.DrugPeople">
+        <id column="drug_peo_id" jdbcType="INTEGER" property="drugPeoId"/>
+        <result column="drug_id" jdbcType="VARCHAR" property="drugId"/>
+        <result column="hosr_id" jdbcType="INTEGER" property="hosrId"/>
+        <result column="drug_number" jdbcType="INTEGER" property="drugNumber"/>
+        <result column="drug_give_number" jdbcType="INTEGER" property="drugGiveNumber"/>
+    </resultMap>
+    <!-- 关联病人信息和药品信息 -->
+    <resultMap id="BaseResultMap2" type="com.kkb.pojo.DrugPeople">
+        <id column="drug_peo_id" jdbcType="INTEGER" property="drugPeoId"/>
+        <result column="drug_id" jdbcType="VARCHAR" property="drugId"/>
+        <result column="dr_name" jdbcType="VARCHAR" property="drName"/>
+        <result column="hosr_id" jdbcType="INTEGER" property="hosrId"/>
+        <result column="hosr_name" jdbcType="VARCHAR" property="hosrName"/>
+        <result column="hosr_reg_price" jdbcType="DECIMAL" property="hosrRegPrice"/>
+        <result column="dr_outprice" jdbcType="DECIMAL" property="drOutprice"/>
+        <result column="drug_number" jdbcType="INTEGER" property="drugNumber"/>
+        <result column="drug_give_number" jdbcType="INTEGER" property="drugGiveNumber"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
             </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
             </foreach>
-          </trim>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        drug_peo_id
+        , drug_id, hosr_id, drug_number, drug_give_number
+    </sql>
+    <select id="selectByExample" parameterType="com.kkb.pojo.DrugPeopleExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
         </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List">
-    drug_peo_id, drug_id, hosr_id, drug_number, drug_give_number
-  </sql>
-  <select id="selectByExample" parameterType="com.kkb.pojo.DrugPeopleExample" resultMap="BaseResultMap">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from drug_people
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from drug_people
-    where drug_peo_id = #{drugPeoId,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from drug_people
-    where drug_peo_id = #{drugPeoId,jdbcType=INTEGER}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.kkb.pojo.DrugPeopleExample">
-    delete from drug_people
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.kkb.pojo.DrugPeople">
-    insert into drug_people (drug_peo_id, drug_id, hosr_id, 
-      drug_number, drug_give_number)
-    values (#{drugPeoId,jdbcType=INTEGER}, #{drugId,jdbcType=VARCHAR}, #{hosrId,jdbcType=INTEGER}, 
-      #{drugNumber,jdbcType=INTEGER}, #{drugGiveNumber,jdbcType=INTEGER})
-  </insert>
-  <insert id="insertSelective" parameterType="com.kkb.pojo.DrugPeople">
-    insert into drug_people
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="drugPeoId != null">
-        drug_peo_id,
-      </if>
-      <if test="drugId != null">
-        drug_id,
-      </if>
-      <if test="hosrId != null">
-        hosr_id,
-      </if>
-      <if test="drugNumber != null">
-        drug_number,
-      </if>
-      <if test="drugGiveNumber != null">
-        drug_give_number,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="drugPeoId != null">
-        #{drugPeoId,jdbcType=INTEGER},
-      </if>
-      <if test="drugId != null">
-        #{drugId,jdbcType=VARCHAR},
-      </if>
-      <if test="hosrId != null">
-        #{hosrId,jdbcType=INTEGER},
-      </if>
-      <if test="drugNumber != null">
-        #{drugNumber,jdbcType=INTEGER},
-      </if>
-      <if test="drugGiveNumber != null">
-        #{drugGiveNumber,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.kkb.pojo.DrugPeopleExample" resultType="java.lang.Long">
-    select count(*) from drug_people
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map">
-    update drug_people
-    <set>
-      <if test="record.drugPeoId != null">
-        drug_peo_id = #{record.drugPeoId,jdbcType=INTEGER},
-      </if>
-      <if test="record.drugId != null">
+        <include refid="Base_Column_List"/>
+        from drug_people
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from drug_people
+        where drug_peo_id = #{drugPeoId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from drug_people
+        where drug_peo_id = #{drugPeoId,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.kkb.pojo.DrugPeopleExample">
+        delete from drug_people
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.kkb.pojo.DrugPeople">
+        insert into drug_people (drug_peo_id, drug_id, hosr_id,
+                                 drug_number, drug_give_number)
+        values (#{drugPeoId,jdbcType=INTEGER}, #{drugId,jdbcType=VARCHAR}, #{hosrId,jdbcType=INTEGER},
+                #{drugNumber,jdbcType=INTEGER}, #{drugGiveNumber,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="com.kkb.pojo.DrugPeople">
+        insert into drug_people
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="drugPeoId != null">
+                drug_peo_id,
+            </if>
+            <if test="drugId != null">
+                drug_id,
+            </if>
+            <if test="hosrId != null">
+                hosr_id,
+            </if>
+            <if test="drugNumber != null">
+                drug_number,
+            </if>
+            <if test="drugGiveNumber != null">
+                drug_give_number,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="drugPeoId != null">
+                #{drugPeoId,jdbcType=INTEGER},
+            </if>
+            <if test="drugId != null">
+                #{drugId,jdbcType=VARCHAR},
+            </if>
+            <if test="hosrId != null">
+                #{hosrId,jdbcType=INTEGER},
+            </if>
+            <if test="drugNumber != null">
+                #{drugNumber,jdbcType=INTEGER},
+            </if>
+            <if test="drugGiveNumber != null">
+                #{drugGiveNumber,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.kkb.pojo.DrugPeopleExample" resultType="java.lang.Long">
+        select count(*) from drug_people
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <select id="selectByPrimaryKeyWithInfo" resultMap="BaseResultMap2">
+        SELECT dp.*,d.dr_name,d.dr_outprice ,hrg.hosr_name
+        FROM `drug_people` dp
+                 LEFT JOIN drug d ON dp.drug_id = d.dr_id
+                 LEFT JOIN hos_register hrg on dp.hosr_id = hrg.hosr_id
+        WHERE dp.hosr_id = #{hosrId}
+        ORDER BY dp.drug_peo_id desc
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update drug_people
+        <set>
+            <if test="record.drugPeoId != null">
+                drug_peo_id = #{record.drugPeoId,jdbcType=INTEGER},
+            </if>
+            <if test="record.drugId != null">
+                drug_id = #{record.drugId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.hosrId != null">
+                hosr_id = #{record.hosrId,jdbcType=INTEGER},
+            </if>
+            <if test="record.drugNumber != null">
+                drug_number = #{record.drugNumber,jdbcType=INTEGER},
+            </if>
+            <if test="record.drugGiveNumber != null">
+                drug_give_number = #{record.drugGiveNumber,jdbcType=INTEGER},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update drug_people
+        set drug_peo_id = #{record.drugPeoId,jdbcType=INTEGER},
         drug_id = #{record.drugId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.hosrId != null">
         hosr_id = #{record.hosrId,jdbcType=INTEGER},
-      </if>
-      <if test="record.drugNumber != null">
         drug_number = #{record.drugNumber,jdbcType=INTEGER},
-      </if>
-      <if test="record.drugGiveNumber != null">
-        drug_give_number = #{record.drugGiveNumber,jdbcType=INTEGER},
-      </if>
-    </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map">
-    update drug_people
-    set drug_peo_id = #{record.drugPeoId,jdbcType=INTEGER},
-      drug_id = #{record.drugId,jdbcType=VARCHAR},
-      hosr_id = #{record.hosrId,jdbcType=INTEGER},
-      drug_number = #{record.drugNumber,jdbcType=INTEGER},
-      drug_give_number = #{record.drugGiveNumber,jdbcType=INTEGER}
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.kkb.pojo.DrugPeople">
-    update drug_people
-    <set>
-      <if test="drugId != null">
-        drug_id = #{drugId,jdbcType=VARCHAR},
-      </if>
-      <if test="hosrId != null">
-        hosr_id = #{hosrId,jdbcType=INTEGER},
-      </if>
-      <if test="drugNumber != null">
-        drug_number = #{drugNumber,jdbcType=INTEGER},
-      </if>
-      <if test="drugGiveNumber != null">
-        drug_give_number = #{drugGiveNumber,jdbcType=INTEGER},
-      </if>
-    </set>
-    where drug_peo_id = #{drugPeoId,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.kkb.pojo.DrugPeople">
-    update drug_people
-    set drug_id = #{drugId,jdbcType=VARCHAR},
-      hosr_id = #{hosrId,jdbcType=INTEGER},
-      drug_number = #{drugNumber,jdbcType=INTEGER},
-      drug_give_number = #{drugGiveNumber,jdbcType=INTEGER}
-    where drug_peo_id = #{drugPeoId,jdbcType=INTEGER}
-  </update>
+        drug_give_number = #{record.drugGiveNumber,jdbcType=INTEGER}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.kkb.pojo.DrugPeople">
+        update drug_people
+        <set>
+            <if test="drugId != null">
+                drug_id = #{drugId,jdbcType=VARCHAR},
+            </if>
+            <if test="hosrId != null">
+                hosr_id = #{hosrId,jdbcType=INTEGER},
+            </if>
+            <if test="drugNumber != null">
+                drug_number = #{drugNumber,jdbcType=INTEGER},
+            </if>
+            <if test="drugGiveNumber != null">
+                drug_give_number = #{drugGiveNumber,jdbcType=INTEGER},
+            </if>
+        </set>
+        where drug_peo_id = #{drugPeoId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.kkb.pojo.DrugPeople">
+        update drug_people
+        set drug_id          = #{drugId,jdbcType=VARCHAR},
+            hosr_id          = #{hosrId,jdbcType=INTEGER},
+            drug_number      = #{drugNumber,jdbcType=INTEGER},
+            drug_give_number = #{drugGiveNumber,jdbcType=INTEGER}
+        where drug_peo_id = #{drugPeoId,jdbcType=INTEGER}
+    </update>
 </mapper>

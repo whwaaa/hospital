@@ -11,8 +11,10 @@ import java.util.List;
  */
 public class RegisterQueryVo {
 
-    // 病例号
+    // 门诊号
     private String hosrId;
+    // 病人姓名
+    private String hosrName;
     // 医生姓名
     private String doctorName;
     // 医生科室
@@ -90,5 +92,13 @@ public class RegisterQueryVo {
 
     public void setDoctorId(List<Integer> doctorId) {
         this.doctorId = doctorId;
+    }
+
+    public String getHosrName() {
+        return hosrName;
+    }
+
+    public void setHosrName(String hosrName) {
+        this.hosrName = hosrName;
     }
 }
