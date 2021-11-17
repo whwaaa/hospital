@@ -24,7 +24,6 @@ public class HosRegister implements Serializable {
     @ExcelProperty("挂号信息")
     // 设置列的宽度
     @ColumnWidth(10)
-
     // 病历号
     @ExcelIgnore
     private Integer hosrId;

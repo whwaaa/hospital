@@ -29,7 +29,7 @@ function U() {
 }
 
 // TODO: 前后端分离开发配置 -> 分离开发:true, 一体开发:false
-var crossDomainMode = false;
+var crossDomainMode = true;
 var origin;
 var projectUrl;
 if(crossDomainMode){
