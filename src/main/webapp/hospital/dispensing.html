@@ -40,15 +40,15 @@
 			    });
 			    var indexUrl = decodeURI(document.location.toString());
 			    let pageNum = indexUrl.GetValue("pageNum");
-			    let hosrId = indexUrl.GetValue("hosrId");
-			    let hosrName = indexUrl.GetValue("hosrName");
+			    let searchHosrId = indexUrl.GetValue("searchHosrId");
+			    let searchHosrName = indexUrl.GetValue("searchHosrName");
 			    // 默认进来的处理
 			    if (pageNum == null) {
 			        queryList(1);
 			    } else {
 			        // 从编辑页面或者详情页面返回的时候
-			        $("#hosrId").val(hosrId);
-			        $("#hosrName").val(hosrName);
+			        $("#hosrId").val(searchHosrId);
+			        $("#hosrName").val(searchHosrName);
 			        queryList(pageNum);
 			    }
 			});
@@ -100,11 +100,11 @@
 			function fillContent(pageInfo) {
 			    $("#mycon").find("tbody").empty();
 			    // 查询的条件
-			    let hosrId = $("#hosrId").val();
-			    let hosrName = $("#hosrName").val();
+			    let searchHosrId = $("#hosrId").val();
+			    let searchHosrName = $("#hosrName").val();
 			    $.each(pageInfo.list, function () {
-			        let addOrderUrl = 'dispensing-give.html?pageNum=' + pageInfo.pageNum + '&pageSize=' + pageInfo.pageSize + '&hosrId=' + hosrId + '&hosrName=' + hosrName;
-			        let lookUrl = 'dispensing-look.html?pageNum=' + pageInfo.pageNum + '&pageSize=' + pageInfo.pageSize + '&hosrId=' + hosrId + '&hosrName=' + hosrName;
+			        let addOrderUrl = 'dispensing-give.html?pageNum=' + pageInfo.pageNum + '&pageSize=' + pageInfo.pageSize + '&searchHosrId=' + searchHosrId + '&searchHosrName=' + searchHosrName + "&hosrId=" + this.hosrId;
+			        let lookUrl = 'dispensing-look.html?pageNum=' + pageInfo.pageNum + '&pageSize=' + pageInfo.pageSize + '&searchHosrId=' + searchHosrId + '&searchHosrName=' + searchHosrName + "&hosrId=" + this.hosrId;
 			        let con = "<tr>\n" +
 			            "             <td style='vertical-align:middle;'><input type='checkbox' name='check' value='" + this.hosrId + "'></td>\n" +
 			            "             <td>" + this.hosrId + "</td>\n" +

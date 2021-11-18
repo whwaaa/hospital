@@ -130,6 +130,14 @@ public class HosRegister implements Serializable {
     @ExcelProperty(value = "所挂科室")
     private String keshi;
 
+    public HosRegister() {
+    }
+
+    public HosRegister(Integer hosrId, BigDecimal hosrRegPrice) {
+        this.hosrId = hosrId;
+        this.hosrRegPrice = hosrRegPrice;
+    }
+
     public String getKeshi() {
         return keshi;
     }

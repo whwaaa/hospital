@@ -27,6 +27,8 @@ public class DrugPeople {
     private Integer drugNumber;
     // 已购数量
     private Integer drugGiveNumber;
+    // 未发数量
+    private Integer drugLastNumber;
 
     public Integer getDrugPeoId() {
         return drugPeoId;
@@ -98,5 +100,13 @@ public class DrugPeople {
 
     public void setDrOutprice(BigDecimal drOutprice) {
         this.drOutprice = drOutprice;
+    }
+
+    public Integer getDrugLastNumber() {
+        return drugLastNumber;
+    }
+
+    public void setDrugLastNumber(Integer drugLastNumber) {
+        this.drugLastNumber = drugLastNumber;
     }
 }
