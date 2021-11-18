@@ -36,58 +36,61 @@ public class DrugPeopleController {
 
     /**
      * 查询挂号的病人信息
+     *
      * @param vo
      * @param pageNum
      * @param pageSize
      * @return
      */
     @RequestMapping(value = "hosRegister/list", method = RequestMethod.GET)
-    public AjaxResultVo getHosRegisterInfo(RegisterQueryVo vo,Integer pageNum,Integer pageSize){
+    public AjaxResultVo getHosRegisterInfo(RegisterQueryVo vo, Integer pageNum, Integer pageSize) {
         // 分页数据初始化
-        if (pageNum==null || pageNum<=0){
+        if (pageNum == null || pageNum <= 0) {
             pageNum = 1;
         }
-        if (pageSize==null || pageSize<=0){
+        if (pageSize == null || pageSize <= 0) {
             pageSize = 5;
         }
         PageInfo<HosRegister> pageInfo = drugPeopleService.gethosRegisterByPage(pageNum, pageSize, vo);
-        return new AjaxResultVo(200,"查询成功" ,pageInfo);
+        return new AjaxResultVo(200, "查询成功", pageInfo);
     }
 
     /**
      * 添加买药订单
+     *
      * @param hosrIds 挂号id，支持批量
-     * @param drId 药品编号
-     * @param num 数量
+     * @param drId    药品编号
+     * @param num     数量
      * @return 添加情况
      */
-    @RequestMapping(value = "addOrder",method = RequestMethod.POST)
-    public AjaxResultVo addDrugOrder(Integer[] hosrIds, String drId, Integer num){
+    @RequestMapping(value = "addOrder", method = RequestMethod.POST)
+    public AjaxResultVo addDrugOrder(Integer[] hosrIds, String drId, Integer num) {
         int i = drugPeopleService.addDrugToHosRegisterOreder(hosrIds, drId, num);
-        if (i>0){
+        if (i > 0) {
             return new AjaxResultVo();
-        }else if (i==-1){
-            return new AjaxResultVo(400,"当前剩余的库存不够，不能写入记录");
+        } else if (i == -1) {
+            return new AjaxResultVo(400, "当前剩余的库存不够，不能写入记录");
         }
         // i==0
-        return new AjaxResultVo(400,"没有可添加的记录");
+        return new AjaxResultVo(400, "没有可添加的记录");
     }
 
     /**
-     * 询病人所有的买药记录
-     * @param hosrId 病人挂号id
-     * @param pageNum 页码
+     * 查询病人所有的买药记录
+     *
+     * @param hosrId   病人挂号id
+     * @param pageNum  页码
      * @param pageSize 页大小
      * @return 返回查询的数据
      */
     @RequestMapping("/order/{hosrId}")
-    public AjaxResultVo getDrugOrderList(@PathVariable("hosrId") Integer hosrId, Integer pageNum, Integer pageSize){
+    public AjaxResultVo getDrugOrderList(@PathVariable("hosrId") Integer hosrId, Integer pageNum, Integer pageSize) {
         // 对于分页数据的初始化
-        if (pageNum==null || pageNum<=0){
+        if (pageNum == null || pageNum <= 0) {
             pageNum = 1;
         }
-        if (pageSize==null || pageSize<=0){
-            pageSize=10;
+        if (pageSize == null || pageSize <= 0) {
+            pageSize = 10;
         }
         PageInfo<DrugPeople> pageInfo = drugPeopleService.getDrugPeopleByHosrIdPage(hosrId, pageNum, pageSize);
         return new AjaxResultVo(pageInfo);
@@ -95,19 +98,26 @@ public class DrugPeopleController {
 
     /**
      * 病人购药交易请求
+     *
      * @param drugPeoId 购药记录的主键
-     * @param num 数量
+     * @param num       数量
      * @return 交易情况
      */
     @RequestMapping("given/{drugPeoId}")
-    public AjaxResultVo givenToPeople(@PathVariable("drugPeoId") Integer drugPeoId, Integer num){
+    public AjaxResultVo givenToPeople(@PathVariable("drugPeoId") Integer drugPeoId, Integer num) {
         int i = drugPeopleService.givenDrugToPeople(drugPeoId, num);
-        if (i > 0){
+        if (i > 0) {
             return new AjaxResultVo();
-        }else if (i==-1){
-            return new AjaxResultVo(400,"病人的该购药记录不存在");
+        } else if (i == -1) {
+            return new AjaxResultVo(400, "病人的该购药记录不存在");
+        } else if (i == -2) {
+            return new AjaxResultVo(400, "购买的数量大于剩余可购买的数量，不允许购买");
+        } else if (i == -3) {
+            return new AjaxResultVo(400, "没有可购买的数量");
+        } else if (i == -4) {
+            return new AjaxResultVo(400, "挂号费用不足以支付药品的配用");
         }
-        return new AjaxResultVo(400,"购买的数量大于可购的数量");
+        return new AjaxResultVo(400, "购买的数量大于可购的数量");
     }
 
 }
