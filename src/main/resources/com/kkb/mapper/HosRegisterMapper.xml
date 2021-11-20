@@ -94,6 +94,9 @@
         <if test="hosrId!=null">
           and hosr_id LIKE concat(concat('%',#{hosrId}),'%')
         </if>
+      <if test="hosrName!=null">
+        and hosr_name LIKE concat(concat('%',#{hosrName}),'%')
+      </if>
         <if test="createTimeStartBlur!=null">
           and hosr_create_time LIKE concat(concat('%',#{createTimeStartBlur}),'%')
         </if>

@@ -9,12 +9,10 @@ import com.kkb.service.RegisterService;
 import com.kkb.vo.AjaxResultVo;
 import com.kkb.vo.RegisterQueryVo;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * show 处理在线发药相关的请求
@@ -51,7 +49,7 @@ public class DrugPeopleController {
         if (pageSize == null || pageSize <= 0) {
             pageSize = 5;
         }
-        PageInfo<HosRegister> pageInfo = drugPeopleService.gethosRegisterByPage(pageNum, pageSize, vo);
+        PageInfo pageInfo = registerService.queryList(pageNum, pageSize, vo);
         return new AjaxResultVo(200, "查询成功", pageInfo);
     }
 
@@ -64,7 +62,8 @@ public class DrugPeopleController {
      * @return 添加情况
      */
     @RequestMapping(value = "addOrder", method = RequestMethod.POST)
-    public AjaxResultVo addDrugOrder(Integer[] hosrIds, String drId, Integer num) {
+    public AjaxResultVo addDrugOrder(@RequestParam("hosrIds[]") List<Integer> hosrIds, @RequestParam("drId") String drId,
+                                     @RequestParam("num") Integer num) {
         int i = drugPeopleService.addDrugToHosRegisterOreder(hosrIds, drId, num);
         if (i > 0) {
             return new AjaxResultVo();

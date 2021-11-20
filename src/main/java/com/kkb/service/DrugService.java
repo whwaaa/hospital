@@ -91,7 +91,7 @@ public class DrugService {
     public PageInfo<Drug> findDrugByPage(DrugQueryVo vo, int pageNum, int pageSize) {
         List<Drug> drugs = null;
         // 如果pageNum || pageSize小于0，不进行分页
-        if (pageNum > 0 || pageSize > 0) {
+        if (pageNum > 0 && pageSize > 0) {
             PageHelper.startPage(pageNum,pageSize);
         }
         if (vo!=null){

@@ -24,6 +24,8 @@ import java.util.List;
 public class DrugPeopleService {
 
     @Resource
+    private RegisterService registerService;
+    @Resource
     private HosRegisterMapper hosRegisterMapper;
     @Resource
     private DrugPeopleMapper drugPeopleMapper;
@@ -35,40 +37,6 @@ public class DrugPeopleService {
     private UserMapper userMapper;
 
     /**
-     * 显示挂号病人信息，支持姓名和挂号编码模糊查询
-     *
-     * @param pageNum  页码
-     * @param pageSize 页大小
-     * @param vo       查询条件
-     * @return 分页数据
-     */
-    public PageInfo<HosRegister> gethosRegisterByPage(Integer pageNum, Integer pageSize, RegisterQueryVo vo) {
-        PageHelper.startPage(pageNum, pageSize);
-        HosRegisterExample example = new HosRegisterExample();
-        // 设置条件
-        if (vo != null) {
-            HosRegisterExample.Criteria criteria = example.createCriteria();
-            // 挂号的主键
-            if (!StringUtils.isEmpty(vo.getHosrId().trim())) {
-                criteria.andHosrIdcarLike("%" + vo.getHosrId().trim() + "%");
-            }
-            // 病人名字
-            if (!StringUtils.isEmpty(vo.getHosrName().trim())) {
-                criteria.andHosrNameLike("%" + vo.getHosrName().trim() + "%");
-            }
-        }
-        List<HosRegister> hosRegisters = hosRegisterMapper.selectByExample(example);
-        for (HosRegister hosReg : hosRegisters) {
-            // 遍历查询医生信息
-            Doctor doctor = doctorMapper.selectByPrimaryKey(hosReg.getdId());
-            User user = userMapper.selectByPrimaryKey(doctor.getuId());
-            // 获取医生姓名
-            hosReg.setDoctorName(user.getuTrueName());
-        }
-        return new PageInfo<>(hosRegisters);
-    }
-
-    /**
      * 病人录入待购买药品，支持单个人和多个人的购买，需要关联库存
      *
      * @param hosrIds 挂号id
@@ -77,10 +45,10 @@ public class DrugPeopleService {
      * @return 记录情况
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
-    public int addDrugToHosRegisterOreder(Integer[] hosrIds, String drId, Integer num) {
-        if (hosrIds != null && hosrIds.length > 0) {
+    public int addDrugToHosRegisterOreder(List<Integer> hosrIds, String drId, Integer num) {
+        if (hosrIds != null && hosrIds.size() > 0) {
             // 库存判断
-            int n = hosrIds.length * num;
+            int n = hosrIds.size() * num;
             Drug drug = drugMapper.selectByPrimaryKey(drId);
             if (drug.getDrNumber() < n) {
                 return -1;
@@ -94,7 +62,7 @@ public class DrugPeopleService {
                 drugPeople.setDrugGiveNumber(0);
                 drugPeopleMapper.insertSelective(drugPeople);
             }
-            return hosrIds.length;
+            return hosrIds.size();
         }
         return 0;
     }

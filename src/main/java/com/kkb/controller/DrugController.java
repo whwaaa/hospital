@@ -93,6 +93,18 @@ public class DrugController {
     }
 
     /**
+     * 查询所有药品
+     *
+     * @return 查询的数据
+     */
+    @RequestMapping(value = "list/all",method = RequestMethod.GET)
+    public AjaxResultVo getAllDrug(){
+        PageInfo<Drug> pageInfo = drugService.findDrugByPage(null, 0, 0);
+        return new AjaxResultVo(200,"查询成功",pageInfo);
+    }
+
+
+    /**
      * 通过药品编码查询药品信息
      * @param drId 药品编码
      * @return 查询结果
