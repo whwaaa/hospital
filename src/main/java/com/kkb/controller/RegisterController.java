@@ -55,6 +55,24 @@ public class RegisterController {
         return new AjaxResultVo(500, "查询时间格式有误!");
     }
 
+    /**
+     * 批量查询病人的基本信息，根据病人的挂号id
+     *
+     * @param hosrIds 病人挂号id的集合
+     * @return 查询结果
+     */
+    @RequestMapping(value = "list/Ids",method = RequestMethod.GET)
+    public AjaxResultVo queryListByIds(@RequestParam("hosrId")List<Integer> hosrIds){
+        List<HosRegister> hosRegisters = registerService.queryListByIds(hosrIds);
+        AjaxResultVo resultVo = new AjaxResultVo();
+        if (hosRegisters!=null){
+            resultVo.setObj(hosRegisters);
+        }else {
+            resultVo.setCode(400);
+            resultVo.setMsg("没有查到挂号信息，操作失败");
+        }
+        return resultVo;
+    }
 
     // 添加一条数据
     @RequestMapping(value = "", method = RequestMethod.POST)

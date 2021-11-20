@@ -49,7 +49,7 @@ public class RegisterService implements Serializable {
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public PageInfo queryList(Integer pageNum, Integer pageSize, RegisterQueryVo vo) throws BindException {;
+    public PageInfo queryList(Integer pageNum, Integer pageSize, RegisterQueryVo vo) {;
         // 1. 处理医生姓名, 医生所属科室条件
         if(vo.getDoctorName()!=null && !"".equals(vo.getDoctorName().trim()) || vo.getdKeshi()!=null && !"".equals(vo.getdKeshi().trim())) {
             DoctorExample doctorExample = new DoctorExample();
@@ -128,6 +128,21 @@ public class RegisterService implements Serializable {
         return new PageInfo(hosRegisters);
     }
 
+    /**
+     * 根据挂号id批量查询病人的基本信息
+     * @param hosrIds 挂号id集合
+     * @return 查询结果
+     */
+    public List<HosRegister> queryListByIds(List<Integer> hosrIds){
+        if (hosrIds!=null&&hosrIds.size()>0){
+            HosRegisterExample example = new HosRegisterExample();
+            HosRegisterExample.Criteria criteria = example.createCriteria();
+            criteria.andHosrIdIn(hosrIds);
+            return hosRegisterMapper.selectByExample(example);
+        }else {
+            return null;
+        }
+    }
 
     /**
      * 添加一条挂号数据

@@ -103,7 +103,7 @@
 			    let searchHosrId = $("#hosrId").val();
 			    let searchHosrName = $("#hosrName").val();
 			    $.each(pageInfo.list, function () {
-			        let addOrderUrl = 'dispensing-give.html?pageNum=' + pageInfo.pageNum + '&pageSize=' + pageInfo.pageSize + '&searchHosrId=' + searchHosrId + '&searchHosrName=' + searchHosrName + "&hosrId=" + this.hosrId;
+			        let addOrderUrl = 'dispensing-give.html?pageNum=' + pageInfo.pageNum + '&pageSize=' + pageInfo.pageSize + '&searchHosrId=' + searchHosrId + '&searchHosrName=' + searchHosrName + "&hosrId=" + this.hosrId + "&hosrName=" +this.hosrName;
 			        let lookUrl = 'dispensing-look.html?pageNum=' + pageInfo.pageNum + '&pageSize=' + pageInfo.pageSize + '&searchHosrId=' + searchHosrId + '&searchHosrName=' + searchHosrName + "&hosrId=" + this.hosrId;
 			        let con = "<tr>\n" +
 			            "             <td style='vertical-align:middle;'><input type='checkbox' name='check' value='" + this.hosrId + "'></td>\n" +
@@ -118,7 +118,7 @@
 			        $("#mycon").find("tbody").append($(con))
 			    })
 			}
-			
+			// 选中所有
 			function checkall() {
 				var alls = document.getElementsByName("check");
 				var ch = document.getElementById("checkall");
@@ -132,21 +132,20 @@
 					}
 				}
 			}
-
-			function delAll() {
+			// 批量操作，请求记录药品
+			function addOrders() {
 				var alls = document.getElementsByName("check");
-				var ids = new Array();
+				var idsStr = "?";
 				for (var i = 0; i < alls.length; i++) {
 					if (alls[i].checked) {
-						ids.push(alls[i].value);
+						idsStr = idsStr +"hosrId="+ alls[i].value + "&";
 					}
 				}
-				if (ids.length > 0) {
-					if (confirm("确认操作?")) {
-						alert("成功!");
-					}
+				if (idsStr.length > 2) {
+					 idsStr = idsStr.substr(0, idsStr.length-1);
+					 window.location.href = "dispensing-gives.html" + idsStr;
 				} else {
-					alert("请选中要操作的项");
+					layer.msg("请选中要操作的项");
 				}
 			}
 		</script>
@@ -194,7 +193,7 @@
 					</div>
 					<!-- 操作按钮 -->
 					<div>
-						<button type="button" class="btn btn-success" id="addOrder">发药(订单)</button>
+						<button type="button" class="btn btn-success" id="addOrders" onclick="addOrders()">发药(订单)</button>
 					</div>
 				</th>
 			</tr>
