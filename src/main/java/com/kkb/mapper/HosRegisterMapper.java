@@ -32,4 +32,7 @@ public interface HosRegisterMapper {
 
     // 自定义条件查询
     List<HosRegister> selectByRedefineCondition(RegisterQueryVo vo);
+
+    // 自定义条件查询id集合
+    List<Integer> selectHosIdsByRedefineCondition(RegisterQueryVo vo);
 }

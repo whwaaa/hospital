@@ -49,7 +49,8 @@ if(crossDomainMode){
 	// TODO: 配置项三: 前端项目地址
 	// 例: hbuilder 启动项目首页的地址是: http://127.0.0.1:8848/webapp/index/index.html?__hbt=1636802666940
 	// 则配置 projectUrl = "http://127.0.0.1:8848/webapp"
-	projectUrl = "http://localhost:8848/webapp"
+	// projectUrl = "http://localhost:8848/webapp"
+    projectUrl = "http://localhost:63342/shandong-hospital/Shandong_Hospital/src/main/webapp";
 }
 
 

@@ -19,16 +19,26 @@ public class RegisterQueryVo {
     private String doctorName;
     // 医生科室
     private String dKeshi;
-    // 挂号开始时间(模糊时间)
+    // 挂号或住院开始时间(模糊时间)
     private String createTimeStartBlur;
-    // 挂号结束时间(模糊时间)
+    // 挂号或住院结束时间(模糊时间)
     private String createTimeEndBlur;
-    // 挂号开始时间
+    // 挂号或住院开始时间
     private Date createTimeStart;
-    // 挂号结束时间
+    // 挂号或住院结束时间
     private Date createTimeEnd;
     // 根据医生名字,医生所属科室查,询到的医生id集合
     List<Integer> doctorId;
+    // 关联住院表的挂号表id集合
+    private List<Integer> hosrIdList;
+
+    public List<Integer> getHosrIdList() {
+        return hosrIdList;
+    }
+
+    public void setHosrIdList(List<Integer> hosrIdList) {
+        this.hosrIdList = hosrIdList;
+    }
 
     public String getHosrId() {
         return hosrId;

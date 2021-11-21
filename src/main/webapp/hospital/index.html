@@ -32,11 +32,119 @@
 
     </style>
     <script type="text/javascript">
-	 $(function () {
-		$('#newNav').click(function(){
-				window.location.href="add.html";
-		 });
-    });
+
+        // 退院处理
+        function backCourt(){
+            layer.msg("退院成功")
+        }
+        // 出院处理
+        function outHospital(){
+            layer.msg("出院成功")
+        }
+        // 监听清空
+        function resetClear(){
+            $("button[type='reset']").on("click", function(){
+                $("input").val("");
+                queryList(1);
+            })
+        }
+
+        // 查询列表
+        queryList = function(pageNum){
+            // 病历号
+            let hosrId = $("input[name='hosrId']").val().trim()
+            // 医生名字
+            let doctorName = $("input[name='doctorName']").val().trim()
+            // 医生所属科室
+            let dKeshi = $("input[name='dKeshi']").val().trim()
+            // 挂号开始时间
+            let createTimeStartBlur = $("input[name='createTimeStartBlur']").val().trim()
+            // 挂号结束时间
+            let createTimeEndBlur = $("input[name='createTimeEndBlur']").val().trim()
+            layer.load(0)
+            $.ajax({
+                type: "GET",
+                url: origin + "/be-hospital/list",
+                data: {pageNum:pageNum,pageSize:globalPageSize,hosrId:hosrId,doctorName:doctorName,
+                    dKeshi:dKeshi,createTimeStartBlur:createTimeStartBlur,createTimeEndBlur:createTimeEndBlur},
+                // 允许携带cookie跨域请求
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function (data) {
+                    layer.closeAll();
+                    if(data.code === 200){
+                        // 填充分页
+                        fillPageData(data.obj);
+                        // 填充内容
+                        fillContentData(data.obj.list);
+                        // 更新全局页数信息
+                        globalPageSize = data.obj.pageSize;
+                        globalPageNum = data.obj.pageNum;
+                    }else{
+                        layer.msg(data.msg,function(){})
+                    }
+                },
+                complete : function(xhr, status) {
+                    myComplete(xhr, status);
+                }
+            });
+        }
+        // 填充内容
+        function fillContentData(cont){
+            // 先清空数据
+            $("table.content").find("tbody").empty();
+            // 遍历数据
+            $.each(cont, function(){
+                // 病人信息
+                let beHospitalMsg = this.beHospital;
+                // 结算状态
+                let behClosePriceState =  beHospitalMsg.behClosePrice;
+                // 渲染显示状态
+                let behStateText = "";
+                // 填充信息
+                let $con = $(" <tr >\n" +
+                    "            <td style=\"vertical-align:middle;\"><input type=\"checkbox\" name=\"check\" value=\"" + this.hosrId + "\"></td>\n" +
+                    "            <td style=\"vertical-align:middle;\">" + this.hosrId + "</td>\n" +
+                    "            <td style=\"vertical-align:middle;\">" + this.hosrName + "</td>\n" +
+                    "            <td style=\"vertical-align:middle;\">"+ beHospitalMsg.behId +"</td>\n" +
+                    "            <td style=\"vertical-align:middle;\">"+ this.hosrPhone +"</td>\n" +
+                    "            <td style=\"vertical-align:middle;\">"+ beHospitalMsg.behAntecedent +"元</td>\n" +
+                    "            <td style=\"vertical-align:middle;\">" + this.doctorName + "</td>\n" +
+                    "            <td style=\"vertical-align:middle;\">" + this.hosrCreateTimeStr + "</td>\n" +
+                    "            <td style=\"vertical-align:middle;\">" + this.keshi + "</td>\n" +
+                    "</tr>");
+                // 条件渲染状态和操作
+                if(behClosePriceState == 0){
+                    // 出院住院退院状态
+                    let behState = beHospitalMsg.behState;
+                    if(behState == 0){
+                        // **已住院** -> 详情 更改 缴纳押金
+                        behStateText = "已住院";
+                        $con.append("<td style=\"vertical-align:middle;\">"+ behStateText +"</td>")
+                        $con.append("<td id='td_"+ this.hosrId +"'style='vertical-align:middle;'><a href='look.html?hosrId="+this.hosrId+"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>详情>>></a>&nbsp;&nbsp;&nbsp;<a href='edit.html?hosrId="+ this.hosrId +"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>更改</a>&nbsp;&nbsp;&nbsp;<a href='add_many.html?hosrId="+ this.hosrId +"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>缴纳押金</a></td>\n");
+                    }else if(behState == 1){
+                        // **已出院** -> 详情
+                        behStateText = "已出院";
+                        $con.append("<td style=\"vertical-align:middle;\">"+ behStateText +"</td>")
+                        $con.append("<td id='td_"+ this.hosrId +"'style='vertical-align:middle;'><a href='look.html?hosrId="+this.hosrId+"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>详情>>></a>");
+                    }else{
+                        // **已退院** -> 详情
+                        behStateText = "已退院";
+                        $con.append("<td style=\"vertical-align:middle;\">"+ behStateText +"</td>")
+                        $con.append("<td id='td_"+ this.hosrId +"'style='vertical-align:middle;'><a href='look.html?hosrId="+this.hosrId+"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>详情>>></a>");
+                    }
+                }else{
+                    // **已结算** -> 详情 退院 出院
+                    behStateText = "已结算";
+                    $con.append("<td style=\"vertical-align:middle;\">"+ behStateText +"</td>")
+                    $con.append("<td id='td_"+ this.hosrId +"'style='vertical-align:middle;'><a href='look.html?hosrId="+this.hosrId+"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>详情>>></a>&nbsp;&nbsp;&nbsp;<a href='javascript:backCourt()'>退院</a>&nbsp;&nbsp;&nbsp;<a href='javascript:outHospital()'>出院</a>");
+                }
+                $("table.content").find("tbody").append($con);
+            })
+
+        }
 	
     	function checkall(){
 			var alls=document.getElementsByName("check");
@@ -67,38 +175,48 @@
 				alert("请选中要操作的项");
 			}
 		}
+
+        $(function () {
+            // 查询第一页
+            queryList(globalPageNum);
+            // 监听清空
+            resetClear();
+
+            $('#newNav').click(function(){
+                window.location.href="add.html?pageSize="+globalPageSize+"&pageNum="+globalPageNum;
+            });
+        });
     </script>
 </head>
 <body>
 
-<form action="index.html" method="post" class="definewidth m20">
+<div class="definewidth m20">
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
-        <td width="10%" class="tableleft">病例号：</td>
-        <td><input type="text" name="pname" value=""/></td>
-		
+        <td width="10%" class="tableleft">病历号：</td>
+        <td><input type="text" name="hosrId" value=""/></td>
+
         <td width="10%" class="tableleft">主治医生：</td>
-        <td><input type="text" name="pname" value=""/></td>
-		
+        <td><input type="text" name="doctorName" value=""/></td>
+
         <td width="10%" class="tableleft">科室：</td>
-        <td><input type="text" name="pname" value=""/></td>
+        <td><input type="text" name="dKeshi" value=""/></td>
     </tr>
     <tr>
-		
-        <td width="10%" class="tableleft">住院时间：</td>
-		
-		  <td colspan="5">
-			<input type="text" name="pname" value=""/>&nbsp;至&nbsp;<input type="text" name="pname" value=""/>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button type="submit" class="btn btn-primary" type="button">查询</button> 
-            <button type="submit" class="btn btn-primary" type="button">清空</button> 
-			
+
+        <td width="10%" class="tableleft">挂号时间：</td>
+
+        <td colspan="5">
+            <input type="text" name="createTimeStartBlur" value=""/>&nbsp;至&nbsp;<input type="text" name="createTimeEndBlur" value=""/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="button" class="query btn btn-primary" onclick="queryList(1)">查询</button>
+            <button type="reset" class="btn btn-primary">清空</button>
         </td>
     </tr>
 </table>
-</form>
+</div>
    
-<table class="table table-bordered table-hover definewidth m10" >
+<table class="content table table-bordered table-hover definewidth m10" >
    <thead>
     <tr>
     	<th><input type="checkbox" id="checkall" onChange="checkall();"></th>
@@ -114,87 +232,19 @@
         <th>操作</th>
     </tr>
     </thead>
-	     <tr >
-         	<td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">黄飞鸿</td>
-            <td style="vertical-align:middle;">4343</td>
-            <td style="vertical-align:middle;">13127653423</td>
-            <td style="vertical-align:middle;">2000元</td>
-            <td style="vertical-align:middle;">程俊</td>
-            <td style="vertical-align:middle;">2015-01-05 12:33:56</td>
-            <td style="vertical-align:middle;">血液科</td>
-            <td style="vertical-align:middle;">已住院</td>
-            <td style="vertical-align:middle;">
-				<a href="look.html">详情>></a>&nbsp;&nbsp;&nbsp;
-				<a href="edit.html">更改</a>&nbsp;&nbsp;&nbsp;
-				<a href="add_many.html">缴纳押金</a>&nbsp;&nbsp;&nbsp;				
-				
-				
-			</td>
-        </tr>
-	     <tr >
-         	<td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">黄飞鸿</td>
-            <td style="vertical-align:middle;">4343</td>
-            <td style="vertical-align:middle;">13127653423</td>
-            <td style="vertical-align:middle;">2000元</td>
-            <td style="vertical-align:middle;">程俊</td>
-            <td style="vertical-align:middle;">2015-01-05 12:33:56</td>
-            <td style="vertical-align:middle;">血液科</td>
-            <td style="vertical-align:middle;">已退院</td>
-            <td style="vertical-align:middle;">
-				<a href="look.html">详情>></a>&nbsp;&nbsp;&nbsp;
-			</td>
-        </tr>
-	     <tr >
-         	<td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">黄飞鸿</td>
-            <td style="vertical-align:middle;">4343</td>
-            <td style="vertical-align:middle;">13127653423</td>
-            <td style="vertical-align:middle;">2000元</td>
-            <td style="vertical-align:middle;">程俊</td>
-            <td style="vertical-align:middle;">2015-01-05 12:33:56</td>
-            <td style="vertical-align:middle;">血液科</td>
-            <td style="vertical-align:middle;">已结算</td>
-            <td style="vertical-align:middle;">
-				<a href="look.html">详情>></a>&nbsp;&nbsp;&nbsp;				
-				<a href="javascript:alert('退院成功！');">退院</a>&nbsp;&nbsp;&nbsp;
-				<a href="javascript:alert('出院成功！');">出院</a>
-			</td>
-        </tr>
-	     <tr >
-         	<td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">黄飞鸿</td>
-            <td style="vertical-align:middle;">4343</td>
-            <td style="vertical-align:middle;">13127653423</td>
-            <td style="vertical-align:middle;">2000元</td>
-            <td style="vertical-align:middle;">程俊</td>
-            <td style="vertical-align:middle;">2015-01-05 12:33:56</td>
-            <td style="vertical-align:middle;">血液科</td>
-            <td style="vertical-align:middle;">已出院</td>
-            <td style="vertical-align:middle;">
-				<a href="look.html">详情>></a>&nbsp;&nbsp;&nbsp;
-
-			</td>
-        </tr>
+    <tbody></tbody>
   </table>
   
   <table class="table table-bordered table-hover definewidth m10" >
-  	<tr><th colspan="5">  <div class="inline pull-right page">
-          <a href='#' >第一页</a> <a href='#'>上一页</a>     <span class='current'>1</span><a href='#'>2</a><a href='/chinapost/index.php?m=Label&a=index&p=3'>3</a><a href='#'>4</a><a href='#'>5</a>  <a href='#' >下一页</a> <a href='#' >最后一页</a>
-		  &nbsp;&nbsp;&nbsp;共<span class='current'>32</span>条记录<span class='current'> 1/33 </span>页
-		  </div>
+  	<tr><th colspan="5">
+        <div id="pageInfo-box" class="inline pull-right page"></div>
 		 <div><button type="button" class="btn btn-success" id="newNav">添加住院信息</button>&nbsp;&nbsp;&nbsp;
-		 <button type="button" class="btn btn-success" id="delPro" onClick="delAll();">出院</button>&nbsp;&nbsp;&nbsp;
-		 <button type="button" class="btn btn-success" id="delPro" onClick="delAll();">退院</button>&nbsp;&nbsp;&nbsp;
-		 <button type="button" class="btn btn-success" id="delPro">导出Excel</button>
+		 <button type="button" class="btn btn-success" onClick="delAll();">出院</button>&nbsp;&nbsp;&nbsp;
+		 <button type="button" class="btn btn-success" onClick="delAll();">退院</button>&nbsp;&nbsp;&nbsp;
+		 <button type="button" class="btn btn-success" >导出Excel</button>
 		 </div>
 		 
-		 </th></tr>
+    </th></tr>
   </table>
   
 </body>

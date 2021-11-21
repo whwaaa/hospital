@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
@@ -227,7 +226,7 @@ public class RegisterService implements Serializable {
             if(user == null){
                 throw new Exception("数据库医生表和用户表uId不匹配");
             }
-            //doctor.setDoctorName(user.getuTrueName());
+            doctor.setDoctorName(user.getuTrueName());
             // 封装到map集合
             List<Doctor> doctorList = keshiMap.get(doctor.getdKeshi());
             if(doctorList != null){

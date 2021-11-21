@@ -130,6 +130,18 @@ public class HosRegister implements Serializable {
     @ExcelProperty(value = "所挂科室")
     private String keshi;
 
+    // 住院病人信息 (返给前端)
+    @ExcelIgnore
+    private BeHospital beHospital;
+
+    public BeHospital getBeHospital() {
+        return beHospital;
+    }
+
+    public void setBeHospital(BeHospital beHospital) {
+        this.beHospital = beHospital;
+    }
+
     public HosRegister() {
     }
 

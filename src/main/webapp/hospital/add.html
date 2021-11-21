@@ -29,15 +29,202 @@
                 padding-right: 5px;
             }
         }
-
+        .warning{
+            border-color: red !important;
+        }
 
     </style>
     <script type="text/javascript">
-    $(function () {       
-		$('#backid').click(function(){
-				window.location.href="index.html";
-		 });
-    });
+
+        // 非空校验
+        function notNullCheck(va, el){
+            if(va.trim() == ''){
+                return false;
+                el.addClass("warning");
+            }else{
+                return true;
+                el.removeClass("warning");
+            }
+        }
+        // 护理非空校验
+        let behNursePeopleFlag = false;
+        function behNursePeopleCheck(){
+            let el = $("input[name='behNursePeople']");
+            if(!notNullCheck(el.val(), el)){
+                // 空
+                layer.msg("护理不能为空");
+                behNursePeopleFlag = false;
+            }else{
+                behNursePeopleFlag = true;
+            }
+        }
+        let behPatBedFlag = false;
+        // 床位号非空校验
+        function behPatBedCheck(){
+            let el = $("input[name='behPatBed']");
+            if(!notNullCheck(el.val(), el)){
+                // 空
+                layer.msg("床位号不能为空");
+                behPatBedFlag = false;
+            }else{
+                behPatBedFlag = true;
+            }
+        }
+        let behAntecedentFlag = false;
+        // 缴纳押金非空和数字校验
+        function behAntecedentCheck(){
+            let el = $("input[name='behAntecedent']");
+            let regx = /^\d+(\.\d{1,2})?$/
+            if( !regx.test(el.val().trim()) ){
+                if(el.val().trim() == ''){
+                    layer.msg("缴纳押金不能为空");
+                }else{
+                    layer.msg("缴纳押金只能是整数或两位以内小数");
+                }
+                el.addClass("warning");
+                behAntecedentFlag = false;
+            }else{
+                el.removeClass("warning");
+                behAntecedentFlag = true;
+            }
+        }
+        let behIllnessFlag = false;
+        // 病情非空校验
+        function behIllnessCheck(){
+            let el = $("#behIllness");
+            if(!notNullCheck(el.text(), el)){
+                // 空
+                layer.msg("病情不能为空");
+                behIllnessFlag = false;
+            }else{
+                behIllnessFlag = true;
+            }
+        }
+        // 监听保存
+        let saveFlag = false;
+        function saveSubmit(){
+            setTimeout(function(){
+                if(behNursePeopleFlag && behPatBedFlag &&
+                    behAntecedentFlag && behIllnessFlag && !saveFlag){
+                    saveFlag = true;
+                    layer.load(0);
+                    layer.load(0)
+                    $.ajax({
+                        type: "POST",
+                        // 1. url请求地址前加后端API地址origin
+                        url: origin + "/xxx",
+                        data: {},
+                        dataType: "json",
+                        // 2. 允许携带cookie跨域请求
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        crossDomain: true,
+                        success: function (data) {
+                            layer.closeAll();
+                            if(data.code = 201){
+                                // 添加成功
+                                layer.msg("添加成功", function(){});
+                            }else{
+                                layer.msg(data.msg, function(){});
+                            }
+                        },
+                        complete : function(xhr, status) {
+                            myComplete(xhr, status);
+                        }
+                    })
+                }
+            }, 400)
+        }
+
+        // 查询挂号信息
+        function queryMsg(hosrId){
+            layer.load(0)
+            $.ajax({
+                type: "GET",
+                url: origin + "/register/" + hosrId,
+                dataType: "json",
+                xhrFields: {
+                    // 允许携带cookie跨域
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function (data) {
+                    layer.closeAll()
+                    if (data.code == 200){
+                        // 填充数据
+                        // 姓名
+                        $("#hosrName").text(data.obj.hosrName);
+                        // 证件号
+                        $("#hosrIdcar").text(data.obj.hosrIdcar);
+                        // 社保号
+                        $("#hosrMedical").text(data.obj.hosrMedical);
+                        // 联系电话
+                        $("#hosrPhone").text(data.obj.hosrPhone);
+                        // 是否自费
+                        $("input[name='hosrSelfPrice']").val(data.obj.hosrSelfPrice);
+                        if(data.obj.hosrSelfPrice == 0){ // 0自费 1免费
+                            $("input[name='hosrSelfPrice']").eq(1).prop("checked", true);
+                        }else{
+                            $("input[name='hosrSelfPrice']").eq(0).prop("checked", true);
+                        }
+                        // 计算年龄
+                        let year = parseInt(data.obj.hosrIdcar.substr(6,4));
+                        let month = parseInt(data.obj.hosrIdcar.substr(10,2));
+                        let day = parseInt(data.obj.hosrIdcar.substr(12,2));
+                        let nowYear = new Date().getFullYear();
+                        let nowMoth = new Date().getMonth() + 1;
+                        let nowDay = new Date().getDate();
+                        if(nowMoth - month > 0){
+                            // 年龄即年份相减
+                            $("#hosrAge").text(nowYear - year);
+                        }else if(nowMoth - month < 0){
+                            // 年龄即年份相减再减一
+                            $("#hosrAge").text(nowYear - year - 1);
+                        }else if(nowDay - day >= 0){
+                            // 月分相等, 日相等或更大, 即刚好满岁或不超出一个月 -> 年龄即年份相减
+                            $("#hosrAge").text(nowYear - year);
+                        }else{
+                            // 今年生日没到 -> 年龄即年份相减再减一
+                            $("#hosrAge").text(nowYear - year - 1);
+                        }
+                        // 计算性别 第17位奇数是男, 偶数是女
+                        if( data.obj.hosrIdcar.substr(16,1)%2 == 0 ){
+                            $("input[name='hosrSex']").eq(1).prop("checked",true);	// 女
+                        }else{
+                            $("input[name='hosrSex']").eq(0).prop("checked",true);  // 男
+                        }
+                        // 初复诊
+                        $("input[name='hosrLookDoctor']").val(data.obj.hosrLookDoctor)
+                        if(data.obj.hosrLookDoctor == 0){ // 初复诊：0初诊 1复诊
+                            $("input[name='hosrLookDoctor']").eq(0).prop("checked", true);
+                        }else{
+                            $("input[name='hosrLookDoctor']").eq(1).prop("checked", true);
+                        }
+                        // 所挂科室
+                        $("#keshi").text(data.obj.keshi);
+                        // 指定医生
+                        $("#doctor").text(data.obj.doctorName);
+                        // 备注
+                        $("#hosrRemark").text(data.obj.hosrRemark);
+                    }else{
+                        layer.msg(data.msg,function(){})
+                    }
+                },
+                complete : function(xhr, status) {
+                    myComplete(xhr, status);
+                }
+            })
+        }
+
+
+        $(function () {
+
+            // 监听返回
+            $('#backid').click(function(){
+                window.location.href="index.html?pageSize="+globalPageSize+"&pageNum="+globalPageNum;
+            });
+        });
     </script>
 </head>
 <body>
@@ -45,11 +232,11 @@
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
         <td width="10%" class="tableleft">病历号</td>
-        <td><input type="text" name="pname" value="输入病历号回车自动带出挂号人信息"/></td>
+        <td><input type="text" name="hosrId" placeholder="输入病历号" value="" onblur="queryMsg(this.value)"/></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">姓名</td>
-        <td>黄飞鸿</td>
+        <td id="hosrName"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">证件类型</td>
@@ -57,64 +244,64 @@
     </tr>
     <tr>
         <td width="10%" class="tableleft">证件号</td>
-        <td>42068325467876</td>
+        <td id="hosrIdcar"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">社保号</td>
-        <td>423423432</td>
+        <td id="hosrMedical"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">联系电话</td>
-        <td>13126576456</td>
+        <td id="hosrPhone"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">是否自费</td>
-        <td><input type="radio" name="pname0" value="" checked/>否&nbsp;&nbsp;&nbsp;<input type="radio" name="pname0" value=""/>是</td>
+        <td><input type="radio" name="hosrSelfPrice" value="1" readonly onclick="javascript:return false;"/>否&nbsp;&nbsp;&nbsp;<input readonly onclick="javascript:return false;" type="radio" name="hosrSelfPrice" value="0"/>是</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">性别</td>
-        <td><input type="radio" name="pname" value="" checked/>男&nbsp;&nbsp;&nbsp;<input type="radio" name="pname" value=""/>女</td>
+        <td><input type="radio" readonly onclick="javascript:return false;" name="hosrSex" value="" checked/>男&nbsp;&nbsp;&nbsp;<input readonly onclick="javascript:return false;" type="radio" name="hosrSex" value=""/>女</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">年龄</td>
-        <td>33</td>
+        <td id="hosrAge"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">初复诊</td>
-        <td><input type="radio" name="pname1" value="" checked/>初诊&nbsp;&nbsp;&nbsp;<input type="radio" name="pname1" value=""/>复诊</td>
+        <td><input type="radio" readonly onclick="javascript:return false;" name="hosrLookDoctor" value="" checked/>初诊&nbsp;&nbsp;&nbsp;<input readonly onclick="javascript:return false;" type="radio" name="hosrLookDoctor" value=""/>复诊</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">所挂科室</td>
-        <td><select><option>急诊科</option><option>骨科</option><option>血液科</option></select></td>
+        <td id="keshi"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">指定医生</td>
-        <td><select><option>程俊</option><option>欧阳雨露</option><option>王博</option></select></td>
+        <td id="doctor"><</td>
     </tr>
 	<tr>
         <td width="10%" class="tableleft">备注</td>
-        <td>暂无  以上信息为输入病历号自动带出来的</td>
+        <td id="hosrRemark"></td>
 	</tr>
     <tr>
         <td width="10%" class="tableleft">护理</td>
-        <td><input type="text" name="pname" value=""/></td>
+        <td><input type="text" onblur="behNursePeopleCheck()" name="behNursePeople" value=""/></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">床位号</td>
-        <td><input type="text" name="pname" value=""/></td>
+        <td><input type="text" onblur="behPatBedCheck()" name="behPatBed" value=""/></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">缴费押金</td>
-        <td><input type="text" name="pname" value=""/></td>
+        <td><input type="text" onblur="behAntecedentCheck()" name="behAntecedent" value=""/></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">病情</td>
-        <td><textarea></textarea></td>
+        <td><textarea onblur="behIllnessCheck()" id="behIllness"></textarea></td>
     </tr>
     <tr>
         <td colspan="2">
 			<center>
-				<button type="submit" class="btn btn-primary" type="button">保存</button> &nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
+				<button id="saveSubmit" class="btn btn-primary" type="button">保存</button> &nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
 			</center>
 		</td>
     </tr>

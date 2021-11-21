@@ -52,6 +52,17 @@ public class Doctor implements Serializable {
 
     private User user;
 
+    // 医生姓名, 返回参数需要
+    private String doctorName;
+
+    public String getDoctorName() {
+        return doctorName;
+    }
+
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
+    }
+
     public User getUser() {
         return user;
     }

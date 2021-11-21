@@ -209,11 +209,16 @@
         layer.load(0);
         $.ajax({
             type: "GET",
-            url: "/ckcharge/list/?pageNum="+pageNum+"&pageSize="+globalPageSize+"&jwtToken=" + jwtToken,
+            url: origin + "/ckcharge/list/?pageNum="+pageNum+"&pageSize="+globalPageSize,
             data:{
                 behId:behId,
                 behName:behName,
             },
+            xhrFields: {
+                // 允许cookie跨域
+                withCredentials: true
+            },
+            crossDomain: true,
             success: function (data) {
                 layer.closeAll();
                 console.log(data);
@@ -273,13 +278,18 @@
     function pay(behId,blank){
         $.ajax({
             type: "POST",
-            url: "/ckcharge/"+behId,
+            url: origin + "/ckcharge/"+behId,
             data:{
                 _method:"PUT",
                 jwtToken:jwtToken,
                 behId:behId,
                 blank:blank,
             },
+            xhrFields: {
+                // 允许cookie跨域
+                withCredentials: true
+            },
+            crossDomain: true,
             success: function (data) {
                 if(data.code == 200){
                     queryList(globalPageNum);
