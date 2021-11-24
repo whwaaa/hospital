@@ -1,10 +1,9 @@
 package com.kkb.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.kkb.mapper.DrugPeopleMapper;
 import com.kkb.pojo.DrugPeople;
-import com.kkb.pojo.HosRegister;
 import com.kkb.service.DrugPeopleService;
-import com.kkb.service.DrugService;
 import com.kkb.service.RegisterService;
 import com.kkb.vo.AjaxResultVo;
 import com.kkb.vo.RegisterQueryVo;
@@ -28,10 +27,9 @@ public class DrugPeopleController {
     @Resource
     private DrugPeopleService drugPeopleService;
     @Resource
-    private DrugService drugService;
-    @Resource
     private RegisterService registerService;
-
+    @Resource
+    private DrugPeopleMapper drugPeopleMapper;
     /**
      * 查询挂号的病人信息
      *
@@ -105,8 +103,9 @@ public class DrugPeopleController {
     @RequestMapping("given/{drugPeoId}")
     public AjaxResultVo givenToPeople(@PathVariable("drugPeoId") Integer drugPeoId, Integer num) {
         int i = drugPeopleService.givenDrugToPeople(drugPeoId, num);
+        DrugPeople people = drugPeopleMapper.selectByPrimaryKey(drugPeoId);
         if (i > 0) {
-            return new AjaxResultVo();
+            return new AjaxResultVo(200, "购买成功，当前挂号余额: " + people.getHosrRegPrice() + "元");
         } else if (i == -1) {
             return new AjaxResultVo(400, "病人的该购药记录不存在");
         } else if (i == -2) {
@@ -114,7 +113,7 @@ public class DrugPeopleController {
         } else if (i == -3) {
             return new AjaxResultVo(400, "没有可购买的数量");
         } else if (i == -4) {
-            return new AjaxResultVo(400, "挂号费用不足以支付药品的配用");
+            return new AjaxResultVo(400, "挂号费用不足,目前余额为:" + people.getHosrRegPrice() + "元");
         }
         return new AjaxResultVo(400, "购买的数量大于可购的数量");
     }

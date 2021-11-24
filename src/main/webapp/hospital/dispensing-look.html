@@ -84,6 +84,7 @@
 						"             <td>" + this.hosrId + "</td>\n" +
 						"             <td>" + this.hosrName + "</td>\n" +
 						"             <td>" + this.drName + "</td>\n" +
+						"             <td>" + this.drOutprice + "</td>\n" +
 						"             <td>" + this.drugNumber + "</td>\n" +
 						"             <td>" + this.drugGiveNumber + "</td>\n" +
 						"             <td>" + this.drugLastNumber + "</td>\n" +
@@ -101,7 +102,7 @@
 			// 请求发药，给用户结算药品
 			// n为发药数量
 			function reqEndGivenDrug(num,drugPeoId) {
-				layer.load(0);
+				let loadId =  layer.load(0);
 				$.ajax({
 				 type: "POST",
 					url: origin + "/drugPeople/given/" + drugPeoId,
@@ -111,13 +112,13 @@
 					crossDomain: true,
 					data: {num: num},
 					success: function(data) {
-							layer.closeAll()
+							layer.close(loadId);
+							layer.msg(data.msg,{
+								time: 2*1000
+							});
 							if (data.code === 200) {
-								 layer.msg("分发药品成功!");
 								 let pageNum = document.location.toString().GetValue("pageNum");
 								 queryList(pageNum);
-							} else {
-								layer.msg(data.msg, function() {});
 							}
 						}
 						// 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
@@ -146,6 +147,7 @@
 					<th>病历号</th>
 					<th>姓名</th>
 					<th>药品名称</th>
+					<th>单价(元)</th>
 					<th>药品数量</th>
 					<th>已发数量</th>
 					<th>未发数量</th>

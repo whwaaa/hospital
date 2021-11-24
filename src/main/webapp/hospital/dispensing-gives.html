@@ -122,7 +122,7 @@
                     drId: drId,
                     num: num
                 };
-                layer.load(0);
+                let loadId = layer.load(0);
                 $.ajax({
                     type: "POST",
                     url: origin + "/drugPeople/addOrder",
@@ -132,9 +132,11 @@
                     },
                     crossDomain: true,
                     success: function (data) {
-                        layer.closeAll();
+                        layer.close(loadId);
                         if (data.code === 200) {
-                            layer.msg("操作成功", function () {
+                            layer.msg("操作成功",{
+                                time: 1500
+                            }, function () {
                                 window.location.href = "dispensing.html";
                             });
                         } else {

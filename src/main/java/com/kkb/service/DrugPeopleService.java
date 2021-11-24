@@ -24,8 +24,6 @@ import java.util.List;
 public class DrugPeopleService {
 
     @Resource
-    private RegisterService registerService;
-    @Resource
     private HosRegisterMapper hosRegisterMapper;
     @Resource
     private DrugPeopleMapper drugPeopleMapper;
