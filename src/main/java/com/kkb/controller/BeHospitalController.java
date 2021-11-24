@@ -1,9 +1,8 @@
 package com.kkb.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.kkb.pojo.HosRegister;
+import com.kkb.pojo.BeHospital;
 import com.kkb.service.BeHospitalService;
-import com.kkb.service.RegisterService;
 import com.kkb.vo.AjaxResultVo;
 import com.kkb.vo.RegisterQueryVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * 住院模块控制器
@@ -39,11 +39,54 @@ public class BeHospitalController {
     }
 
     // 添加住院信息
-//    @RequestMapping(value = "", method = RequestMethod.POST)
-//    public AjaxResultVo addData(HttpServletRequest request, ){
-//
-//    }
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public AjaxResultVo addData(HttpServletRequest request,
+                                @RequestParam(value = "hosrId")Integer hosrId,
+                                BeHospital beHospital){
+        Integer add = service.add(request, hosrId, beHospital);
+        if(add > 0){
+            return new AjaxResultVo();
+        }
+        return new AjaxResultVo(500, "服务器内部异常, 请稍后再试!");
+    }
 
+    // 根据主键更新
+    @RequestMapping(value = "{beh-id}", method = RequestMethod.PUT)
+    public AjaxResultVo updateById(@PathVariable(value = "beh-id")Integer behId, BeHospital beHospital){
+        Integer res = service.updateById(behId, beHospital);
+        if(res != 0){
+            return new AjaxResultVo(200,"更新成功");
+        }
+        return new AjaxResultVo(500, "服务器内部异常, 请稍后再试!");
+    }
 
+    // 缴纳金额
+    @RequestMapping(value = "add-amount/{beh-id}", method = RequestMethod.PUT)
+    public AjaxResultVo addAmount(@PathVariable(value = "beh-id")Integer behId, BeHospital beHospital) throws Exception {
+        Integer res = service.addAmount(behId, beHospital);
+        if(res != 0){
+            return new AjaxResultVo(200,"更新成功");
+        }
+        return new AjaxResultVo(500, "服务器内部异常, 请稍后再试!");
+    }
 
+    // 根据主键查询
+    @RequestMapping(value = "{hosr-id}", method = RequestMethod.GET)
+    public AjaxResultVo queyrById(@PathVariable("hosr-id") Integer hosrId) throws Exception {
+        Map<String, Object> map = service.queryById(hosrId);
+        if(map!=null && map.size()==2){
+            return new AjaxResultVo(map);
+        }
+        return new AjaxResultVo(500, "服务器内部异常, 请稍后再试!");
+    }
+
+    // 查询消费信息
+    @RequestMapping(value = "{hosr-id}/{beh-id}", method = RequestMethod.GET)
+    public AjaxResultVo queryByIds(@PathVariable("hosr-id") Integer hosrId,@PathVariable("beh-id") Integer behId){
+        Map<String, Object> stringObjectMap = service.queryByIds(hosrId, behId);
+        if(stringObjectMap!=null && stringObjectMap.size()!=0){
+            return new AjaxResultVo(stringObjectMap);
+        }
+        return new AjaxResultVo(500, "服务器内部异常, 请稍后再试!");
+    }
 }

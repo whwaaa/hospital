@@ -268,6 +268,9 @@ public class RegisterService implements Serializable {
     public HosRegister queryById(Integer hosrId) throws Exception {
         if(hosrId != null){
             HosRegister hosRegister = hosRegisterMapper.selectByPrimaryKey(hosrId);
+            if(hosRegister == null){
+                throw new Exception("根据主键查询挂号信息id: "+ hosrId +" 不存在");
+            }
             Doctor doctor = doctorMapper.selectByPrimaryKey(hosRegister.getdId());
             if(doctor == null){
                 throw new Exception("挂号表里的医生id:"+ hosRegister.getdId() +"不存在,请检查数据库");

@@ -33,13 +33,52 @@
     </style>
     <script type="text/javascript">
 
+        // 出院退院ajax请求
+        function backCourtResetClearAjax(method, hosrState, hosrId){
+            layer.load(0)
+            $.ajax({
+                type: "POST",
+                // 1. url请求地址前加后端API地址origin
+                url: origin + "/register/" + hosrId,
+                data: {_method:"PUT",hosrState:hosrState},
+                dataType: "json",
+                // 2. 允许携带cookie跨域请求
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function (data) {
+                    layer.closeAll();
+                    if(data.code == 200){
+                        if(method == 0){
+                            // 出院
+                            layer.msg("出院成功")
+                            $("#td_" + hosrId).prev().text("已出院")
+                        }else{
+                            // 退院
+                            layer.msg("退院成功")
+                            $("#td_" + hosrId).prev().text("已退院")
+                        }
+                        $("#td_" + hosrId).empty();
+                        $("#td_" + hosrId).append("<a href='look.html?hosrId="+hosrId+"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>详情>>></a>")
+                    }else{
+                        layer.msg(data.msg, function(){})
+                    }
+                },
+                complete : function(xhr, status) {
+                    myComplete(xhr, status);
+                }
+            })
+        }
         // 退院处理
-        function backCourt(){
-            layer.msg("退院成功")
+        function backCourt(hosrId){
+            let hosrState = 3; // 退号
+            backCourtResetClearAjax(1, hosrState, hosrId);
         }
         // 出院处理
-        function outHospital(){
-            layer.msg("出院成功")
+        function outHospital(hosrId){
+            let hosrState = 2; // 出院
+            backCourtResetClearAjax(0, hosrState, hosrId);
         }
         // 监听清空
         function resetClear(){
@@ -119,27 +158,39 @@
                 if(behClosePriceState == 0){
                     // 出院住院退院状态
                     let behState = beHospitalMsg.behState;
-                    if(behState == 0){
+                    if(this.hosrState == 1){
                         // **已住院** -> 详情 更改 缴纳押金
                         behStateText = "已住院";
                         $con.append("<td style=\"vertical-align:middle;\">"+ behStateText +"</td>")
-                        $con.append("<td id='td_"+ this.hosrId +"'style='vertical-align:middle;'><a href='look.html?hosrId="+this.hosrId+"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>详情>>></a>&nbsp;&nbsp;&nbsp;<a href='edit.html?hosrId="+ this.hosrId +"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>更改</a>&nbsp;&nbsp;&nbsp;<a href='add_many.html?hosrId="+ this.hosrId +"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>缴纳押金</a></td>\n");
-                    }else if(behState == 1){
+                        $con.append("<td id='td_"+ this.hosrId +"'style='vertical-align:middle;'><a href='look.html?hosrId="+this.hosrId+"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>详情>>></a>&nbsp;&nbsp;&nbsp;<a href='edit.html?behId="+beHospitalMsg.behId+"&hosrId="+ this.hosrId +"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>更改</a>&nbsp;&nbsp;&nbsp;<a href='add_many.html?behId="+beHospitalMsg.behId+"&hosrId="+ this.hosrId +"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>缴纳押金</a></td>\n");
+                    }else if(this.hosrState == 2){
                         // **已出院** -> 详情
                         behStateText = "已出院";
                         $con.append("<td style=\"vertical-align:middle;\">"+ behStateText +"</td>")
-                        $con.append("<td id='td_"+ this.hosrId +"'style='vertical-align:middle;'><a href='look.html?hosrId="+this.hosrId+"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>详情>>></a>");
+                        $con.append("<td id='td_"+ this.hosrId +"'style='vertical-align:middle;'><a href='look.html?hosrId="+this.hosrId+"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>详情>>></a></td>\n");
                     }else{
                         // **已退院** -> 详情
                         behStateText = "已退院";
                         $con.append("<td style=\"vertical-align:middle;\">"+ behStateText +"</td>")
-                        $con.append("<td id='td_"+ this.hosrId +"'style='vertical-align:middle;'><a href='look.html?hosrId="+this.hosrId+"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>详情>>></a>");
+                        $con.append("<td id='td_"+ this.hosrId +"'style='vertical-align:middle;'><a href='look.html?hosrId="+this.hosrId+"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>详情>>></a></td>\n");
                     }
                 }else{
-                    // **已结算** -> 详情 退院 出院
-                    behStateText = "已结算";
-                    $con.append("<td style=\"vertical-align:middle;\">"+ behStateText +"</td>")
-                    $con.append("<td id='td_"+ this.hosrId +"'style='vertical-align:middle;'><a href='look.html?hosrId="+this.hosrId+"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>详情>>></a>&nbsp;&nbsp;&nbsp;<a href='javascript:backCourt()'>退院</a>&nbsp;&nbsp;&nbsp;<a href='javascript:outHospital()'>出院</a>");
+                    if(this.hosrState == 1){
+                        // **已结算** -> 详情 退院 出院
+                        behStateText = "已结算";
+                        $con.append("<td style=\"vertical-align:middle;\">"+ behStateText +"</td>")
+                        $con.append("<td id='td_"+ this.hosrId +"'style='vertical-align:middle;'><a href='look.html?hosrId="+this.hosrId+"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>详情>>></a>&nbsp;&nbsp;&nbsp;<a href='javascript:backCourt(" + this.hosrId + ")'>退院</a>&nbsp;&nbsp;&nbsp;<a href='javascript:outHospital(" + this.hosrId + ")'>出院</a></td>\n");
+                    }else if(this.hosrState == 2){
+                        // **已出院** -> 详情
+                        behStateText = "已出院";
+                        $con.append("<td style=\"vertical-align:middle;\">"+ behStateText +"</td>")
+                        $con.append("<td id='td_"+ this.hosrId +"'style='vertical-align:middle;'><a href='look.html?hosrId="+this.hosrId+"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>详情>>></a></td>\n");
+                    }else{
+                        // **已退院** -> 详情
+                        behStateText = "已退院";
+                        $con.append("<td style=\"vertical-align:middle;\">"+ behStateText +"</td>")
+                        $con.append("<td id='td_"+ this.hosrId +"'style='vertical-align:middle;'><a href='look.html?hosrId="+this.hosrId+"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>详情>>></a></td>\n");
+                    }
                 }
                 $("table.content").find("tbody").append($con);
             })
@@ -153,28 +204,50 @@
 				for(var i=0;i<alls.length;i++){
 					alls[i].checked=true;	
 				}	
-			}else{
-				for(var i=0;i<alls.length;i++){
-					alls[i].checked=false;	
-				}	
-			}
+			}else {
+                for (var i = 0; i < alls.length; i++) {
+                    alls[i].checked = false;
+                }
+            }
 		}
-		function delAll(){
-			var alls=document.getElementsByName("check");
-			var ids=new Array();
-			for(var i=0;i<alls.length;i++){
-				if(alls[i].checked){
-					ids.push(alls[i].value);
-				}		
-			}
-			if(ids.length>0){
-				if(confirm("确认操作?")){
-					alert("成功!");
-				}
-			}else{
-				alert("请选中要操作的项");
-			}
-		}
+
+        // mode: 0:出院 1:退院
+        function delAll(mode) {
+            var alls = document.getElementsByName("check");
+            var ids = new Array();
+            for (var i = 0; i < alls.length; i++) {
+                if (alls[i].checked) {
+                    let cha = $("#td_" + alls[i].value).find("a").eq(1);
+                    if (cha.length == 0 || cha.text() != '退院') {
+                        // 10404病号还未缴费
+                        layer.msg(alls[i].value + "病号还未缴费", function () {});
+                        setTimeout(function(){
+                            alls[i].checked = false;
+                        },300)
+                        return false;
+                    }
+                    ids.push(alls[i].value);
+                }
+            }
+            if (ids.length > 0) {
+                if (confirm("确认操作?")) {
+                    for (let i = 0; i < ids.length; i++) {
+                        if (mode == 0) { // 出院
+                            // 出院处理
+                            outHospital(ids[i]);
+                        } else {  // 退院
+                            // 退院处理
+                            backCourt(ids[i]);
+                        }
+                    }
+                    setTimeout(function(){
+                        $("input[type='checkbox']").prop("checked",false);
+                    },1000)
+                }
+            }else{
+                alert("请选中要操作的项");
+            }
+        }
 
         $(function () {
             // 查询第一页
@@ -239,8 +312,8 @@
   	<tr><th colspan="5">
         <div id="pageInfo-box" class="inline pull-right page"></div>
 		 <div><button type="button" class="btn btn-success" id="newNav">添加住院信息</button>&nbsp;&nbsp;&nbsp;
-		 <button type="button" class="btn btn-success" onClick="delAll();">出院</button>&nbsp;&nbsp;&nbsp;
-		 <button type="button" class="btn btn-success" onClick="delAll();">退院</button>&nbsp;&nbsp;&nbsp;
+		 <button type="button" class="btn btn-success" onClick="delAll(0);">出院</button>&nbsp;&nbsp;&nbsp;
+		 <button type="button" class="btn btn-success" onClick="delAll(1);">退院</button>&nbsp;&nbsp;&nbsp;
 		 <button type="button" class="btn btn-success" >导出Excel</button>
 		 </div>
 		 

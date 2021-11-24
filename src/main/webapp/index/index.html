@@ -57,6 +57,9 @@
                     // 加载导航栏
                     loadNav(data.obj);
                 }
+            },
+            error: function(){
+                layer.alert("服务器好像跑路了");
             }
             // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上下面的代码
             ,complete : function(xhr, status) {
@@ -120,7 +123,6 @@
                     // 将要刷新的资源名称
                     refreshName = v.mName;
                 }
-				
                 myobj.id = v.mId;
                 myobj.text = v.mName;
 				// 跨域标识

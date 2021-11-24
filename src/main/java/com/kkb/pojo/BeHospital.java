@@ -3,6 +3,9 @@ package com.kkb.pojo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -10,14 +13,20 @@ import java.util.Date;
 public class BeHospital implements Serializable {
     private Integer behId;
 
+    // 住院人姓名
+    @NotBlank(message = "住院人姓名不能为空")
     private String behName;
-
+    // 护理人
+    @NotBlank(message = "护理人不能为空")
     private String behNursePeople;
-
+    // 病床号
+    @NotBlank(message = "病床号不能为空")
     private String behPatBed;
-
+    // 缴纳金额
+    @NotBlank(message = "缴纳金额不能为空")
     private BigDecimal behAntecedent;
-
+    // 病情介绍
+    @NotBlank(message = "病情介绍不能为空")
     private String behIllness;
     private BigDecimal blank;
 
@@ -28,9 +37,11 @@ public class BeHospital implements Serializable {
     public void setBlank(BigDecimal blank) {
         this.blank = blank;
     }
-
+    // 结算状态：0未结算 1已结算
+    @NotNull
+    @Size(max = 1)
     private Integer behClosePrice;
-
+    // 信息状态:  暂不用
     private Integer behState;
 
     private Integer behIsDel;

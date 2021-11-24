@@ -1,5 +1,8 @@
 package com.kkb.exceptions;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.kkb.vo.AjaxResultVo;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindException;
@@ -9,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * 全局异常处理
@@ -39,6 +43,24 @@ public class GlobalExceptionHandle implements HandlerExceptionResolver {
             response.setHeader("CONTENTPATH", "/index/login.html");
             response.setStatus(HttpServletResponse.SC_FORBIDDEN); // 添加403状态码 (服务器拒绝)
         }
+
+        // response方式返回json数据
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("application/json; charset=utf-8");
+        PrintWriter writer = null;
+        try {
+            // 返回AjaxResultVo封装的异常信息
+            AjaxResultVo ajaxResultVo = new AjaxResultVo(500, e.getMessage());
+            String msg = JSON.toJSON(ajaxResultVo).toString();
+            writer = response.getWriter();
+            writer.write(msg);
+            writer.flush();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            writer.close();
+        }
+
         return mv;
     }
 }
