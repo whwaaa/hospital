@@ -78,7 +78,8 @@ public class ChargeService {
         List<ChargeProject> list = chargeProjectMapper.selectByExample(chargeProjectExample);
         return list.size();
     }
-    //按照名称查询
+    // 按照名称查询
+    @Transactional(propagation = Propagation.REQUIRED,readOnly = true)
     public ChargeProject queryByName(String chapName){
         ChargeQueryVo vo = new ChargeQueryVo();
         if(chapName !=null) {
@@ -93,5 +94,13 @@ public class ChargeService {
         return null;
     }
 
-
+    /**
+     * 查询所有
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED,readOnly = true)
+    public List<ChargeProject> queryAllChargeProject(){
+        return chargeProjectMapper.selectByExample(null);
     }
+
+}

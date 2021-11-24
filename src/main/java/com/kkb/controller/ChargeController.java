@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -86,5 +87,15 @@ public class ChargeController {
             return new AjaxResultVo(chargeProject);
         }
         return new AjaxResultVo(400,"该项目不存在，请重新输入！");
+    }
+
+    // 查询所有收费项目
+    @RequestMapping(value = "charge-project-list", method = RequestMethod.GET)
+    public AjaxResultVo queryAllChargeProject(){
+        List<ChargeProject> chargeProjects = chargeService.queryAllChargeProject();
+        if(chargeProjects != null && chargeProjects.size() != 0){
+            return new AjaxResultVo(chargeProjects);
+        }
+        return new AjaxResultVo(400, "收费项目尚未完善");
     }
 }

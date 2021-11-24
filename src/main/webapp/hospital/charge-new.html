@@ -29,6 +29,44 @@
                 padding-right: 5px;
             }
         }
+        .my-select{
+            position: relative;
+            width: 230px;
+            height: auto;
+            max-height: 300px;
+            overflow-y: auto;
+            border-top: 1px solid #cccccc;
+            border-bottom: 1px solid #cccccc;
+            display: none;
+        }
+        .my-select div{
+            line-height: 24px;
+            position: relative;
+            height: 24px;
+            width: 200px;
+            margin: 0 3px;
+            padding-left: 5px;
+            border: 1px solid #cccccc;
+        }
+        #select{
+            cursor: pointer;
+            display: inline-block;
+            width: 25px;
+            height: 21px;
+            left: -26px;
+            top: 2px;
+            position: relative;
+        }
+        #span{
+            cursor: default;
+            margin-left: -20px;
+            position: relative;
+            top: -4px;
+        }
+        .active{
+            box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(82 168 236 / 80%);
+            background-color: white;
+        }
 
 
     </style>
@@ -53,7 +91,13 @@
     </tr>
     <tr>
         <td width="10%" class="tableleft">收费项目</td>
-        <td><input type="text" name="pname"  id="chapName" value="" onblur="query()"/>输入自动匹配出来</td>
+        <td style="position: relative;"><input type="text" name="pname"  id="chapName" value="" onblur="querySelect()"/>
+<!--            <select id="select" style="width:120px;height:25px;" onmousedown="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">-->
+            <select style="width:20px;height:25px;cursor: default;" size="2"></select>
+            <div id="select" style="display: inline-block;"></div>
+            <span id="span">输入自动匹配出来</span>
+            <div class="my-select"></div>
+        </td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">收费金额</td>
@@ -75,40 +119,112 @@
 </body>
 </html>
 <script>
+    // 读取地址栏信息
     let behId = document.location.toString().GetValue("behId");
     $("#behId").val(behId);
-    $(function(){
-        $.ajax({
-            type: "GET",
-            url: origin + "/ckcharge/"+behId,
-            data:{
-                behId:behId,
-            },
-            xhrFields: {
-                withCredentials: true
-            },
-            crossDomain: true,
-            success: function (data) {
-                if(data.code == 200){
-                    $("#behName").html(data.obj.behName)
+    // 存放收费项目数据
+    let chargeProjectDate;
+    // 下拉提示标志
+    let flag = true;
+    function querySelect(){
+
+    }
+    function mouseMoveAndChoose(){
+        // 鼠标移动到div边框提示
+        $(".my-select>div").on("mouseenter",function(){
+            $(this).addClass("active");
+            $(this).siblings().removeClass("active")
+        })
+        // 监听鼠标选择
+        $(".my-select>div").on("click",function(){
+            // 填充input
+            $("#chapName").val($(this).text())
+            // 填充chapId
+            $("#chapId").val(chargeProjectDate[$(this).attr("eq")].chapId);
+            // 填充金额
+            $("#chapMoney").val(chargeProjectDate[$(this).attr("eq")].chapMoney);
+            // 触发关闭下拉框
+            $("#select").trigger("click");
+        })
+    }
+    // 监听div关闭
+    function listenDivClose(_this){
+        $("body").on("click", function(){
+            // 关闭监听移入
+            _this.slideUp("normal",function(){
+                flag = true;
+            });
+            // 关闭body点击
+            $("body").off("click");
+        })
+        // 监听鼠标移入
+        _this.on("mouseenter", function(){
+            // 关闭监听body点击
+            $("body").off("click");
+            // 关闭移入监听
+            _this.off("mouseenter");
+            // 监听移出
+            _this.on("mouseleave", function(){
+                _this.off("mouseleave");
+                // 递归调用
+                listenDivClose(_this);
+            })
+        })
+    }
+    // 监听下拉选择
+    function changeSelect(){
+        $("#select").on("click", function(){
+            if(flag){
+                flag = false;
+                $(".my-select").slideDown();
+                // 监听div关闭
+                listenDivClose($(".my-select"));
+            }else{
+                flag = true;
+                $(".my-select").slideUp();
+            }
+            return false;
+        })
+
+    }
+
+    // 监听input内容变化
+    function inputPropertychange(){
+        $("#chapName").bind( 'input propertychange' , function (){
+            let inputChapName = $(this).val().trim();
+            // 遍历收费项目数据,相似匹配
+            $(".my-select").empty();
+            $.each(chargeProjectDate, function(i, e){
+                if(inputChapName === '') {
+                    $(".my-select").append($("<div eq='"+ i +"' value='"+ e.chapId +"'>"+ e.chapName +"</div>"));
                 }else{
+                    // 模糊匹配
+                    if(e.chapName.indexOf(inputChapName) !== -1){
+                        $(".my-select").append($("<div eq='"+ i +"' value='"+ e.chapId +"'>"+ e.chapName +"</div>"));
+                    }
                 }
-            }
-            // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
-            ,complete : function(xhr, status) {
-                myComplete(xhr, status);
-            }
-        });
-    })
-   function query(){
-       let chapName = $("#chapName").val()
+            })
+            $("body").off("click");
+            $(".my-select").off("mouseenter");
+            $(".my-select>div").off("mouseenter");
+            $(".my-select>div").off("click");
+            $("#chapName").unbind( 'input propertychange');
+            flag = true;
+            // 触发显示下拉框
+            $("#select").trigger("click");
+            // 监听鼠标移动与选择
+            mouseMoveAndChoose();
+            // 监听input内容变化
+            inputPropertychange();
+        })
+    }
+
+    // 查询所有收费项目
+    function queryAllChargeProject(){
        layer.load(0);
        $.ajax({
            type: "GET",
-           url: origin + "/charge/chapname",
-           data:{
-               chapName:chapName,
-           },
+           url: origin + "/charge/charge-project-list",
            xhrFields: {
                withCredentials: true
            },
@@ -116,9 +232,16 @@
            success: function (data) {
                layer.closeAll();
                if(data.code == 200){
-                   $("#chapMoney").val(data.obj.chapMoney);
-                   $("#chapName").val(data.obj.chapName);
-                   $("#chapId").val(data.obj.chapId);
+                   // 储存收费项数据
+                   chargeProjectDate = data.obj;
+                   // 填充数据
+                   $.each(chargeProjectDate, function(i, e){
+                       $(".my-select").append($("<div eq='"+ i +"' value='"+ e.chapId +"'>"+ e.chapName +"</div>"));
+                   })
+                   // 监听鼠标移动与选择
+                   mouseMoveAndChoose();
+                   // 监听input内容变化
+                   inputPropertychange();
                }else{
                    layer.msg("项目名称不存在", function(){})
                }
@@ -129,6 +252,8 @@
            }
        });
     }
+
+    // 监听提交
     $("#sub").click(function (){
         let behId = $("#behId").val();
         let chapId = $("#chapId").val();
@@ -163,5 +288,34 @@
                 myComplete(xhr, status);
             }
         });
+    });
+
+
+    $(function(){
+        $.ajax({
+            type: "GET",
+            url: origin + "/ckcharge/"+behId,
+            data:{
+                behId:behId,
+            },
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+            success: function (data) {
+                if(data.code == 200){
+                    $("#behName").html(data.obj.behName)
+                }else{
+                }
+            }
+            // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+            ,complete : function(xhr, status) {
+                myComplete(xhr, status);
+            }
+        });
+        // 查询所有收费项目
+        queryAllChargeProject();
+        // 监听下拉选择
+        changeSelect();
     })
 </script>
