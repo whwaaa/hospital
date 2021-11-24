@@ -27,4 +27,7 @@ public interface RoleMapper {
     int updateByPrimaryKeySelective(Role record);
 
     int updateByPrimaryKey(Role record);
+
+    // 查询医生id
+    Integer selectDoctorId();
 }

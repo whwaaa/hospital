@@ -72,6 +72,9 @@
   <sql id="Base_Column_List">
     r_id, r_name, r_state, r_is_del, r_create_time, r_update_time, u_id
   </sql>
+  <select id="selectDoctorId" resultType="java.lang.Integer">
+    select r_id from role where r_name="医生"
+  </select>
   <select id="selectByExample" parameterType="com.kkb.pojo.RoleExample" resultMap="BaseResultMap">
     select
     <if test="distinct">

@@ -35,7 +35,7 @@
     <script type="text/javascript">
     $(function () {       
 		$('#backid').click(function(){
-				window.location.href="account.html";
+            window.location.href="charge2.html?pageSize="+globalPageSize+"&pageNum="+globalPageNum;
 		 });
     });
     </script>
@@ -134,8 +134,8 @@
         let chapId = $("#chapId").val();
         layer.load(0);
         $.ajax({
-            type: origin + "POST",
-            url: "/pricepeople/add",
+            type: "POST",
+            url: origin + "/pricepeople/add",
             data: {
                 behId:behId,
                 chapId:chapId,

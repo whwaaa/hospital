@@ -147,8 +147,8 @@
         let behName = $("#behName").val();
         layer.load(0);
         $.ajax({
-            type: origin + "GET",
-            url: "/ckcharge/list/?pageNum="+pageNum+"&pageSize="+globalPageSize+"&jwtToken=" + jwtToken,
+            type: "GET",
+            url: origin + "/ckcharge/list/?pageNum="+pageNum+"&pageSize="+globalPageSize+"&jwtToken=" + jwtToken,
             data:{
                 behId:behId,
                 behName:behName,
@@ -204,12 +204,12 @@
     }
     function query(id) {
         // window.location.href="/hospital/charge-edit1.html?chapId="+id;
-        window.location.href="/hospital/account-look2.html?behId="+id+
+        window.location.href="account-look2.html?behId="+id+
             "&globalPageNum" + globalPageNum + "&globalPageSize" + globalPageSize;
     }
     function query1(id) {
         // window.location.href="/hospital/charge-edit1.html?chapId="+id;
-        window.location.href="/hospital/charge-new.html?behId="+id+
+        window.location.href="charge-new.html?behId="+id+
             "&globalPageNum" + globalPageNum + "&globalPageSize" + globalPageSize;
     }
 </script>

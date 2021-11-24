@@ -133,6 +133,9 @@
       #{uUpdateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.kkb.pojo.User">
+    <selectKey order="AFTER" keyProperty="uId" resultType="java.lang.Integer">
+      select LAST_INSERT_ID()
+    </selectKey>
     insert into user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="uId != null">

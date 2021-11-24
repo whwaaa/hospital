@@ -91,7 +91,7 @@
             crossDomain: true,
             success: function (data) {
                 if(data.code == 200){
-                    layer.msg("添加成功！", function(){})
+                    layer.msg("添加成功！")
                     window.location.href = "charge.html?pageNum=" + pageNum + "&pageSize=" + pageSize;
                 }else{
                     // alert("添加失败！"+data.msg);

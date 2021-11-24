@@ -164,12 +164,17 @@ public class BeHospitalService {
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Integer add(HttpServletRequest request, Integer hosrId, BeHospital beHospital){
-        // 获取当前用户id
-        User user = accessService.paseUserMessage(request);
+        HosRegister hosRegister1 = new HosRegister();
+        hosRegister1.setHosrId(hosrId);
+        hosRegister1.setHosrState(1);
+        // 更新挂号表信息
+        hosRegisterMapper.updateByPrimaryKeySelective(hosRegister1);
         // 获取挂号单信息
         HosRegister hosRegister = hosRegisterMapper.selectByPrimaryKey(hosrId);
         // 同步住院人姓名
         beHospital.setBehName(hosRegister.getHosrName());
+        // 添加住院日期
+        beHospital.setBehCreateTime(new Date());
         // 添加
         int add = beHospitalMapper.insertSelective(beHospital);
         if(add == 0){

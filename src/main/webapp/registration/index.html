@@ -59,11 +59,11 @@
                 if(data.code === 200){
                     // 填充分页
                     fillPageData(data.obj);
-                    // 填充内容
-                    fillContentData(data.obj.list);
                     // 更新全局页数信息
                     globalPageSize = data.obj.pageSize;
                     globalPageNum = data.obj.pageNum;
+                    // 填充内容
+                    fillContentData(data.obj.list);
                 }else{
                     layer.msg(data.msg,function(){})
                 }
