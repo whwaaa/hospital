@@ -83,8 +83,11 @@
     function queryById(chapId){
         $.ajax({
             type: "GET",
-            url: "/charge/"+chapId, //RESTful风格的API定义
-            data: {jwtToken:jwtToken},
+            url: origin + "/charge/"+chapId, //RESTful风格的API定义
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
             success: function (data) {
                 if(data.code === 200){
                     loadDate(data);

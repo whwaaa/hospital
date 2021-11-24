@@ -80,11 +80,14 @@
     $(function(){
         $.ajax({
             type: "GET",
-            url: "/ckcharge/"+behId,
+            url: origin + "/ckcharge/"+behId,
             data:{
-                jwtToken:jwtToken,
                 behId:behId,
             },
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
             success: function (data) {
                 if(data.code == 200){
                     $("#behName").html(data.obj.behName)
@@ -102,11 +105,14 @@
        layer.load(0);
        $.ajax({
            type: "GET",
-           url: "/charge/chapname",
+           url: origin + "/charge/chapname",
            data:{
-               jwtToken:jwtToken,
                chapName:chapName,
            },
+           xhrFields: {
+               withCredentials: true
+           },
+           crossDomain: true,
            success: function (data) {
                layer.closeAll();
                if(data.code == 200){
@@ -128,13 +134,16 @@
         let chapId = $("#chapId").val();
         layer.load(0);
         $.ajax({
-            type: "POST",
+            type: origin + "POST",
             url: "/pricepeople/add",
             data: {
-                jwtToken:jwtToken,
                 behId:behId,
                 chapId:chapId,
             },
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
             success: function (data) {
                 layer.closeAll();
                 if(data.code == 200){

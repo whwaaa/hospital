@@ -175,8 +175,12 @@
 
         $.ajax({
             type: "GET",
-            url: "/charge/list/?pageNum="+pageNum+"&pageSize="+globalPageSize+"&jwtToken=" + jwtToken,
+            url: origin + "/charge/list/?pageNum="+pageNum+"&pageSize="+globalPageSize+"&jwtToken=" + jwtToken,
             data:{chapName:chapName},
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
             success: function (data) {
                 layer.closeAll();
                 console.log(data);
@@ -242,10 +246,14 @@
             //发起异步请求
             $.ajax({
                 type: "POST",
-                url: "/charge/" + chapId, //RESTful风格的API定义
+                url: origin + "/charge/" + chapId, //RESTful风格的API定义
                 data: {
                     _method:"DELETE",
                 },
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
                 success: function (data) {
                     if(data.code == 200){
                         // queryList(1);

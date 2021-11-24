@@ -79,12 +79,16 @@
         let chapMoney = $("#chapMoney").val();
         $.ajax({
             type: "POST",
-            url: "/charge", //RESTful风格的API定义
+            url: origin + "/charge", //RESTful风格的API定义
             data: {
                 jwtToken:jwtToken,
                 chapName:chapName,
                 chapMoney:chapMoney,
             },
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
             success: function (data) {
                 if(data.code == 200){
                     layer.msg("添加成功！", function(){})

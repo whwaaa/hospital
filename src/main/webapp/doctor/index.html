@@ -48,9 +48,13 @@
             layer.load(0)
             $.ajax({
                 type: "GET",
-                url: "/doctor/list",
+                url: origin + "/doctor/list",
                 data: {pageNum:pageNum, pageSize:globalPageSize,
-                    dId:dId, uTrueName:uTrueName,dKeshi:dKeshi,},
+                    dId:dId, uTrueName:uTrueName, dKeshi:dKeshi},
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
                 success: function (data) {
                     layer.closeAll()
                     if(data.code === 200){

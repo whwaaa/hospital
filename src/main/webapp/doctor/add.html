@@ -39,9 +39,13 @@
             $("#btnAdd").click(function () {
                 $.ajax({
                     type: "POST",
-                    url: "/doctor/",
+                    url: origin + "/doctor/",
                     data: $("#myForm").serialize(),
                     dataType:"json",
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
                     success: function(vo){
                         if(vo.code==200) {
                             window.location.href = "index.html";

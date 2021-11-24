@@ -85,8 +85,12 @@
     function queryById(chapId){
         $.ajax({
             type: "GET",
-            url: "/charge/"+chapId, //RESTful风格的API定义
+            url: origin + "/charge/"+chapId, //RESTful风格的API定义
             data: {jwtToken:jwtToken},
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
             success: function (data) {
                 if(data.code == 200){
                     loadDate(data);
@@ -118,13 +122,17 @@
             layer.load(0);
             $.ajax({
                 type: "POST",
-                url: "/charge/"+chapId, //RESTful风格的API定义
+                url: origin + "/charge/"+chapId, //RESTful风格的API定义
                 data: {
                     _method:"PUT",
                     jwtToken:jwtToken,
                     chapName:chapName,
                     chapMoney:chapMoney,
                 },
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
                 dataType: "json",
                 success: function (data) {
                     layer.closeAll()
