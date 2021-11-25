@@ -47,6 +47,7 @@
             margin: 0 3px;
             padding-left: 5px;
             border: 1px solid #cccccc;
+            cursor: pointer;
         }
         #select{
             cursor: pointer;
@@ -83,11 +84,11 @@
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
         <td width="10%" class="tableleft">病历号</td>
-        <td id="behId">1103</td>
+        <td id="behId"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">姓名</td>
-        <td id="behName">黄飞鸿</td>
+        <td id="behName"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">收费项目</td>
@@ -272,7 +273,7 @@
             success: function (data) {
                 layer.closeAll();
                 if(data.code == 200){
-                    layer.msg("添加成功！", function(){})
+                    layer.msg("添加成功！")
                     $("#chapName").val("");
                     $("#chapMoney").val("");
                 }else{
@@ -304,7 +305,7 @@
             crossDomain: true,
             success: function (data) {
                 if(data.code == 200){
-                    $("#behName").html(data.obj.behName)
+                    $("#behName").text(data.obj.behName)
                 }else{
                 }
             }

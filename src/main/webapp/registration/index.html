@@ -38,7 +38,7 @@
 		// 医生名字
 		let doctorName = $("input[name='doctorName']").val().trim()
 		// 医生所属科室
-		let dKeshi = $("input[name='dKeshi']").val().trim()
+		let dKeshi = $("input[name='dKeshi']").val().trim();
 		// 挂号开始时间
 		let createTimeStartBlur = $("input[name='createTimeStartBlur']").val().trim()
 		// 挂号结束时间
@@ -80,8 +80,8 @@
 			$.ajax({
 			    type: "POST",
 			    // 1. url请求地址前加后端API地址origin
-			    url: origin + "/register",
-			    data: {_method:"PUT",hosrId:hosrId,hosrState:3},
+			    url: origin + "/register/" + hosrId,
+			    data: {_method:"PUT",hosrState:3},
 			    dataType: "json",
 			    // 2. 允许携带cookie跨域请求
 			    xhrFields: {
@@ -161,7 +161,7 @@
 		if(ids.length > 0){
 		    // 导出
 			let url = origin + "/register/export";
-			reqExport(url, "药品信息", ids, "hosrIds");
+			reqExport(url, "挂号信息", ids, "hosrIds");
 		}else{
 		    alert("请选中要操作的项");
 		}
@@ -260,20 +260,20 @@
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
         <td width="10%" class="tableleft">病历号：</td>
-        <td><input type="text" name="hosrId" value=""/></td>
+        <td><input placeholder="请输入病历号" type="text" name="hosrId" value=""/></td>
 		
         <td width="10%" class="tableleft">主治医生：</td>
-        <td><input type="text" name="doctorName" value=""/></td>
+        <td><input placeholder="请输入主治医生姓名" type="text" name="doctorName" value=""/></td>
 		
         <td width="10%" class="tableleft">科室：</td>
-        <td><input type="text" name="dKeshi" value=""/></td>
+        <td><input placeholder="请输入科室名称" type="text" name="dKeshi" value=""/></td>
     </tr>
     <tr>
 		
         <td width="10%" class="tableleft">挂号时间：</td>
 		
 		  <td colspan="5">
-			<input type="text" name="createTimeStartBlur" value=""/>&nbsp;至&nbsp;<input type="text" name="createTimeEndBlur" value=""/>
+			<input type="text" placeholder="2099-01-01 00:00:00" name="createTimeStartBlur" value=""/>&nbsp;至&nbsp;<input placeholder="2099-01-01 00:00:00" type="text" name="createTimeEndBlur" value=""/>
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button type="button" class="query btn btn-primary" onclick="queryList(1)">查询</button>
             <button type="reset" class="btn btn-primary">清空</button>

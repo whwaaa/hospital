@@ -211,7 +211,7 @@ function reqExport(url,fileName,list,paramName){
 						// 非excel,是异常
 						let ex = JSON.parse(window.atob(e.target.result.split("base64,")[1]))
 						if(ex.msg != undefined){
-							layer.msg(ex.msg);	// 是用AjaxResoutVo封装的json
+                            layer.msg(decodeURI(ex.msg));   // 是用AjaxResoutVo封装的json
 						}else{
 							layer.msg(ex);	// 不是AjaxResoutVo封装
 						}

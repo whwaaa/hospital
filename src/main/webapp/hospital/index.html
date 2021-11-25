@@ -147,7 +147,7 @@
                     "            <td style=\"vertical-align:middle;\"><input type=\"checkbox\" name=\"check\" value=\"" + this.hosrId + "\"></td>\n" +
                     "            <td style=\"vertical-align:middle;\">" + this.hosrId + "</td>\n" +
                     "            <td style=\"vertical-align:middle;\">" + this.hosrName + "</td>\n" +
-                    "            <td style=\"vertical-align:middle;\">"+ beHospitalMsg.behId +"</td>\n" +
+                    "            <td style=\"vertical-align:middle;\">"+ beHospitalMsg.behPatBed +"</td>\n" +
                     "            <td style=\"vertical-align:middle;\">"+ this.hosrPhone +"</td>\n" +
                     "            <td style=\"vertical-align:middle;\">"+ beHospitalMsg.behAntecedent +"元</td>\n" +
                     "            <td style=\"vertical-align:middle;\">" + this.doctorName + "</td>\n" +
@@ -179,7 +179,7 @@
                         // **已结算** -> 详情 退院 出院
                         behStateText = "已结算";
                         $con.append("<td style=\"vertical-align:middle;\">"+ behStateText +"</td>")
-                        $con.append("<td id='td_"+ this.hosrId +"'style='vertical-align:middle;'><a href='look.html?hosrId="+this.hosrId+"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>详情>>></a>&nbsp;&nbsp;&nbsp;<a href='javascript:backCourt(" + this.hosrId + ")'>退院</a>&nbsp;&nbsp;&nbsp;<a href='javascript:outHospital(" + this.hosrId + ")'>出院</a></td>\n");
+                        $con.append("<td id='td_"+ this.hosrId +"'style='vertical-align:middle;'><a href='look.html?hosrId="+this.hosrId+"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>详情>>></a>&nbsp;&nbsp;&nbsp;<a href='javascript:if (confirm(\"确认操作?\")) {backCourt(" + this.hosrId + ");}'>退院</a>&nbsp;&nbsp;&nbsp;<a href='javascript:if (confirm(\"确认操作?\")) {outHospital(" + this.hosrId + ")}'>出院</a></td>\n");
                     }else if(this.hosrState == 2){
                         // **已出院** -> 详情
                         behStateText = "已出院";
@@ -219,8 +219,8 @@
                 if (alls[i].checked) {
                     let cha = $("#td_" + alls[i].value).find("a").eq(1);
                     if (cha.length == 0 || cha.text() != '退院') {
-                        // 10404病号还未缴费
-                        layer.msg(alls[i].value + "病号还未缴费", function () {});
+                        // xxx病号还未结算
+                        layer.msg(alls[i].value + "病号还未结算", function () {});
                         setTimeout(function(){
                             alls[i].checked = false;
                         },300)
@@ -249,6 +249,24 @@
             }
         }
 
+        // 导出Excel
+        function exportExcel(){
+            var alls=document.getElementsByName("check");
+            var ids = new Array();
+            for(var i=0;i<alls.length;i++){
+                if(alls[i].checked){
+                    ids.push(alls[i].value);
+                }
+            }
+            if(ids.length > 0){
+                // 导出
+                let url = origin + "/be-hospital/export";
+                reqExport(url, "住院病人信息", ids, "hosrId");
+            }else{
+                alert("请选中要操作的项");
+            }
+        }
+
         $(function () {
             // 查询第一页
             queryList(globalPageNum);
@@ -267,20 +285,20 @@
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
         <td width="10%" class="tableleft">病历号：</td>
-        <td><input type="text" name="hosrId" value=""/></td>
+        <td><input placeholder="请输入病历号" type="text" name="hosrId" value=""/></td>
 
         <td width="10%" class="tableleft">主治医生：</td>
-        <td><input type="text" name="doctorName" value=""/></td>
+        <td><input placeholder="请输入主治医生姓名" type="text" name="doctorName" value=""/></td>
 
         <td width="10%" class="tableleft">科室：</td>
-        <td><input type="text" name="dKeshi" value=""/></td>
+        <td><input placeholder="请输入科室名称" type="text" name="dKeshi" value=""/></td>
     </tr>
     <tr>
 
         <td width="10%" class="tableleft">挂号时间：</td>
 
         <td colspan="5">
-            <input type="text" name="createTimeStartBlur" value=""/>&nbsp;至&nbsp;<input type="text" name="createTimeEndBlur" value=""/>
+            <input type="text" placeholder="2099-01-01 00:00:00" name="createTimeStartBlur" value=""/>&nbsp;至&nbsp;<input placeholder="2099-01-01 00:00:00" type="text" name="createTimeEndBlur" value=""/>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <button type="button" class="query btn btn-primary" onclick="queryList(1)">查询</button>
             <button type="reset" class="btn btn-primary">清空</button>
@@ -314,7 +332,7 @@
 		 <div><button type="button" class="btn btn-success" id="newNav">添加住院信息</button>&nbsp;&nbsp;&nbsp;
 		 <button type="button" class="btn btn-success" onClick="delAll(0);">出院</button>&nbsp;&nbsp;&nbsp;
 		 <button type="button" class="btn btn-success" onClick="delAll(1);">退院</button>&nbsp;&nbsp;&nbsp;
-		 <button type="button" class="btn btn-success" >导出Excel</button>
+		 <button type="button" class="btn btn-success" onclick="exportExcel()">导出Excel</button>
 		 </div>
 		 
     </th></tr>

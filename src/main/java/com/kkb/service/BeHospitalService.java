@@ -115,13 +115,14 @@ public class BeHospitalService {
         }
         // 4.首查所有满足条件的挂号表id集合
         List<Integer> hosrIds = hosRegisterMapper.selectHosIdsByRedefineCondition(vo);
-        // 5.将以上挂号表id集合作为条件,查询住院表和挂号表的中间表,筛选关联住院的挂号表id
-        HosrHospitalMiddleExample hosrHospitalMiddleExample = new HosrHospitalMiddleExample();
-        HosrHospitalMiddleExample.Criteria criteria = hosrHospitalMiddleExample.createCriteria();
-        criteria.andHosrIdIn(hosrIds);
-        vo.setHosrIdList(hosrHospitalMiddleMapper.selectHosrIdsByExample(hosrHospitalMiddleExample));
-        vo.setHosrId(null);
-
+        if(hosrIds.size() != 0){
+            // 5.将以上挂号表id集合作为条件,查询住院表和挂号表的中间表,筛选关联住院的挂号表id
+            HosrHospitalMiddleExample hosrHospitalMiddleExample = new HosrHospitalMiddleExample();
+            HosrHospitalMiddleExample.Criteria criteria = hosrHospitalMiddleExample.createCriteria();
+            criteria.andHosrIdIn(hosrIds);
+            vo.setHosrIdList(hosrHospitalMiddleMapper.selectHosrIdsByExample(hosrHospitalMiddleExample));
+            vo.setHosrId(null);
+        }
         // 6.所有条件筛选处理完毕,多条件分页查
         PageHelper.startPage(pageNum, pageSize);
         List<HosRegister> hosRegisters = hosRegisterMapper.selectByRedefineCondition(vo);
@@ -134,6 +135,7 @@ public class BeHospitalService {
             List<HosrHospitalMiddle> hosrHospitalMiddles = hosrHospitalMiddleMapper.selectByExample(hosrHospitalMiddleExample2);
             if (hosrHospitalMiddles.get(0).getBehId()==null){
                 // TODO : 病人挂号中间表和病人表之间数据不匹配,中间表id:hosrHospitalMiddles.get(0).getHosrHospitalId()
+//                 throw new Exception("病人挂号中间表和病人表之间数据不匹配,中间表id:" + hosrHospitalMiddles.get(0).getHosrHospitalId());
             }
             // 通过病人id查询获取病人表信息
             BeHospital beHospital = beHospitalMapper.selectByPrimaryKey(hosrHospitalMiddles.get(0).getBehId());
@@ -292,47 +294,83 @@ public class BeHospitalService {
     }
 
 
+    // 生成excel信息
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public Map<String, Object> query(Integer hosrId) throws Exception {
-        HosRegister hosRegister = null;
-        // 通过hosrId查询挂号信息
-        hosRegister = hosRegisterMapper.selectByPrimaryKey(hosrId);
-        if(hosRegister == null){
-            throw new Exception("根据主键查询挂号信息id: "+ hosrId +" 不存在");
+    public List<BeHospital> createExcelMsg(List<Integer> hosrIds) throws Exception {
+        List<BeHospital> beHospitalList = new ArrayList<>();
+        for (Integer hosrId : hosrIds) {
+            // 通过中间表查询住院信息behId
+            HosrHospitalMiddleExample hosrHospitalMiddleExample = new HosrHospitalMiddleExample();
+            HosrHospitalMiddleExample.Criteria criteria = hosrHospitalMiddleExample.createCriteria();
+            criteria.andHosrIdEqualTo(hosrId);
+            List<HosrHospitalMiddle> hosrHospitalMiddles = hosrHospitalMiddleMapper.selectByExample(hosrHospitalMiddleExample);
+            if(hosrHospitalMiddles==null || hosrHospitalMiddles.size()==0){
+                throw new Exception("中间表没有与hosrId为: "+hosrId+" 的挂号表关联");
+            }
+            // 查询住院信息
+            BeHospital beHospital = beHospitalMapper.selectByPrimaryKey(hosrHospitalMiddles.get(0).getBehId());
+            if(beHospitalMapper == null){
+                throw new Exception("查询不到behId为: " + hosrHospitalMiddles.get(0).getBehId() + " 的住院信息");
+            }
+            HosRegister hosRegister = null;
+            // 通过hosrId查询挂号信息
+            hosRegister = hosRegisterMapper.selectByPrimaryKey(hosrId);
+            if(hosRegister == null){
+                throw new Exception("根据主键查询挂号信息id: "+ hosrId +" 不存在");
+            }
+            // 1.病人姓名 (自带)
+            // 2.社保号
+            beHospital.setHosrMedical(hosRegister.getHosrMedical());
+            // 3.联系电话
+            beHospital.setHosrPhone(hosRegister.getHosrPhone());
+            // 4.是否自费 0自费 1免费
+            beHospital.setHosrSelfPrice(hosRegister.getHosrRegPrice().intValue()==0?"自费":"免费");
+            // 5.性别 0男 1 女
+            beHospital.setHosrSex(hosRegister.getHosrSex()==0?"男":"女");
+            // 6.年龄
+            String idCard = hosRegister.getHosrIdcar();
+            int year = Integer.parseInt(idCard.substring(6,10));
+            int month = Integer.parseInt(idCard.substring(10,12));
+            int day = Integer.parseInt(idCard.substring(12,14));
+            Calendar instance = Calendar.getInstance();
+            System.out.println("年: " + year + " 月: " + month + " 日: " + day);
+            int nowYear = instance.get(Calendar.YEAR);
+            int nowMonth = instance.get(Calendar.MONTH) + 1;
+            int nowDay = instance.get(Calendar.DAY_OF_MONTH);
+            System.out.println("年: " + nowYear + " 月: " + nowMonth + " 日: " + nowDay);
+            int age;
+            if(nowMonth - month > 0){   // 年龄即年份相减 || 月分相等, 日相等或更大, 即刚好满岁或不超出一个月 -> 年龄即年份相减
+                age = nowYear - year;
+            }else{ // 年龄即年份相减再减一 || 今年生日没到 -> 年龄即年份相减再减一
+                age = nowYear - year - 1;
+            }
+            beHospital.setHosrAge(age);
+            // 7.职业
+            beHospital.setHosrWork(hosRegister.getHosrWork());
+            // 8.初复诊 0初诊1复诊
+            beHospital.setHosrLookDoctor(hosRegister.getHosrLookDoctor().equals("0")?"初诊":"复诊");
+            // 9.所挂科室
+            Doctor doctor = doctorMapper.selectByPrimaryKey(hosRegister.getdId());
+            if(doctor == null){
+                throw new Exception("挂号表里的医生id:"+ hosRegister.getdId() +"不存在,请检查数据库");
+            }
+            beHospital.setKeshi(doctor.getdKeshi());
+            // 10.指定医生
+            User user = userMapper.selectByPrimaryKey(doctor.getuId());
+            if(user == null){
+                throw new Exception("医生表里的用户id:"+ doctor.getuId() +"不存在,请检查数据库");
+            }
+            beHospital.setDoctorName(user.getuTrueName());
+            // 11.押金金额
+            beHospital.setBehAntecedentStr(beHospital.getBehAntecedent().toString() + "元");
+            // 12.病情介绍 (自带)
+            beHospitalList.add(beHospital);
         }
-        Doctor doctor = doctorMapper.selectByPrimaryKey(hosRegister.getdId());
-        if(doctor == null){
-            throw new Exception("挂号表里的医生id:"+ hosRegister.getdId() +"不存在,请检查数据库");
-        }
-        // 封装医生所属科室
-        hosRegister.setKeshi(doctor.getdKeshi());
-        User user = userMapper.selectByPrimaryKey(doctor.getuId());
-        if(user == null){
-            throw new Exception("医生表里的用户id:"+ doctor.getuId() +"不存在,请检查数据库");
-        }
-        // 封装挂号费
-        hosRegister.setHosrRegPriceStr(hosRegister.getHosrRegPrice().toString() + "元");
-        // 封装医生姓名
-        hosRegister.setDoctorName(user.getuTrueName());
-
-        // 通过中间表查询住院信息behId
-        HosrHospitalMiddleExample hosrHospitalMiddleExample = new HosrHospitalMiddleExample();
-        HosrHospitalMiddleExample.Criteria criteria = hosrHospitalMiddleExample.createCriteria();
-        criteria.andHosrIdEqualTo(hosrId);
-        List<HosrHospitalMiddle> hosrHospitalMiddles = hosrHospitalMiddleMapper.selectByExample(hosrHospitalMiddleExample);
-        if(hosrHospitalMiddles==null || hosrHospitalMiddles.size()==0){
-            throw new Exception("中间表没有与hosrId为: "+hosrId+" 的挂号表关联");
-        }
-        // 查询住院信息
-        BeHospital beHospital = beHospitalMapper.selectByPrimaryKey(hosrHospitalMiddles.get(0).getBehId());
-        if(beHospitalMapper == null){
-            throw new Exception("查询不到behId为: " + hosrHospitalMiddles.get(0).getBehId() + " 的住院信息");
-        }
-        Map<String, Object> map = new HashMap<>();
-        map.put("beHospital", beHospital);
-        map.put("hosRegister", hosRegister);
-        return map;
+        return beHospitalList;
     }
+
+
+
 
 }
 

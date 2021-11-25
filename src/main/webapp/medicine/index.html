@@ -213,7 +213,7 @@
             if (drIds.length == 0) {
                 layer.msg("没有选中数据，不能导出!");
             } else {
-                let url = origin + '/drug/export/drIds';
+                let url = '/drug/export/drIds';
                 reqExport(url, "药品信息", drIds, "drId");
                 // 清除复选框
                 $("input[name='check']:checked").prop("checked", false);
@@ -225,7 +225,7 @@
             // 查询的条件
             let drName = $("#drName").val();
             let drType = $("#drType").val();
-            let url = origin + '/drug/export?drName=' + drName + "&drType=" + drType;
+            let url = '/drug/export?drName=' + drName + "&drType=" + drType;
             reqExport(url, "药品信息", null, "");
         });
     })

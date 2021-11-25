@@ -31,11 +31,6 @@
 
     </style>
     <script type="text/javascript">
-
-        $(function () {
-
-        });
-	
     	function checkall(){
 			var alls=document.getElementsByName("check");
 			var ch=document.getElementById("checkall");
@@ -83,41 +78,17 @@
         <th>检查日期</th>
     </tr>
     </thead>
-    <tbody id="tbody">
-<!--	     <tr >-->
-<!--            <td style="vertical-align:middle;">1103</td>-->
-<!--            <td style="vertical-align:middle;">黄飞鸿</td>-->
-<!--            <td style="vertical-align:middle;">心脏检查</td>-->
-<!--            <td style="vertical-align:middle;">200</td>-->
-<!--            <td style="vertical-align:middle;">2015-01-04 10:33:12</td>-->
-<!--			</tr>-->
-<!--	     <tr >-->
-<!--            <td style="vertical-align:middle;">1103</td>-->
-<!--            <td style="vertical-align:middle;">黄飞鸿</td>-->
-<!--            <td style="vertical-align:middle;">心脏手术</td>-->
-<!--            <td style="vertical-align:middle;">1600</td>-->
-<!--            <td style="vertical-align:middle;">2015-01-04 12:33:12</td>-->
-<!--			</tr>-->
-<!--	     <tr >-->
-<!--            <td style="vertical-align:middle;">1103</td>-->
-<!--            <td style="vertical-align:middle;">黄飞鸿</td>-->
-<!--            <td style="vertical-align:middle;">B超检查</td>-->
-<!--            <td style="vertical-align:middle;">50</td>-->
-<!--            <td style="vertical-align:middle;">2015-01-04 09:33:12</td>-->
-<!--			</tr>-->
-    </tbody>
+    <tbody id="tbody"></tbody>
   </table>
   
   <table class="table table-bordered table-hover definewidth m10" >
   	<tr>
         <th colspan="5">
           <div  id="pageInfo-box" class="inline pull-right page">
-<!--          <a href='#' >第一页</a> <a href='#'>上一页</a>     <span class='current'>1</span><a href='#'>2</a><a href='/chinapost/index.php?m=Label&a=index&p=3'>3</a><a href='#'>4</a><a href='#'>5</a>  <a href='#' >下一页</a> <a href='#' >最后一页</a>-->
-<!--		  &nbsp;&nbsp;&nbsp;共<span class='current'>32</span>条记录<span class='current'> 1/33 </span>页-->
 		  </div>
 		 <div>
 				<button type="button" class="btn btn-success" name="backid" id="backid" onclick="back()">返回列表</button>
-				<button type="button" class="btn btn-success" >导出excel</button>
+				<button type="button" class="btn btn-success" onclick="exportExcel()" >导出excel</button>
 		 </div>
 		 
 		 </th>
@@ -128,24 +99,34 @@
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
         <td width="10%" class="tableleft">总花费：</td>
-        <td id="allCast">1850元</td>
+        <td id="allCast"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">押金：</td>
-        <td id="behAntecedent">2000元</td>
+        <td id="behAntecedent"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">余额：</td>
-        <td id="balance">150元</td>
+        <td id="balance"></td>
     </tr>
 </table>
   
 </body>
 </html>
 <script>
+    // 获取地址栏信息
     let behId = document.location.toString().GetValue("behId");
-    $(function () {
 
+    // 导出Excel
+    function exportExcel(){
+        let ids = new Array();
+        ids.push(behId)
+        let url = origin + "/ckcharge/export";
+        reqExport(url, "结算账单", ids, "behId");
+    }
+
+
+    $(function () {
         queryList(globalPageNum);
     });
     queryList = function(pageNum){
@@ -211,9 +192,9 @@
         }
 
         $("#tbody").html($(str));
-        $("#allCast").html(allCast);
-        $("#balance").html(balance);
-        $("#behAntecedent").html(behAntecedent);
+        $("#allCast").html(allCast+"元");
+        $("#balance").html(balance+"元");
+        $("#behAntecedent").html(behAntecedent+"元");
 
     }
 
