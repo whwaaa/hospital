@@ -117,8 +117,7 @@
 								time: 2*1000
 							});
 							if (data.code === 200) {
-								 let pageNum = document.location.toString().GetValue("pageNum");
-								 queryList(pageNum);
+								 queryList(globalPageNum);
 							}
 						}
 						// 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
@@ -134,7 +133,7 @@
 			// 返回在线发药的主页
 			$(function() {
 				$('#backid').click(function() {
-					window.location.href = "dispensing.html";
+					window.location.href = "dispensing.html?pageSize="+globalPageSize+"&pageNum="+globalPageNum;
 				});
 			});
 		</script>

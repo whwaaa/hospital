@@ -137,7 +137,7 @@
                             layer.msg("操作成功",{
                                 time: 1500
                             }, function () {
-                                window.location.href = "dispensing.html";
+                                window.location.href = "dispensing.html?pageSize="+globalPageSize+"&pageNum="+globalPageNum;
                             });
                         } else {
                             layer.msg(data.msg);
@@ -152,7 +152,7 @@
             });
 
             $('#backid').click(function () {
-                window.location.href = "dispensing.html";
+                window.location.href = "dispensing.html?pageSize="+globalPageSize+"&pageNum="+globalPageNum;
             });
 
             // 检查是不是正整数，却小于100；
