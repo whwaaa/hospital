@@ -122,6 +122,8 @@
 <script>
     // 读取地址栏信息
     let behId = document.location.toString().GetValue("behId");
+    let behName = decodeURI(document.location.toString().GetValue("nameuri").replaceAll("_","%"));
+
     $("#behId").val(behId);
     // 存放收费项目数据
     let chargeProjectDate;
@@ -293,27 +295,29 @@
 
 
     $(function(){
-        $.ajax({
-            type: "GET",
-            url: origin + "/ckcharge/"+behId,
-            data:{
-                behId:behId,
-            },
-            xhrFields: {
-                withCredentials: true
-            },
-            crossDomain: true,
-            success: function (data) {
-                if(data.code == 200){
-                    $("#behName").text(data.obj.behName)
-                }else{
-                }
-            }
-            // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
-            ,complete : function(xhr, status) {
-                myComplete(xhr, status);
-            }
-        });
+        $("#behId").text(behId);
+        $("#behName").text(behName)
+        // $.ajax({
+        //     type: "GET",
+        //     url: origin + "/ckcharge/"+behId,
+        //     data:{
+        //         behId:behId,
+        //     },
+        //     xhrFields: {
+        //         withCredentials: true
+        //     },
+        //     crossDomain: true,
+        //     success: function (data) {
+        //         if(data.code == 200){
+        //             $("#behName").text(data.obj.behName)
+        //         }else{
+        //         }
+        //     }
+        //     // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+        //     ,complete : function(xhr, status) {
+        //         myComplete(xhr, status);
+        //     }
+        // });
         // 查询所有收费项目
         queryAllChargeProject();
         // 监听下拉选择

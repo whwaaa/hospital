@@ -118,7 +118,7 @@
                         // 1. url请求地址前加后端API地址origin
                         url: origin + "/be-hospital",
                         data: {behNursePeople:behNursePeople,behPatBed:behPatBed,behAntecedent:behAntecedent
-                            ,behIllness:behIllness,hosrId:hosrId},
+                            ,behIllness:behIllness,hosrId:hosrId,behId:hosrId},
                         dataType: "json",
                         // 2. 允许携带cookie跨域请求
                         xhrFields: {
@@ -163,61 +163,74 @@
                 success: function (data) {
                     layer.closeAll()
                     if (data.code == 200){
-                        // 填充数据
-                        // 姓名
-                        $("#hosrName").text(data.obj.hosrName);
-                        // 证件号
-                        $("#hosrIdcar").text(data.obj.hosrIdcar);
-                        // 社保号
-                        $("#hosrMedical").text(data.obj.hosrMedical);
-                        // 联系电话
-                        $("#hosrPhone").text(data.obj.hosrPhone);
-                        // 是否自费
-                        $("input[name='hosrSelfPrice']").val(data.obj.hosrSelfPrice);
-                        if(data.obj.hosrSelfPrice == 0){ // 0自费 1免费
-                            $("input[name='hosrSelfPrice']").eq(1).prop("checked", true);
+                        let msg;
+                        if(data.obj.hosrState == 0){
+                            // 填充数据
+                            // 姓名
+                            $("#hosrName").text(data.obj.hosrName);
+                            // 证件号
+                            $("#hosrIdcar").text(data.obj.hosrIdcar);
+                            // 社保号
+                            $("#hosrMedical").text(data.obj.hosrMedical);
+                            // 联系电话
+                            $("#hosrPhone").text(data.obj.hosrPhone);
+                            // 是否自费
+                            $("input[name='hosrSelfPrice']").val(data.obj.hosrSelfPrice);
+                            if(data.obj.hosrSelfPrice == 0){ // 0自费 1免费
+                                $("input[name='hosrSelfPrice']").eq(1).prop("checked", true);
+                            }else{
+                                $("input[name='hosrSelfPrice']").eq(0).prop("checked", true);
+                            }
+                            // 计算年龄
+                            let year = parseInt(data.obj.hosrIdcar.substr(6,4));
+                            let month = parseInt(data.obj.hosrIdcar.substr(10,2));
+                            let day = parseInt(data.obj.hosrIdcar.substr(12,2));
+                            let nowYear = new Date().getFullYear();
+                            let nowMoth = new Date().getMonth() + 1;
+                            let nowDay = new Date().getDate();
+                            if(nowMoth - month > 0){
+                                // 年龄即年份相减
+                                $("#hosrAge").text(nowYear - year);
+                            }else if(nowMoth - month < 0){
+                                // 年龄即年份相减再减一
+                                $("#hosrAge").text(nowYear - year - 1);
+                            }else if(nowDay - day >= 0){
+                                // 月分相等, 日相等或更大, 即刚好满岁或不超出一个月 -> 年龄即年份相减
+                                $("#hosrAge").text(nowYear - year);
+                            }else{
+                                // 今年生日没到 -> 年龄即年份相减再减一
+                                $("#hosrAge").text(nowYear - year - 1);
+                            }
+                            // 计算性别 第17位奇数是男, 偶数是女
+                            if( data.obj.hosrIdcar.substr(16,1)%2 == 0 ){
+                                $("input[name='hosrSex']").eq(1).prop("checked",true);	// 女
+                            }else{
+                                $("input[name='hosrSex']").eq(0).prop("checked",true);  // 男
+                            }
+                            // 初复诊
+                            $("input[name='hosrLookDoctor']").val(data.obj.hosrLookDoctor)
+                            if(data.obj.hosrLookDoctor == 0){ // 初复诊：0初诊 1复诊
+                                $("input[name='hosrLookDoctor']").eq(0).prop("checked", true);
+                            }else{
+                                $("input[name='hosrLookDoctor']").eq(1).prop("checked", true);
+                            }
+                            // 所挂科室
+                            $("#keshi").text(data.obj.keshi);
+                            // 指定医生
+                            $("#doctor").text(data.obj.doctorName);
+                            // 备注
+                            $("#hosrRemark").text(data.obj.hosrRemark);
                         }else{
-                            $("input[name='hosrSelfPrice']").eq(0).prop("checked", true);
+                            // 1已住院 2已出院 3已退号
+                            if(data.obj.hosrState == 1){
+                                msg = "已住院";
+                            }else if(data.obj.hosrState == 2){
+                                msg = "已出院";
+                            }else{
+                                msg = "已退号";
+                            }
+                            layer.msg("病号" + hosrId + msg, function(){});
                         }
-                        // 计算年龄
-                        let year = parseInt(data.obj.hosrIdcar.substr(6,4));
-                        let month = parseInt(data.obj.hosrIdcar.substr(10,2));
-                        let day = parseInt(data.obj.hosrIdcar.substr(12,2));
-                        let nowYear = new Date().getFullYear();
-                        let nowMoth = new Date().getMonth() + 1;
-                        let nowDay = new Date().getDate();
-                        if(nowMoth - month > 0){
-                            // 年龄即年份相减
-                            $("#hosrAge").text(nowYear - year);
-                        }else if(nowMoth - month < 0){
-                            // 年龄即年份相减再减一
-                            $("#hosrAge").text(nowYear - year - 1);
-                        }else if(nowDay - day >= 0){
-                            // 月分相等, 日相等或更大, 即刚好满岁或不超出一个月 -> 年龄即年份相减
-                            $("#hosrAge").text(nowYear - year);
-                        }else{
-                            // 今年生日没到 -> 年龄即年份相减再减一
-                            $("#hosrAge").text(nowYear - year - 1);
-                        }
-                        // 计算性别 第17位奇数是男, 偶数是女
-                        if( data.obj.hosrIdcar.substr(16,1)%2 == 0 ){
-                            $("input[name='hosrSex']").eq(1).prop("checked",true);	// 女
-                        }else{
-                            $("input[name='hosrSex']").eq(0).prop("checked",true);  // 男
-                        }
-                        // 初复诊
-                        $("input[name='hosrLookDoctor']").val(data.obj.hosrLookDoctor)
-                        if(data.obj.hosrLookDoctor == 0){ // 初复诊：0初诊 1复诊
-                            $("input[name='hosrLookDoctor']").eq(0).prop("checked", true);
-                        }else{
-                            $("input[name='hosrLookDoctor']").eq(1).prop("checked", true);
-                        }
-                        // 所挂科室
-                        $("#keshi").text(data.obj.keshi);
-                        // 指定医生
-                        $("#doctor").text(data.obj.doctorName);
-                        // 备注
-                        $("#hosrRemark").text(data.obj.hosrRemark);
                     }else{
                         layer.msg(data.msg,function(){})
                     }

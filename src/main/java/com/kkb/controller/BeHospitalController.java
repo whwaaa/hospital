@@ -2,7 +2,9 @@ package com.kkb.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.kkb.pojo.BeHospital;
+import com.kkb.pojo.HosRegister;
 import com.kkb.service.BeHospitalService;
+import com.kkb.utils.excel.ExcelUtil;
 import com.kkb.vo.AjaxResultVo;
 import com.kkb.vo.RegisterQueryVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -88,5 +93,24 @@ public class BeHospitalController {
             return new AjaxResultVo(stringObjectMap);
         }
         return new AjaxResultVo(500, "服务器内部异常, 请稍后再试!");
+    }
+
+    // 导出Excel
+    @RequestMapping(value = "export",method = RequestMethod.GET)
+    public void exportAll(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        List<HosRegister> hosRegisterList = new ArrayList<>();
+        String[] hosrIds = request.getParameterValues("hosrId");
+        List<Integer> intHosrIds = new ArrayList<>();
+        for (String hosrId : hosrIds) {
+            Integer intHosrId;
+            try {
+                intHosrId = Integer.parseInt(hosrId);
+                intHosrIds.add(intHosrId);
+            } catch (Exception e) {
+                throw new Exception("hosrId不是纯数字 _> " + hosrId);
+            }
+        }
+        List<BeHospital> beHospitalList = service.createExcelMsg(intHosrIds);
+        ExcelUtil.exportDefault(beHospitalList,"住院病人信息",response);
     }
 }

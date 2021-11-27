@@ -186,6 +186,7 @@
             let obj = list[i];
             let id=obj.behId==null?'':obj.behId;
             let name=obj.behName==null?'':obj.behName;
+            let nameuri = encodeURI(name);
             bName=name;
             let createtime=obj.behCreateTime==null?'':obj.behCreateTime;
             str+='<tr>' +
@@ -194,7 +195,7 @@
                 '            <td>'+createtime+'</td>' +
                 '            <td style="vertical-align:middle;">'+
                 '<a href="#" onclick="query('+id+')" >'+"详情&nbsp;&nbsp;"+'</a>'+
-                '<a href="#" onclick="query1('+id+')">'+"添加收费项"+'</a>'+
+                '<a href="#" onclick="query1('+id+',\''+nameuri+'\')">'+"添加收费项"+'</a>'+
                 '            </td>'
             '</tr>'
 
@@ -207,9 +208,9 @@
         window.location.href="account-look2.html?behId="+id+
             "&globalPageNum" + globalPageNum + "&globalPageSize" + globalPageSize;
     }
-    function query1(id) {
+    function query1(id,nameuri) {
         // window.location.href="/hospital/charge-edit1.html?chapId="+id;
-        window.location.href="charge-new.html?behId="+id+
+        window.location.href="charge-new.html?behId="+id+"&nameuri="+nameuri.replaceAll("%","_")+
             "&globalPageNum" + globalPageNum + "&globalPageSize" + globalPageSize;
     }
 </script>

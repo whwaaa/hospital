@@ -183,7 +183,8 @@ public class BeHospitalService {
         // 添加挂号住院中间表信息
         HosrHospitalMiddle hosrHospitalMiddle = new HosrHospitalMiddle();
         hosrHospitalMiddle.setHosrId(hosrId);
-        hosrHospitalMiddle.setBehId(beHospital.getBehId());
+//        hosrHospitalMiddle.setBehId(beHospital.getBehId());
+        hosrHospitalMiddle.setBehId(hosrId);    // 直接用挂号id作为住院id
         return hosrHospitalMiddleMapper.insertSelective(hosrHospitalMiddle);
     }
 

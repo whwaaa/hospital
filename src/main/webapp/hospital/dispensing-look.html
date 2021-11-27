@@ -44,7 +44,7 @@
 					pageNum: pageNum,
 					pageSize: globalPageSize
 				};
-				layer.load(0);
+				let queryLayer = layer.load(0);
 				$.ajax({
 			  		type: "GET",
 					url: origin + "/drugPeople/order/" + hosrId,
@@ -54,23 +54,22 @@
 					crossDomain: true,
 					data: reqData,
 					success: function(data) {
-							layer.closeAll()
-							if (data.code === 200) {
-								// 更新全局分页参数
-								globalPageSize = data.obj.pageSize;
-								globalPageNum = data.obj.pageNum;
-								// 填充分页
-								fillPageData(data.obj);
-								// 填充内容
-								fillContent(data.obj);
-								$("#checkall").removeAttr("checked");
-							} else {
-								layer.msg(data.msg, function() {});
-							}
+					  	layer.close(queryLayer);
+						if (data.code === 200) {
+							// 更新全局分页参数
+							globalPageSize = data.obj.pageSize;
+							globalPageNum = data.obj.pageNum;
+							// 填充分页
+							fillPageData(data.obj);
+							// 填充内容
+							fillContent(data.obj);
+							$("#checkall").removeAttr("checked");
+						} else {
+							layer.msg(data.msg, function() {});
 						}
-						// 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
-						,
-					complete: function(xhr, status) {
+					}
+					// 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+					,complete: function(xhr, status) {
 						myComplete(xhr, status);
 					}
 				});
@@ -112,17 +111,16 @@
 					crossDomain: true,
 					data: {num: num},
 					success: function(data) {
-							layer.close(loadId);
-							layer.msg(data.msg,{
-								time: 2*1000
-							});
-							if (data.code === 200) {
-								 queryList(globalPageNum);
-							}
+						layer.close(loadId);
+						layer.msg(data.msg,{
+							time: 2*1000
+						});
+						if (data.code === 200) {
+							queryList(globalPageNum);
 						}
-						// 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
-						,
-					complete: function(xhr, status) {
+					}
+					// 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+					,complete: function(xhr, status) {
 						myComplete(xhr, status);
 					}
 				});
