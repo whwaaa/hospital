@@ -57,10 +57,10 @@ public class DoctorController {
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public AjaxResultVo addDoctor(Doctor doctor) {
+    public AjaxResultVo addDoctor(Doctor doctor) throws Exception {
         if (doctorService.queryByIdCar(doctor.getdIdCar()) == 0){
             int i = doctorService.addDoctor(doctor);
-            if (i > 1) {
+            if (i > 0) {
                 return new AjaxResultVo(200, "ok");
             }
             return new AjaxResultVo(500, "服务器内部异常, 请稍后再试!");

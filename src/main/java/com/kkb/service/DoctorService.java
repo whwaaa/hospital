@@ -3,6 +3,8 @@ package com.kkb.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.kkb.mapper.DoctorMapper;
+import com.kkb.mapper.RoleMapper;
+import com.kkb.mapper.RoleMenuMapper;
 import com.kkb.mapper.UserMapper;
 import com.kkb.pojo.Doctor;
 import com.kkb.pojo.DoctorExample;
@@ -24,6 +26,12 @@ public class DoctorService implements Serializable {
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private RoleMapper roleMapper;
+
+    @Resource
+    private RoleMenuMapper roleMenuMapper;
 
     /**
      * 多添加分页查询
@@ -89,8 +97,36 @@ public class DoctorService implements Serializable {
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = {Exception.class})
-    public int addDoctor(Doctor doctor){
+    public int addDoctor(Doctor doctor) throws Exception {
+        // 0.查询医生角色id
+        Integer doctorId = roleMapper.selectDoctorId();
+        if(doctorId == null){
+            throw new Exception("还未创建医生角色");
+        }
+        User user = new User();
+        // 角色id:医生
+        user.setrId(doctorId);
+        // 真实姓名:doctor获取
+        user.setuTrueName(doctor.getDoctorName());
+        // 用户名:默认手机号
+        user.setuLoginName(doctor.getdPhone());
+        // 密码:默认手机号
+        user.setuPassword(doctor.getdPhone());
+        // 状态:0正常
+        user.setuState(0);
+        // 邮箱
+        user.setuEmail(doctor.getdEmail());
+        // 创建日期
+        user.setuCreateTime(new Date());
+        // 添加user
+        userMapper.insertSelective(user);
+        if(user.getuId() == null){
+            throw new Exception("创建用户失败");
+        }
+        doctor.setuId(user.getuId());
+        doctor.setdState(0);
         doctor.setdCreateTime(new Date());
+        doctor.setdIntime(new Date());
         return doctorMapper.insertSelective(doctor);
     }
 
