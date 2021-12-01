@@ -43,14 +43,14 @@
         queryList = function(pageNum){
             // 查询的条件
             let dId = $("#dId").val();
-            let uTrueName= $("#uTrueName").val();
+            let userName= $("#dName").val();
             let dKeshi = $("#dKeshi").val();
-            layer.load(0)
+            layer.load(0);
             $.ajax({
                 type: "GET",
                 url: origin + "/doctor/list",
                 data: {pageNum:pageNum, pageSize:globalPageSize,
-                    dId:dId, uTrueName:uTrueName, dKeshi:dKeshi},
+                    dId:dId, userName:userName, dKeshi:dKeshi},
                 xhrFields: {
                     withCredentials: true
                 },
@@ -82,21 +82,62 @@
             $("#mycon").find("tbody").empty()
             $.each(pageInfo.list, function(){
                 let con = "<tr>\n" +
-                    "             <td style='vertical-align:middle;'><input type='checkbox' name='check' value='>"+ this.dId +"'></td>\n" +
+                    "             <td style='vertical-align:middle;'><input type='checkbox' name='check' value='"+ this.dId +"'></td>\n" +
                     "             <td>"+ this.dId +"</td>\n" +
-                    "             <td>"+ this.user.uTrueName +"</td>\n" +
+                    "             <td>"+ this.doctorName +"</td>\n" +
                     "             <td>"+ this.dIntime +"</td>\n" +
                     "             <td>"+ this.dKeshi +"</td>\n" +
                     "             <td>\n" +
                     "                 <a href='edit.html?pageNum="+ pageInfo.pageNum +"&pageSize="+ pageInfo.pageSize +"&dId="+ this.dId +"'>更改</a>&nbsp;&nbsp;&nbsp;"
                     +"<a href='look.html?pageNum="+ pageInfo.pageNum +"&pageSize="+ pageInfo.pageSize +"&dId="+ this.dId +"'>详情</a>&nbsp;&nbsp;&nbsp;" +
-                    "<a href='javascript:deleteDoctorById("+this.dId+");'>删除</a>\n"+
+                    "<a href='javascript:deleteDoctorById("+this.dId+", "+this.uId+");'>删除</a>\n"+
                     "             </td>\n" +
                     "         </tr>"
                 $("#mycon").find("tbody").append($(con))
             })
         }
-	
+        // 清空
+        function reset(){
+            $("#dId").val("")
+            $("#dName").val("")
+            $("#dKeshi").val("")
+            queryList(1);
+        }
+        // 删除医生byId
+        function deleteDoctorById(dId, uId){
+            if(confirm("确定要执行删除?")){
+                layer.load(0)
+                $.ajax({
+                    type: "POST",
+                    // 1. url请求地址前加后端API地址origin
+                    url: origin + "/doctor/" + dId,
+                    data: {uId:uId,_method:"DELETE"},
+                    dataType: "json",
+                    // 2. 允许携带cookie跨域请求
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
+                    success: function (data) {
+                        layer.closeAll();
+                        if(data.code == 204){
+                            // 删除成功
+                            layer.msg("删除成功",{time:1000},function(){
+                                // 更新当前页信息
+                                queryList(globalPageNum);
+                            });
+                        }else{
+                            // 删除失败
+                            layer.msg(data.msg, function(){});
+                        }
+                    },
+                    complete : function(xhr, status) {
+                        myComplete(xhr, status);
+                    }
+                })
+            }
+
+        }
     	function checkall(){
 			var alls=document.getElementsByName("check");
 			var ch=document.getElementById("checkall");
@@ -126,11 +167,30 @@
 				alert("请选中要操作的项");
 			}
 		}
+
+        // 导出Excel
+        function exportExcel(){
+            var alls=document.getElementsByName("check");
+            var ids = new Array();
+            for(var i=0;i<alls.length;i++){
+                if(alls[i].checked){
+                    ids.push(alls[i].value);
+                }
+            }
+            if(ids.length > 0){
+                // 导出
+                let url = origin + "/doctor/export";
+                reqExport(url, "门诊医生信息", ids, "dIds");
+            }else{
+                alert("请选中要操作的项");
+            }
+        }
+
     </script>
 </head>
 <body>
 
-<form action="index.html" method="post" class="definewidth m20">
+<div class="definewidth m20">
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
         <td width="10%" class="tableleft">医生编号：</td>
@@ -145,11 +205,11 @@
     <tr>
 		  <td colspan="6"><center>
             <button onclick="queryList(1)" class="btn btn-primary" type="button">查询</button>
-            <button class="btn btn-primary" type="reset">清空</button>
+            <button class="btn btn-primary" onclick="reset()" type="reset">清空</button>
 			</center></td>
     </tr>
 </table>
-</form>
+</div>
    
 <table id="mycon" class="table table-bordered table-hover definewidth m10" >
     <thead>
@@ -215,7 +275,7 @@
         </div>
         <div>
             <button type="button" class="btn btn-success" id="newNav">添加新医生</button>
-            <button type="button" class="btn btn-success" id="delPro">导出Excel</button>
+            <button type="button" class="btn btn-success" onclick="exportExcel()" id="delPro">导出Excel</button>
         </div>
     </th></tr>
 </table>

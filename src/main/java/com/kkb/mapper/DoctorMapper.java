@@ -5,6 +5,7 @@ import com.kkb.pojo.DoctorExample;
 import java.util.List;
 import java.util.Map;
 
+import com.kkb.vo.DoctorQueryVO;
 import org.apache.ibatis.annotations.Param;
 
 public interface DoctorMapper {
@@ -32,4 +33,7 @@ public interface DoctorMapper {
 
     // 多条件查询Id集合
     List<Integer> selectDoctorIdList(DoctorExample example);
+
+    // 多条件查询doctor集合
+    List<Doctor> selectDoctorList(DoctorQueryVO vo);
 }

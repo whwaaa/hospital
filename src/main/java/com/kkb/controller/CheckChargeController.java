@@ -2,12 +2,11 @@ package com.kkb.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.kkb.pojo.BeHospital;
-import com.kkb.pojo.ChargeProject;
-import com.kkb.pojo.PricePeople;
+import com.kkb.pojo.*;
 import com.kkb.service.ChargeService;
 import com.kkb.service.CkChargeService;
 import com.kkb.service.PricePeopleService;
+import com.kkb.utils.excel.ExcelUtil;
 import com.kkb.vo.AjaxResultVo;
 import com.kkb.vo.ChargeQueryVo;
 import com.kkb.vo.CkChargeQueryVo;
@@ -18,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,4 +101,41 @@ public class CheckChargeController {
         }
         return new AjaxResultVo(400, "余额不足，请充值！", null);
     }
+
+
+    // 导出Excel
+    @RequestMapping(value = "export",method = RequestMethod.GET)
+    public void exportAll(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String[] behIds = request.getParameterValues("behIds");
+        List<Integer> intBehIds = new ArrayList<>();
+        for (String behId : behIds) {
+            Integer intBehId;
+            try {
+                intBehId = Integer.parseInt(behId);
+                intBehIds.add(intBehId);
+            } catch (Exception e) {
+                String msg = "behId不是纯数字:" + behId;
+                String encode = URLEncoder.encode(msg, "UTF-8");
+                throw new Exception(encode);
+            }
+        }
+        List<ChargeProject> chargeProjectList = ckChargeService.createExcelMsg(intBehIds);
+        ExcelUtil.exportDefault(chargeProjectList,"收费项目信息",response);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

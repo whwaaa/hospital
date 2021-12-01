@@ -3,10 +3,9 @@ package com.kkb.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.kkb.mapper.BeHospitalMapper;
-import com.kkb.pojo.BeHospital;
-import com.kkb.pojo.BeHospitalExample;
-import com.kkb.pojo.ChargeProject;
-import com.kkb.pojo.PricePeople;
+import com.kkb.mapper.ChargeProjectMapper;
+import com.kkb.mapper.PricePeopleMapper;
+import com.kkb.pojo.*;
 import com.kkb.vo.CkChargeQueryVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +13,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +30,15 @@ public class CkChargeService {
     @Autowired
     private PricePeopleService pricePeopleService;
     @Autowired ChargeService chargeService;
+
+    // 收费项和病人之间的中间表
+    @Autowired
+    private PricePeopleMapper pricePeopleMapper;
+    // 收费项目表
+    @Autowired
+    private ChargeProjectMapper chargeProjectMapper;
+
+
     @Transactional(propagation = Propagation.REQUIRED,readOnly = true)
     public PageInfo<ChargeProject> queryByPage(Integer pageNum, Integer pageSize, CkChargeQueryVo vo){
         BeHospitalExample beHospitalExample = new BeHospitalExample();
@@ -57,11 +66,15 @@ public class CkChargeService {
         return new PageInfo(list);
 
     }
+
+
     //根据主键查询
     @Transactional(propagation = Propagation.REQUIRED,readOnly = true)
     public BeHospital queryById(Integer behId){
         return  beHospitalMapper.selectByPrimaryKey(behId);
     }
+
+
     //查询病人余额
     @Transactional(propagation = Propagation.REQUIRED,readOnly = true)
     public BigDecimal queryBlank(Integer behId){
@@ -78,13 +91,53 @@ public class CkChargeService {
         }
         return allCast;
     }
+
+
     //结算
-    @Transactional(propagation = Propagation.REQUIRED,rollbackFor ={Exception.class})
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor ={Exception.class})
     public Integer pay(Integer behId){
         BeHospital beHospital = new BeHospital();
         beHospital.setBehId(behId);
         beHospital.setBehClosePrice(1);     // 是否结算 0未结算 1已结算
        beHospital.setBehUpdateTime(new Date());
         return beHospitalMapper.updateByPrimaryKeySelective(beHospital);
+    }
+
+    //导出Excel
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    public List<ChargeProject> createExcelMsg(List<Integer> behIds) throws Exception {
+        List<ChargeProject> chargeProjectList = new ArrayList<>();
+        for (Integer behId : behIds) {
+            // 查询住院表
+            BeHospital beHospital = beHospitalMapper.selectByPrimaryKey(behId);
+            if(beHospital==null || beHospital.getBehName()==null){
+                String msg = "住院表查询不到病人信息, behId:" + behId;
+                String encode = URLEncoder.encode(msg, "UTF-8");
+                throw new Exception(encode);
+            }
+            // 通过收费项和病人中间表获取chapId
+            PricePeopleExample pricePeopleExample = new PricePeopleExample();
+            PricePeopleExample.Criteria criteria = pricePeopleExample.createCriteria();
+            criteria.andBehIdEqualTo(behId);
+            List<PricePeople> pricePeople = pricePeopleMapper.selectByExample(pricePeopleExample);
+            if(pricePeople.size()!=1 || pricePeople.get(0).getChapId()==null){
+                String msg = "无法通过收费项和病人中间表获取chapId, behId:" + behId;
+                String encode = URLEncoder.encode(msg, "UTF-8");
+                throw new Exception(encode);
+            }
+            // 查询收费项目
+            ChargeProject chargeProject = chargeProjectMapper.selectByPrimaryKey(pricePeople.get(0).getChapId());
+            if(chargeProject == null){
+                String msg = " 查询收费项目为空, chapId:" + pricePeople.get(0).getChapId();
+                String encode = URLEncoder.encode(msg, "UTF-8");
+                throw new Exception(encode);
+            }
+            // 封装检查日期
+            chargeProject.setBeChargeTime(pricePeople.get(0).getCreateTime());
+            // 封装病人姓名
+            chargeProject.setBehName(beHospital.getBehName());
+            chargeProjectList.add(chargeProject);
+        }
+        return chargeProjectList;
     }
 }

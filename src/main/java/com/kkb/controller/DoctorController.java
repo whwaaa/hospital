@@ -1,17 +1,20 @@
 package com.kkb.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.kkb.pojo.Doctor;
+import com.kkb.pojo.*;
 import com.kkb.service.DoctorService;
+import com.kkb.utils.excel.ExcelUtil;
 import com.kkb.vo.AjaxResultVo;
 import com.kkb.vo.DoctorQueryVO;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("doctor")
@@ -44,12 +47,12 @@ public class DoctorController {
      * 根据主键查询
      * @param dId
      * @return
-     *//*
+     */
     @RequestMapping(value = "{dId}",method = RequestMethod.GET)
-    public AjaxResultVo queryById(@PathVariable("dId")Integer dId){
+    public AjaxResultVo queryById(@PathVariable("dId")Integer dId) throws Exception {
         Doctor doctor = doctorService.queryById(dId);
         return new AjaxResultVo(doctor);
-    }*/
+    }
 
     /**
      * 根据主键添加
@@ -69,16 +72,59 @@ public class DoctorController {
     }
 
     /**
-     * 根据主键删除，即物理删除
+     * 根据主键更新
+     * @param dId
+     * @param doctor
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "{dId}", method = RequestMethod.PUT)
+    public AjaxResultVo updateById(@PathVariable("dId") Integer dId, Doctor doctor) throws Exception {
+        int i = doctorService.updateById(dId, doctor);
+        if(i > 0){
+            return new AjaxResultVo();
+        }
+        return new AjaxResultVo(500, "服务器内部异常, 请稍后再试!");
+    }
+
+
+    /**
+     * 根据主键删除逻辑删除
      * @param dId
      * @return
      */
-    /*@RequestMapping(value = "{dId}",method = RequestMethod.DELETE)
-    public AjaxResultVo deleteDoctor(@PathVariable("dId")Integer dId){
-        int i = doctorService.deleteDoctor(dId);
+    @RequestMapping(value = "{dId}",method = RequestMethod.DELETE)
+    public AjaxResultVo deleteDoctor(@PathVariable("dId")Integer dId, @RequestParam("uId") Integer uId) throws Exception {
+        int i = doctorService.deleteDoctor(dId, uId);
         if (i == 1) {
-            return new AjaxResultVo(201, "ok");
+            return new AjaxResultVo(204, "ok");
         }
         return new AjaxResultVo(500, "服务器内部异常, 请稍后再试!");
-    }*/
+    }
+
+
+    /**
+     * 导出Excel
+     * @param request
+     * @param response
+     * @throws Exception
+     */
+    @RequestMapping(value = "export",method = RequestMethod.GET)
+    public void exportAll(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String[] dIds = request.getParameterValues("dIds");
+        List<Integer> intdIds = new ArrayList<>();
+        for (String dId : dIds) {
+            Integer intdId;
+            try {
+                intdId = Integer.parseInt(dId);
+                intdIds.add(intdId);
+            } catch (Exception e) {
+                String msg = "dId不是纯数字:" + dId;
+                String encode = URLEncoder.encode(msg, "UTF-8");
+                throw new Exception(encode);
+            }
+        }
+        List<Doctor> doctorList = doctorService.createExcelMsg(intdIds);
+        ExcelUtil.exportDefault(doctorList,"门诊医生信息",response);
+    }
 }

@@ -1,12 +1,8 @@
 package com.kkb.vo;
 
-import com.kkb.pojo.User;
-
-import java.util.Date;
-
 public class DoctorQueryVO {
     private Integer dId;//医生编号
-    private User user;//获取用户姓名
+    private String userName;//获取用户姓名
     private String dKeshi;//医生所在科室
 
     public Integer getdId() {
@@ -17,12 +13,12 @@ public class DoctorQueryVO {
         this.dId = dId;
     }
 
-    public User getUser() {
-        return user;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getdKeshi() {

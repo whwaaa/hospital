@@ -195,7 +195,7 @@
         /*返回列表函数*/
         function back() {
             $('#backid').click(function(){
-                window.location.href="index.html";
+                window.location.href="index.html?pageNum="+globalPageNum+"&pageSize="+globalPageSize;
             });
         }
         $(function () {
@@ -203,12 +203,13 @@
             $("#btnAdd").click(function () {
                 submitfn();
             });
+            back();
         });
 
     </script>
 </head>
 <body>
-    <form id="myForm" action="index.html" method="post" class="definewidth m20">
+    <div id="myForm" class="definewidth m20">
         <table class="table table-bordered table-hover definewidth m10">
             <tr>
                 <td width="10%" class="tableleft">姓名</td>
@@ -284,6 +285,6 @@
 			    </center></td>
             </tr>
     </table>
-</form>
+</div>
 </body>
 </html>

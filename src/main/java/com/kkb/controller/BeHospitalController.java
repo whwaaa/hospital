@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -98,7 +99,6 @@ public class BeHospitalController {
     // 导出Excel
     @RequestMapping(value = "export",method = RequestMethod.GET)
     public void exportAll(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        List<HosRegister> hosRegisterList = new ArrayList<>();
         String[] hosrIds = request.getParameterValues("hosrId");
         List<Integer> intHosrIds = new ArrayList<>();
         for (String hosrId : hosrIds) {
@@ -107,7 +107,9 @@ public class BeHospitalController {
                 intHosrId = Integer.parseInt(hosrId);
                 intHosrIds.add(intHosrId);
             } catch (Exception e) {
-                throw new Exception("hosrId不是纯数字 _> " + hosrId);
+                String msg = "hosrId不是纯数字:" + hosrId;
+                String encode = URLEncoder.encode(msg, "UTF-8");
+                throw new Exception(encode);
             }
         }
         List<BeHospital> beHospitalList = service.createExcelMsg(intHosrIds);
