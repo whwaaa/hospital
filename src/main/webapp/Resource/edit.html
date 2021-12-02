@@ -94,7 +94,8 @@
                 $("input[name='mUrl']").addClass("warning");
             }else{
                 $("input[name='mUrl']").removeClass("warning");
-                layer.load(0)
+                layer.load(0);
+                origin = origin + "/";
                 $.ajax({
                     type: "GET",
                     // url: origin + "/" + url,
@@ -103,7 +104,8 @@
 					   withCredentials: true
 					},
 					crossDomain: true,
-                    async: false,
+                    async: true,
+                    timeout: 1000,
                     success: function (data) {
                         urlCheckFlat = true;
                         layer.closeAll();
@@ -227,7 +229,7 @@
                     }
                 })
             }
-        }, 120)
+        }, 1500)
     }
 
     // 根据id查询数据并填充
