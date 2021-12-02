@@ -3,6 +3,8 @@ package com.kkb.mapper;
 import com.kkb.pojo.BeHospital;
 import com.kkb.pojo.BeHospitalExample;
 import java.util.List;
+
+import com.kkb.vo.CkChargeQueryVo;
 import org.apache.ibatis.annotations.Param;
 
 public interface BeHospitalMapper {
@@ -27,4 +29,7 @@ public interface BeHospitalMapper {
     int updateByPrimaryKeySelective(BeHospital record);
 
     int updateByPrimaryKey(BeHospital record);
+
+    // 自定义病历号,姓名模糊查询
+    List<BeHospital> selectByBehIdAndBehName(CkChargeQueryVo vo);
 }

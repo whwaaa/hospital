@@ -42,23 +42,25 @@ public class CkChargeService {
     @Transactional(propagation = Propagation.REQUIRED,readOnly = true)
     public PageInfo<ChargeProject> queryByPage(Integer pageNum, Integer pageSize, CkChargeQueryVo vo){
         BeHospitalExample beHospitalExample = new BeHospitalExample();
-        //创建查询条件容器
-        BeHospitalExample.Criteria criteria = beHospitalExample.createCriteria();
-        if(vo != null){
-            if(vo.getBehId()!=null){
-                criteria.andBehIdEqualTo(vo.getBehId());
-            }
-            if(vo.getBehName()!=null && !"".equals(vo.getBehName().trim())){
-                criteria.andBehNameLike("%"+vo.getBehName()+"%");
-            }
-
-        }
-        PageHelper.startPage(pageNum,pageSize);
-        List<BeHospital> list = beHospitalMapper.selectByExample(beHospitalExample);
+//        //创建查询条件容器
+//        BeHospitalExample.Criteria criteria = beHospitalExample.createCriteria();
+//        if(vo != null){
+//            if(vo.getBehId()!=null){
+//                criteria.andBehIdEqualTo(vo.getBehId());
+//            }
+//            if(vo.getBehName()!=null && !"".equals(vo.getBehName().trim())){
+//                criteria.andBehNameLike("%"+vo.getBehName()+"%");
+//            }
+//
+//        }
+//        PageHelper.startPage(pageNum,pageSize);
+//        List<BeHospital> list = beHospitalMapper.selectByExample(beHospitalExample);
 //        PageInfo pageInfo = new PageInfo(list);
 //        for (BeHospital o : (BeHospital)pageInfo.getList()) {
 //
 //        }
+        PageHelper.startPage(pageNum,pageSize);
+        List<BeHospital> list = beHospitalMapper.selectByBehIdAndBehName(vo);
         for (BeHospital beHospital : list) {
             BigDecimal allCast = queryBlank(beHospital.getBehId());
             beHospital.setAllCast(allCast);

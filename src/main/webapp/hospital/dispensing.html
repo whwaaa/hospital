@@ -51,6 +51,16 @@
 			        $("#hosrName").val(searchHosrName);
 			        queryList(pageNum);
 			    }
+				// 监听查询
+				$("#query").on("click", function(){
+					queryList(globalPageNum);
+				})
+				// 监听清空
+				$("#reset").on("click", function(){
+					$("#hosrId").val('');
+					$("#hosrName").val('');
+					queryList(1);
+				})
 			});
 
 			// 重写queryList(分页查询方法)
@@ -152,7 +162,7 @@
 	</head>
 	<body>
 
-		<form action="dispensing.html" method="post" class="definewidth m20">
+		<div class="definewidth m20">
 			<table class="table table-bordered table-hover definewidth m10">
 				<tr>
 					<td width="10%" class="tableleft" >门诊号：</td>
@@ -163,13 +173,13 @@
 				<tr>
 					<td colspan="2">
 						<center>
-							<button id="searchBtn" onclick="queryList(1)" class="btn btn-primary" type="button">查询</button>
-							<button class="btn btn-primary" type="reset">清空</button>
+							<button id="query" class="btn btn-primary" type="button">查询</button>
+							<button class="btn btn-primary" id="reset" type="reset">清空</button>
 						</center>
 					</td>
 				</tr>
 			</table>
-		</form>
+		</div>
 
 		<table id="mycon" class="table table-bordered table-hover definewidth m10">
 			<thead>

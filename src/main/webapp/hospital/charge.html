@@ -64,7 +64,7 @@
 </head>
 <body>
    
-<form class="definewidth m20">
+<div class="definewidth m20">
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
         <td width="10%" class="tableleft">收费项目名称：</td>
@@ -78,7 +78,7 @@
 </table>
 
 
-</form>
+</div>
 <table class="table table-bordered table-hover definewidth m10" >
    <thead>
     <tr>
@@ -90,17 +90,6 @@
     </tr>
     </thead>
     <tbody id="tbody">
-	     <tr >
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">心脏检查</td>
-            <td style="vertical-align:middle;">200</td>
-            <td style="vertical-align:middle;">2015-01-04 10:34</td>
-            <td style="vertical-align:middle;">
-				<a href="charge-edit1.html">修改</a>
-				<a href="">删除</a>
-				<a href="charge-edit1.html">查看详情</a>
-			</td>
-        </tr>
     </tbody>
   </table>
   
@@ -168,11 +157,21 @@
         });
         // 分页查询
         queryList(globalPageNum);
+        // 监听清空
+        res();
     });
+
+    // 清空
+    function res(){
+        $("#res").on("click", function(){
+            $("#pname").val("");
+            queryList(1);
+        })
+    }
 
     queryList = function(pageNum){
         let chapName = $("#pname").val();
-
+        layer.load(0);
         $.ajax({
             type: "GET",
             url: origin + "/charge/list/?pageNum="+pageNum+"&pageSize="+globalPageSize+"&jwtToken=" + jwtToken,
@@ -185,8 +184,6 @@
                 layer.closeAll();
                 console.log(data);
                 if(data.code == 200){
-                    $("#res").trigger("click");
-
                     // 填充分页
                     fillPageData(data.obj);
                     // 更新当前页全局变量
@@ -232,17 +229,16 @@
    }
     function updateCharge(id) {
         // window.location.href="/hospital/charge-edit1.html?chapId="+id;
-        window.location.href="/hospital/charge-edit1.html?chapId="+id +
+        window.location.href="charge-edit1.html?chapId="+id +
             "&globalPageNum" + globalPageNum + "&globalPageSize" + globalPageSize;
     }
     function chickCharge(id) {
         // window.location.href="/hospital/charge-edit2.html?chapId="+id;
-        window.location.href="/hospital/charge-edit2.html?chapId="+id +
+        window.location.href="charge-edit2.html?chapId="+id +
             "&globalPageNum" + globalPageNum + "&globalPageSize" + globalPageSize;
     }
     function deleteCharge(chapId) {
         if(confirm("确定要删除吗?")) {
-
             //发起异步请求
             $.ajax({
                 type: "POST",

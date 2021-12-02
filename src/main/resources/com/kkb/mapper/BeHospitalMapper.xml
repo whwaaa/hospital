@@ -78,6 +78,18 @@
     beh_id, beh_name, beh_nurse_people, beh_pat_bed, beh_antecedent, beh_illness, beh_close_price, 
     beh_state, beh_is_del, beh_create_time, beh_update_time, u_id
   </sql>
+  <!-- 自定义病历号,姓名模糊查询 -->
+  <select id="selectByBehIdAndBehName" parameterType="com.kkb.vo.CkChargeQueryVo" resultMap="BaseResultMap">
+    select * from be_hospital
+    <where>
+      <if test="behId != null">
+        and beh_id LIKE concat(concat('%',#{behId}),'%')
+      </if>
+      <if test="behName != null">
+        and beh_name LIKE concat(concat('%',#{behName}),'%')
+      </if>
+    </where>
+  </select>
   <select id="selectByExample" parameterType="com.kkb.pojo.BeHospitalExample" resultMap="BaseResultMap">
     select
     <if test="distinct">

@@ -49,6 +49,16 @@
                 $("#drType").val(drType);
                 queryList(pageNum);
             }
+            // 监听查询
+            $("#query").on("click", function(){
+                queryList(globalPageNum);
+            })
+            // 监听清空
+            $("#reset").on("click", function(){
+                $("#drName").val('');
+                $("#drType").val('')
+                queryList(1);
+            })
         });
 
         // 重写queryList(分页查询方法)
@@ -140,7 +150,7 @@
 </head>
 <body>
 
-<form action="index.html" method="post" class="definewidth m20">
+<div class="definewidth m20">
     <table class="table table-bordered table-hover definewidth m10">
         <tr>
             <td width="10%" class="tableleft">药品名称：</td>
@@ -156,13 +166,13 @@
         <tr>
             <td colspan="4">
                 <center>
-                    <button type="button" onclick="queryList(1)" class="btn btn-primary">查询</button>
-                    <button type="reset" class="btn btn-primary">清空</button>
+                    <button type="button" id="query" class="btn btn-primary">查询</button>
+                    <button type="reset" id="reset" class="btn btn-primary">清空</button>
                 </center>
             </td>
         </tr>
     </table>
-</form>
+</div>
 
 <table id="mycon" class="table table-bordered table-hover definewidth m10">
     <thead>

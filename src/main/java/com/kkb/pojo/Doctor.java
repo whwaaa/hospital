@@ -52,6 +52,8 @@ public class Doctor implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ExcelProperty(value = "出生日期")
     private Date doctorBirthday;
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ExcelIgnore
     private Date dBirthday;
 

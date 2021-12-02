@@ -45,16 +45,16 @@
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
         <td width="10%" class="tableleft">编号</td>
-        <td><input type="text" id="chapId" value="1103" readonly="readonly"/></td>
+        <td><input type="text" id="chapId" value="" readonly="readonly"/></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">收费项目名称</td>
-        <td><input type="text" id="chapName" value="心电图图检" /></td>
+        <td><input type="text" id="chapName" value="" /></td>
     </tr>
 
     <tr>
         <td width="10%" class="tableleft">收费金额</td>
-        <td><input type="text" id="chapMoney" value="600"/></td>
+        <td><input type="text" id="chapMoney" value=""/></td>
     </tr>
     <tr>
         <td colspan="2">
@@ -80,13 +80,14 @@
         let url = document.location.toString();
         let chapId = url.GetValue("chapId");
         queryById(chapId);
-
+        // 监听提交按钮
+        subListen();
     });
     function queryById(chapId){
         $.ajax({
             type: "GET",
             url: origin + "/charge/"+chapId, //RESTful风格的API定义
-            data: {jwtToken:jwtToken},
+            data: {},
             xhrFields: {
                 withCredentials: true
             },
@@ -104,6 +105,7 @@
         });
 
     }
+    let oldChapName;
     function loadDate(data) {
         let chap = data.obj;
         console.log(chap);
@@ -113,43 +115,82 @@
         $("#chapId").val(chapId);
         $("#chapName").val(chapName);
         $("#chapMoney").val(chapMoney);
+        oldChapName = chapName;
 
     }
-  $("#sub").click(function(){
-           let chapId = $("#chapId") .val();
-           let chapName = $("#chapName").val();
-           let chapMoney = $("#chapMoney").val();
-            layer.load(0);
-            $.ajax({
-                type: "POST",
-                url: origin + "/charge/"+chapId, //RESTful风格的API定义
-                data: {
-                    _method:"PUT",
-                    jwtToken:jwtToken,
-                    chapName:chapName,
-                    chapMoney:chapMoney,
-                },
-                xhrFields: {
-                    withCredentials: true
-                },
-                crossDomain: true,
-                dataType: "json",
-                success: function (data) {
-                    layer.closeAll()
-                    console.log(data);
-                    if (data.code == 200){
-                        window.location.href = "charge.html";
-                    }else{
-                        layer.msg(data.msg, function(){})
-                        if(data.code == 400){
-                            $("#chapName").focus();
-                        }
+
+    // 修改提交
+    function updateSub(chapName){
+        let chapId = $("#chapId") .val();
+        // let chapName = $("#chapName").val();
+        let chapMoney = $("#chapMoney").val();
+        layer.load(0);
+        $.ajax({
+            type: "POST",
+            url: origin + "/charge/"+chapId, //RESTful风格的API定义
+            data: {
+                _method:"PUT",
+                jwtToken:jwtToken,
+                chapName:chapName,
+                chapMoney:chapMoney,
+            },
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+            dataType: "json",
+            success: function (data) {
+                layer.closeAll()
+                console.log(data);
+                if (data.code == 200){
+                    window.location.href = "charge.html";
+                }else{
+                    layer.msg(data.msg, function(){})
+                    if(data.code == 400){
+                        $("#chapName").focus();
                     }
                 }
-                ,complete : function(xhr, status) {
-                    myComplete(xhr, status);
-                }
-            });
+            }
+            ,complete : function(xhr, status) {
+                myComplete(xhr, status);
+            }
         });
+    }
+
+    // 监听提交按钮
+    function subListen(){
+        $("#sub").click(function(){
+            let chapName = $("#chapName").val().trim();
+            if(oldChapName.indexOf(chapName) != -1){
+                updateSub(chapName);
+            }else{
+                $.ajax({
+                    type: "GET",
+                    url: origin + "/charge/chapname",
+                    data: {
+                        _method:"PUT",
+                        chapName:chapName
+                    },
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
+                    dataType: "json",
+                    success: function (data) {
+                        layer.closeAll()
+                        if(data.code == 400){
+                            updateSub(chapName);
+                        }else if(data.code == 200){
+                            layer.msg("项目名称重复", function(){});
+                        }
+                    }
+                    ,complete : function(xhr, status) {
+                        myComplete(xhr, status);
+                    }
+                });
+            }
+        });
+    }
+
 
 </script>
