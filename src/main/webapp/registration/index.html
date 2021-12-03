@@ -95,6 +95,7 @@
 						// 更新显示信息
 						$("#td_" + hosrId).find("a").eq(1).remove();
 						$("#td_" + hosrId).find("a").eq(1).remove();
+                        $("#td_" + hosrId).prev().text("已退号");
 					}else{
 						layer.msg(data.msg, function(){})
 					}

@@ -81,7 +81,7 @@
 	function listenkeshiSelectCheck(time){
 		checkTime[6] = setTimeout(function() {
 			// 拿到选择的科室value
-			let keshiValue = $("select[name='keshi']").val();
+			let keshiValue = $("select[name='keshi']").val().trim();
 			// 填充医生select
 			let doctors = doctorMsgKeshi[keshiValue];
 			if(doctors == undefined){
@@ -95,7 +95,7 @@
 				$("select[name='keshi']").addClass("warning")
 			}else{
 				// 获取医生初始选择项
-				let original = $("select[name='doctor']").val();
+				let original = $("select[name='doctor']").val().trim();
 				$("select[name='doctor']").empty();
 				$("select[name='doctor']").append($("<option value='-1'>--请选择医生--</option>"))
 				$.each(doctors, function(){
@@ -103,7 +103,7 @@
 				})
 				// 遍历更新的医生select, 查看如果存在option与原始相同, 则恢复select选项
 				$.each($("select[name='doctor']").find("option"),function(){
-				    if($(this).val() == original){
+				    if($(this).val().trim() == original){
 				        $("select[name='doctor']").val(original)
 				    }
 				})

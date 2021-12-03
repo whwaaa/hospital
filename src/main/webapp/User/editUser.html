@@ -231,11 +231,11 @@
             clearTimeout(trueNameCheckTime);
             clearTimeout(emailCheckTime);
             clearTimeout(roleCheckTime);
-            let rId = $("#rId").val();
-            let uEmail = $("input[name='uEmail']").val();
-            let uTrueName = $("input[name='uTrueName']").val();
-            let uPassword = $("input[name='uPassword']").val();
-            let uState = $("input[name='uState']:checked").val();
+            let rId = $("#rId").val().trim();
+            let uEmail = $("input[name='uEmail']").val().trim();
+            let uTrueName = $("input[name='uTrueName']").val().trim();
+            let uPassword = $("input[name='uPassword']").val().trim();
+            let uState = $("input[name='uState']:checked").val().trim();
             // 再次校验所有信息
             passwordCheck(uPassword);
             trueNameCheck(uTrueName);

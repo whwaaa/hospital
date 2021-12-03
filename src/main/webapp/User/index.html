@@ -45,7 +45,7 @@
     }
     // TODO : 这里一定要重写queryList(分页查询方法)
     queryList = function(pageNum){
-        let uLoginName = $("#username").val()
+        let uLoginName = $("#username").val().trim()
         layer.load(0)
         $.ajax({
             type: "GET",

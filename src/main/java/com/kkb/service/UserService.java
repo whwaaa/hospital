@@ -43,11 +43,15 @@ public class UserService {
         // 创建多条件查询对象
         UserExample userExample = new UserExample();
         UserExample.Criteria criteria = userExample.createCriteria();
+        UserExample.Criteria criteria2 = userExample.createCriteria();
         // 添加多条件
         if(userQueryVO.getuLoginName()!=null && !"".equals(userQueryVO.getuLoginName())){
             criteria.andULoginNameLike("%" + userQueryVO.getuLoginName() + "%");
+            criteria2.andUTrueNameLike("%" + userQueryVO.getuLoginName() + "%");
         }
         criteria.andUIsDelEqualTo(0);  // 是否删除 0不删除 1删除
+        criteria2.andUIsDelEqualTo(0);
+        userExample.or(criteria2);
         // 分页
         PageHelper.startPage(pageNum, pageSize);
         List<User> users = userMapper.selectByExample(userExample);

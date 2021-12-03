@@ -208,11 +208,11 @@
     function updateRole(){
         // 防止onblur和onclick发生冲突, 确保onclick先执行
         clearTimeout(roleNameCheckTime)
-        let rName = $("input[name='rName']").val();
-        let rState = $("input[name='rState']:checked").val()
+        let rName = $("input[name='rName']").val().trim();
+        let rState = $("input[name='rState']:checked").val().trim();
         var menuIds = "";
         $.each($("input[name='group[]']:checked"), function(){
-            menuIds += $(this).val() + "_"
+            menuIds += $(this).val().trim() + "_"
         })
         // 角色名的唯一性验证, 非空
         roleNameCheck(rName);
