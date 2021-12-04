@@ -33,34 +33,31 @@ var crossDomainMode = true;
 var origin;
 var projectUrl;
 if(crossDomainMode){
-	// TODO: 配置项一: ajax请求添加跨域配置
-	// xhrFields: {
-	//    // 允许cookie跨域
-	//    withCredentials: true
-	// },
-	// crossDomain: true,
-				
-	// TODO: 配置项二: 后台API请求源(协议域名端口,80可略) ajax请求url加上origin 例: 
-	// {
-	// 	url: origin + "/access/user",
-	// }
-	// origin = "http://121.43.158.139"
-	origin = "http://127.0.0.1:8080"
+    // TODO: 配置项一: ajax请求添加跨域配置
+    // xhrFields: {
+    //    // 允许cookie跨域
+    //    withCredentials: true
+    // },
+    // crossDomain: true,
 
-	// TODO: 配置项三: 前端项目地址
-	// 例: hbuilder 启动项目首页的地址是: http://127.0.0.1:8848/webapp/index/index.html?__hbt=1636802666940
-	// 则配置 projectUrl = "http://127.0.0.1:8848/webapp"
-	// projectUrl = "http://localhost:8848/webapp"
-    projectUrl = "http://localhost:63342/shandong-hospital/Shandong_Hospital/src/main/webapp";
-    // projectUrl = "http://localhost:63342/shandong-hospital/Shandong_Hospital/src/main/webapp";
+    // TODO: 配置项二: 后台API请求源(协议域名端口,80可略) ajax请求url加上origin 例:
+    // {
+    // 	url: origin + "/access/user",
+    // }
+    origin = "http://121.43.158.139"
+
+    // TODO: 配置项三: 前端项目地址
+    // 例: hbuilder 启动项目首页的地址是: http://127.0.0.1:8848/webapp/index/index.html?__hbt=1636802666940
+    // 则配置 projectUrl = "http://127.0.0.1:8848/webapp"
+    projectUrl = "";
 }
 
 
 if(crossDomainMode){
-	// 如果有则去除地址最后斜杠
-	if(projectUrl.lastIndexOf("/")==projectUrl.length-1){
-		projectUrl = projectUrl.substr(0,projectUrl.length-1)
-	}
+    // 如果有则去除地址最后斜杠
+    if(projectUrl.lastIndexOf("/")==projectUrl.length-1){
+        projectUrl = projectUrl.substr(0,projectUrl.length-1)
+    }
 }
 let jwtToken;
 $(function(){
@@ -116,9 +113,9 @@ function myComplete(xhr, status){
         setTimeout(function (){
             let callBackUrL = window.location.href;
             if(crossDomainMode){
-            	window.location.href = projectUrl + xhr.getResponseHeader("CONTENTPATH") + "?callBackUrL=" + callBackUrL;
+                window.location.href = projectUrl + xhr.getResponseHeader("CONTENTPATH") + "?callBackUrL=" + callBackUrL;
             }else{
-            	window.location.href = xhr.getResponseHeader("CONTENTPATH") + "?callBackUrL=" + callBackUrL;
+                window.location.href = xhr.getResponseHeader("CONTENTPATH") + "?callBackUrL=" + callBackUrL;
             }
         }, 1500)
     }
@@ -202,7 +199,7 @@ function reqExport(url,fileName,list,paramName){
         let xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);    // 也可以使用POST方式，根据接口
         xhr.responseType = "blob";  // 返回类型blob
-		xhr.withCredentials = true;  // 允许跨域带cookie
+        xhr.withCredentials = true;  // 允许跨域带cookie
         // 定义请求完成的处理函数，请求前也可以增加加载框/禁用下载按钮逻辑
         xhr.onload = function () {
             // 请求完成
@@ -212,30 +209,25 @@ function reqExport(url,fileName,list,paramName){
                 let reader = new FileReader();
                 reader.readAsDataURL(blob);  // 转换为base64，可以直接放入a标签的href
                 reader.onload = function (e) {
-					if(e.target.result.length < 1000){	// excel至少4000以上
-						// 非excel,是异常
-						let ex = JSON.parse(window.atob(e.target.result.split("base64,")[1]))
-						if(ex.msg != undefined){
+                    if(e.target.result.length < 1000){	// excel至少4000以上
+                        // 非excel,是异常
+                        let ex = JSON.parse(window.atob(e.target.result.split("base64,")[1]))
+                        if(ex.msg != undefined){
                             layer.msg(decodeURI(ex.msg));   // 是用AjaxResoutVo封装的json
-						}else{
-							layer.msg(ex);	// 不是AjaxResoutVo封装
-						}
-					}else{
-						 // 转换完成，创建一个a标签用于下载
-						var a = document.createElement('a');
-						a.download = fileName + '.xlsx';
-						a.href = e.target.result;
-						$("body").append(a);  // 修复firefox中无法触发click
-						a.click();
-						$(a).remove();
-						layer.msg('导出成功!');
-					}
+                        }else{
+                            layer.msg(ex);	// 不是AjaxResoutVo封装
+                        }
+                    }else{
+                        // 转换完成，创建一个a标签用于下载
+                        var a = document.createElement('a');
+                        a.download = fileName + '.xlsx';
+                        a.href = e.target.result;
+                        $("body").append(a);  // 修复firefox中无法触发click
+                        a.click();
+                        $(a).remove();
+                        layer.msg('导出成功!');
+                    }
                 }
-                // 导出失败的处理  -> responseType是text时, responseText才能读取, 不然总报错
-                // let obj = JSON.parse(this.responseText);
-                // if (obj.code!=null){
-                //     layer.msg(obj.msg);
-                // }
             }else {
                 layer.msg("导出失败!");
             }

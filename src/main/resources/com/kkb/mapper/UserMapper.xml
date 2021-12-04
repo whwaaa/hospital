@@ -5,7 +5,7 @@
 <!--  <cache type="com.kkb.utils.RedisCache"/>-->
   <cache>
     <property name="eviction" value="LRU"/><!--回收策略为LRU-->
-<!--    <property name="flushInterval" value="60000"/>&lt;!&ndash;自动刷新时间间隔为60S&ndash;&gt;-->
+    <property name="flushInterval" value="600000"/><!--自动刷新时间间隔为600S-->
     <property name="size" value="1024"/><!--最多缓存1024个引用对象-->
     <property name="readOnly" value="true"/><!--只读-->
   </cache>
