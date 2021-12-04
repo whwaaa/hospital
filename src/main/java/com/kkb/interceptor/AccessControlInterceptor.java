@@ -20,18 +20,19 @@ public class AccessControlInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // 获取请求中的token
-        Cookie[] cookies = request.getCookies();
-        String jwtToken = null;
-        // 遍历cookie
-        if(cookies != null){
-            for (Cookie cookie : cookies) {
-                // 查找name=jwtToken的cookie
-                if(cookie.getName()!=null && "jwtToken".equals(cookie.getName())){
-                    jwtToken = cookie.getValue();
-                }
-            }
-        }
+        String jwtToken;
+        jwtToken = request.getParameter("jwtToken");
+//        // 获取请求中的token
+//        Cookie[] cookies = request.getCookies();
+//        // 遍历cookie
+//        if(cookies != null){
+//            for (Cookie cookie : cookies) {
+//                // 查找name=jwtToken的cookie
+//                if(cookie.getName()!=null && "jwtToken".equals(cookie.getName())){
+//                    jwtToken = cookie.getValue();
+//                }
+//            }
+//        }
         if(jwtToken != null){
             // 验证成功则更新token, 验证失败抛出异常
             String newJwtToken = null;
@@ -47,10 +48,13 @@ public class AccessControlInterceptor implements HandlerInterceptor {
                 Cookie cookie = new Cookie("jwtToken", newJwtToken);
                 // 获取前端请求域名
                 cookie.setPath("/");
-                String domain = request.getRequestURL().toString().split("/")[2];
-                cookie.setDomain(domain);
+//                String domain = request.getRequestURL().toString().split("/")[2];
+//                cookie.setDomain(domain);
                 cookie.setMaxAge(3*24*60*60);     // 设置过期时间3天 3*24*60*60秒
                 response.addCookie(cookie);
+                // 设置jwt
+                // 后端没有域名设置cookie不会成功, 改用响应头传参, 前端再设置cookie
+                response.addHeader("jwt", newJwtToken);
             } catch (Exception e) {
                 throw new JWTTokenInvalidException("cookie的域名不能设置为ip地址,本地调试请在前端页面改用localhost访问");
             }

@@ -87,7 +87,7 @@
         $.ajax({
             type: "GET",
             url: origin + "/charge/"+chapId, //RESTful风格的API定义
-            data: {},
+            data: {jwtToken:jwtToken},
             xhrFields: {
                 withCredentials: true
             },
@@ -169,7 +169,8 @@
                     url: origin + "/charge/chapname",
                     data: {
                         _method:"PUT",
-                        chapName:chapName
+                        chapName:chapName,
+                        jwtToken:jwtToken
                     },
                     xhrFields: {
                         withCredentials: true

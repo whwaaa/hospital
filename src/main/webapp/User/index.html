@@ -54,7 +54,7 @@
 			   withCredentials: true
 			},
 			crossDomain: true,
-            data: {pageNum:pageNum,pageSize:globalPageSize,uLoginName:uLoginName},
+            data: {pageNum:pageNum,pageSize:globalPageSize,uLoginName:uLoginName,jwtToken:jwtToken},
             success: function (data) {
                 layer.closeAll()
                 if(data.code === 200){
@@ -92,7 +92,7 @@
 			   withCredentials: true
 			},
 			crossDomain: true,
-            data: {uState:uState,_method:"PUT"},
+            data: {uState:uState,_method:"PUT",jwtToken:jwtToken},
             dataType: "json",
             success: function (data) {
                 layer.closeAll()
@@ -147,7 +147,7 @@
 				   withCredentials: true
 				},
 				crossDomain: true,
-                data: {_method:"DELETE"},
+                data: {_method:"DELETE",jwtToken:jwtToken},
                 success: function (data) {
                     layer.closeAll();
                     if(data.code === 204){
@@ -197,7 +197,7 @@
 							   withCredentials: true
 							},
 							crossDomain: true,
-                            data: {_method:"DELETE"},
+                            data: {_method:"DELETE",jwtToken:jwtToken},
                             success: function (data) {
                                 layer.closeAll();
                                 if(data.code === 204){

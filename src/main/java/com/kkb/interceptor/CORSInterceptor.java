@@ -18,16 +18,12 @@ public class CORSInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String origin = request.getHeader("origin");
-        response.addHeader("Access-Control-Allow-Origin",origin);
-        response.addHeader("Access-Control-Allow-Credentials","true");
-        response.addHeader("Access-Control-Allow-Methods", "*");
-        response.addHeader("Access-Control-Allow-Headers", "*");
         response.setHeader("Access-Control-Allow-Origin",origin);
         response.setHeader("Access-Control-Allow-Credentials","true");
         response.setHeader("Access-Control-Allow-Methods", "*");
         response.setHeader("Access-Control-Allow-Headers", "*");
         // 额外暴露自定义的首部
-        response.setHeader("Access-Control-Expose-Headers","REDIRECT,TOKEN-MSG,CONTENTPATH");
+        response.setHeader("Access-Control-Expose-Headers","REDIRECT,TOKEN-MSG,CONTENTPATH,jwt");
 //        Enumeration<String> headerNames = request.getHeaderNames();
 //        while(headerNames.hasMoreElements()){
 //            String s = headerNames.nextElement();

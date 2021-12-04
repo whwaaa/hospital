@@ -99,6 +99,7 @@
                         type: "GET",
                         // url: origin + "/" + url,
                         url: origin + url,
+                        data: {jwtToken:jwtToken},
 						xhrFields: {
 						   withCredentials: true
 						},
@@ -155,7 +156,7 @@
 						   withCredentials: true
 						},
 						crossDomain: true,
-                        data: {mUrl:mUrl,mState:$("input[name='mState']:checked").val(),mName:mName},
+                        data: {mUrl:mUrl,mState:$("input[name='mState']:checked").val(),mName:mName,jwtToken:jwtToken},
                         dataType: "json",
                         async: false,
                         success: function (data) {

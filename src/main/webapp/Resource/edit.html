@@ -102,6 +102,7 @@
                     type: "GET",
                     // url: origin + "/" + url,
                     url: origin + url,
+                    data: {jwtToken:jwtToken},
 					xhrFields: {
 					   withCredentials: true
 					},
@@ -208,7 +209,7 @@
                 $.ajax({
                     type: "POST",
                     url: origin + "/menu/" + mId,
-                    data: {mUrl:mUrl,mState:mState,mName:mName,_method:"PUT"},
+                    data: {mUrl:mUrl,mState:mState,mName:mName,_method:"PUT"jwtToken:jwtToken},
 					xhrFields: {
 					   withCredentials: true
 					},
@@ -239,7 +240,7 @@
         $.ajax({
             type: "GET",
             url: origin + "/menu/" + mId,
-            data: {},
+            data: {jwtToken:jwtToken},
 			xhrFields: {
 			   withCredentials: true
 			},

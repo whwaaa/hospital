@@ -84,7 +84,7 @@
 					   withCredentials: true
 					},
 					crossDomain: true,
-                    data: {},
+                    data: {jwtToken:jwtToken},
                     dataType: "json",
                     async: false,
                     success: function (data) {
@@ -115,7 +115,7 @@
 			   withCredentials: true
 			},
 			crossDomain: true,
-            data: {pageSize:999,pageNum:1},
+            data: {pageSize:999,pageNum:1,jwtToken:jwtToken},
             dataType: "json",
             success: function (data) {
                 layer.closeAll()
@@ -161,7 +161,7 @@
 					   withCredentials: true
 					},
 					crossDomain: true,
-                    data: {rName:rName,rState:rState,menuIds:menuIds},
+                    data: {rName:rName,rState:rState,menuIds:menuIds,jwtToken:jwtToken},
                     dataType: "json",
                     success: function (data) {
                         layer.closeAll()

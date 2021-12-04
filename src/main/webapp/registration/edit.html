@@ -62,7 +62,7 @@
 		$.ajax({
 		    type: "GET",
 		    url: origin + "/register/doctor/list",
-		    data: {},
+		    data: {jwtToken:jwtToken},
 		    dataType: "json",
 		    // 允许携带cookie跨域请求
 		    xhrFields: {
@@ -330,7 +330,7 @@
 				    // url请求地址前加后端API地址origin
 				    url: origin + "/register/" + hosrId,
 				    data: {hosrName:hosrName,hosrIdcar:hosrIdcar,hosrMedical:hosrMedical,hosrRegPrice:hosrRegPrice,hosrPhone:hosrPhone,hosrSelfPrice:hosrSelfPrice,
-					hosrState:hosrState,hosrRemark:hosrRemark,dId:dId,hosrLookDoctor:hosrLookDoctor,hosrWork:hosrWork,hosrAge:hosrAge,hosrSex:hosrSex,_method:"PUT"},
+					hosrState:hosrState,hosrRemark:hosrRemark,dId:dId,hosrLookDoctor:hosrLookDoctor,hosrWork:hosrWork,hosrAge:hosrAge,hosrSex:hosrSex,_method:"PUT",jwtToken:jwtToken},
 				    dataType: "json",
 				    // 允许携带cookie跨域请求
 				    xhrFields: {
@@ -364,7 +364,7 @@
 		    type: "GET",
 		    // 1. url请求地址前加后端API地址origin
 		    url: origin + "/register/" + hosrId,
-		    data: {},
+		    data: {jwtToken:jwtToken},
 		    dataType: "json",
 		    // 2. 允许携带cookie跨域请求
 		    xhrFields: {

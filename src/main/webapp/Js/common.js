@@ -44,13 +44,14 @@ if(crossDomainMode){
 	// {
 	// 	url: origin + "/access/user",
 	// }
-	origin = "http://localhost"
-	
+	// origin = "http://121.43.158.139"
+	origin = "http://127.0.0.1:8080"
+
 	// TODO: 配置项三: 前端项目地址
 	// 例: hbuilder 启动项目首页的地址是: http://127.0.0.1:8848/webapp/index/index.html?__hbt=1636802666940
 	// 则配置 projectUrl = "http://127.0.0.1:8848/webapp"
 	// projectUrl = "http://localhost:8848/webapp"
-    projectUrl = "http://localhost:63342/shandong-hospital/src/main/webapp";
+    projectUrl = "http://localhost:63342/shandong-hospital/Shandong_Hospital/src/main/webapp";
     // projectUrl = "http://localhost:63342/shandong-hospital/Shandong_Hospital/src/main/webapp";
 }
 
@@ -61,8 +62,11 @@ if(crossDomainMode){
 		projectUrl = projectUrl.substr(0,projectUrl.length-1)
 	}
 }
-
 let jwtToken;
+$(function(){
+    jwtToken = $.cookie("jwtToken")
+})
+
 document.write("<script src=\"https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js\"></script>");
 document.write("<script src=\"https://cdn.bootcdn.net/ajax/libs/layer/3.5.1/layer.js\"></script>");
 
@@ -110,7 +114,6 @@ function myComplete(xhr, status){
         }
         // 跳到登陆界面, 传入当前URL作为参数, 登陆成功再跳回来
         setTimeout(function (){
-			
             let callBackUrL = window.location.href;
             if(crossDomainMode){
             	window.location.href = projectUrl + xhr.getResponseHeader("CONTENTPATH") + "?callBackUrL=" + callBackUrL;
@@ -119,7 +122,9 @@ function myComplete(xhr, status){
             }
         }, 1500)
     }
-
+    $.removeCookie("jwtToken",{path:'/'})
+    jwtToken = xhr.getResponseHeader("jwt");
+    $.cookie('jwtToken', jwtToken, { expires: 7, path: '/' });
 }
 
 // 填充分页信息
@@ -179,7 +184,6 @@ function queryList(pageNum){}
  * @param list 若选中数据，则传入选中记录的主键数组；否则导出全部的数据，则设置为null或[]。
  * @param paramName 若导出选中的记录，需要设置与后端@RequestParam的值（value）相同;否则导出全部，则设置为""或null。
  */
-var tempgloab;
 function reqExport(url,fileName,list,paramName){
     layer.confirm('确定导出数据吗？', {
         btn: ['确认','取消'],//按钮
@@ -191,6 +195,7 @@ function reqExport(url,fileName,list,paramName){
             for (let i = 0; i < list.length; i++) {
                 paramUrl = paramUrl + "&" + paramName + "=" + list[i];
             }
+            paramUrl += "&jwtToken=" + jwtToken;
             url = url + "?"+ paramUrl.substr(1,paramUrl.length-1);
         }
         layer.msg('请求已发送', {icon: 1});

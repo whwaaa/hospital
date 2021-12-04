@@ -118,7 +118,7 @@
                         // 1. url请求地址前加后端API地址origin
                         url: origin + "/be-hospital",
                         data: {behNursePeople:behNursePeople,behPatBed:behPatBed,behAntecedent:behAntecedent
-                            ,behIllness:behIllness,hosrId:hosrId,behId:hosrId},
+                            ,behIllness:behIllness,hosrId:hosrId,behId:hosrId,jwtToken:jwtToken},
                         dataType: "json",
                         // 2. 允许携带cookie跨域请求
                         xhrFields: {
@@ -154,6 +154,7 @@
             $.ajax({
                 type: "GET",
                 url: origin + "/register/" + hosrId,
+                data: {jwtToken:jwtToken},
                 dataType: "json",
                 xhrFields: {
                     // 允许携带cookie跨域

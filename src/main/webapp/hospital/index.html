@@ -40,7 +40,7 @@
                 type: "POST",
                 // 1. url请求地址前加后端API地址origin
                 url: origin + "/register/" + hosrId,
-                data: {_method:"PUT",hosrState:hosrState},
+                data: {_method:"PUT",hosrState:hosrState,jwtToken:jwtToken},
                 dataType: "json",
                 // 2. 允许携带cookie跨域请求
                 xhrFields: {
@@ -105,7 +105,7 @@
                 type: "GET",
                 url: origin + "/be-hospital/list",
                 data: {pageNum:pageNum,pageSize:globalPageSize,hosrId:hosrId,doctorName:doctorName,
-                    dKeshi:dKeshi,createTimeStartBlur:createTimeStartBlur,createTimeEndBlur:createTimeEndBlur},
+                    dKeshi:dKeshi,createTimeStartBlur:createTimeStartBlur,createTimeEndBlur:createTimeEndBlur,jwtToken:jwtToken},
                 // 允许携带cookie跨域请求
                 xhrFields: {
                     withCredentials: true

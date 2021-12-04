@@ -47,7 +47,7 @@
 				    withCredentials: true
 				 },
 				 crossDomain: true,
-                 data: {pageNum:pageNum,pageSize:globalPageSize,rName:rName},
+                 data: {pageNum:pageNum,pageSize:globalPageSize,rName:rName,jwtToken:jwtToken},
                  success: function (data) {
                      layer.closeAll();
                      if(data.code === 200){
@@ -97,7 +97,7 @@
 					    withCredentials: true
 					 },
 					 crossDomain: true,
-                     data: {_method:"DELETE"},
+                     data: {_method:"DELETE",jwtToken:jwtToken},
                      success: function (data) {
                          layer.closeAll();
                          if(data.code === 204){
@@ -129,7 +129,7 @@
 				    withCredentials: true
 				 },
 				 crossDomain: true,
-                 data: {rState:rState,_method:"PUT"},
+                 data: {rState:rState,_method:"PUT",jwtToken:jwtToken},
                  dataType: "json",
                  success: function (data) {
                      layer.closeAll()
@@ -185,7 +185,7 @@
 							   withCredentials: true
 							},
 							crossDomain: true,
-                            data: {_method:"DELETE"},
+                            data: {_method:"DELETE",jwtToken:jwtToken},
                             success: function (data) {
                                 layer.closeAll();
                                 if(data.code === 204){

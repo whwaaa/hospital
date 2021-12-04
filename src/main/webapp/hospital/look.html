@@ -43,6 +43,7 @@
                 type: "GET",
                 // 1. url请求地址前加后端API地址origin
                 url: origin + "/be-hospital/" + hosrId,
+                data: {jwtToken:jwtToken},
                 dataType: "json",
                 // 2. 允许携带cookie跨域请求
                 xhrFields: {

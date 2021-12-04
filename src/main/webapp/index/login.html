@@ -127,6 +127,11 @@
                                 $("#loginTips").text(data.msg)
                                 $("#loginTips").show()
                             }
+                        },
+                        complete: function (xhr, status) {
+                            $.removeCookie("jwtToken",{path:'/'})
+                            jwtToken = xhr.getResponseHeader("jwt");
+                            $.cookie('jwtToken', jwtToken, { expires: 7, path: '/' });
                         }
                     })
                 })

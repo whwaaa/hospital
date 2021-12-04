@@ -173,7 +173,7 @@
                 $.ajax({
                     type: "POST",
                     url: origin + "/doctor/" + dId,
-                    data: {doctorName:doctorName,dSex:dSex,dTelphone:dTelphone,dPhone:dPhone,dIdCar:dIdCar,uId:uId
+                    data: {doctorName:doctorName,dSex:dSex,dTelphone:dTelphone,dPhone:dPhone,dIdCar:dIdCar,uId:uId,jwtToken:jwtToken
                         ,dDesc:dDesc,dXueli:dXueli,dKeshi:dKeshi,dEmail:dEmail,dAge:dAge,dBirthday:dBirthday,_method:"PUT"},
                     dataType:"json",
                     xhrFields: {
@@ -208,6 +208,7 @@
                 type: "GET",
                 // 1. url请求地址前加后端API地址origin
                 url: origin + "/doctor/" + dId,
+                data: {jwtToken:jwtToken},
                 dataType: "json",
                 // 2. 允许携带cookie跨域请求
                 xhrFields: {

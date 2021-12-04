@@ -114,6 +114,7 @@
         $.ajax({
             type: "GET",
             url: origin + "/drug/"+drId,
+            data: {jwtToken:jwtToken},
 			xhrFields: {
 			   withCredentials: true
 			},

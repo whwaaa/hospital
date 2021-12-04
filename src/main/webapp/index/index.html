@@ -38,14 +38,17 @@
 <script type="text/javascript" src="../Js/common.js"></script>
 
 <script>
+    $(function(){
+        // 获取用户,角色,资源信息
+        getUserMessage();
+    })
 
     // 获取用户,角色,资源信息
-    getUserMessage();
     function getUserMessage(){
         $.ajax({
             type: "GET",
             url: origin + "/access/user",
-            data: {},
+            data: {jwtToken:jwtToken},
             dataType: "json",
 		    xhrFields: {
 		       withCredentials: true

@@ -57,11 +57,13 @@ public class AccessService {
         try {
             Cookie cookie = new Cookie("jwtToken", jwtToken);
             // 获取前端请求域名
-            String domain = request.getRequestURL().toString().split("/")[2];
-            cookie.setDomain(domain);
+//            String domain = request.getRequestURL().toString().split("/")[2];
+//            cookie.setDomain(domain);
             cookie.setPath("/");
             cookie.setMaxAge(3*24*60*60);     // 设置过期时间3天 3*24*60*60秒
             response.addCookie(cookie);
+            // 后端没有域名设置cookie不会成功, 改用响应头传参, 前端再设置cookie
+            response.addHeader("jwt", jwtToken);
         } catch (Exception e) {
             throw new JWTTokenInvalidException("cookie的域名不能设置为ip地址,本地调试请在前端页面改用localhost访问");
         }
@@ -86,6 +88,9 @@ public class AccessService {
                     jwtToken = cookie.getValue();
                 }
             }
+        }
+        if(jwtToken == null){
+            jwtToken = request.getParameter("jwtToken");
         }
         // 解析jwtToken
         Claims claims = JWTUtil.verifyToken(jwtToken);

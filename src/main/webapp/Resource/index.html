@@ -44,7 +44,7 @@
         $.ajax({
             type: "GET",
             url: origin + "/menu/list",
-            data: {pageNum:pageNum,pageSize:globalPageSize,mName:mName},
+            data: {pageNum:pageNum,pageSize:globalPageSize,mName:mName,jwtToken:jwtToken},
 			xhrFields: {
 			   withCredentials: true
 			},
@@ -108,7 +108,7 @@
             $.ajax({
                 type: "POST",
                 url: origin + "/menu/"+ mId,
-                data: {_method:"DELETE"},
+                data: {_method:"DELETE",jwtToken:jwtToken},
 				xhrFields: {
 				   withCredentials: true
 				},
@@ -157,7 +157,7 @@
                     $.ajax({
                         type: "POST",
                         url: origin + "/menu/"+ id,
-                        data: {_method:"DELETE"},
+                        data: {_method:"DELETE",jwtToken:jwtToken},
 						xhrFields: {
 						   withCredentials: true
 						},

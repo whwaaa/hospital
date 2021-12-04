@@ -67,7 +67,7 @@
                         type: "POST",
                         // 1. url请求地址前加后端API地址origin
                         url: origin + "/be-hospital/add-amount/" + behId,
-                        data: {behAntecedent:behAntecedent,_method:"PUT"},
+                        data: {behAntecedent:behAntecedent,_method:"PUT",jwtToken:jwtToken},
                         dataType: "json",
                         // 2. 允许携带cookie跨域请求
                         xhrFields: {
@@ -102,6 +102,7 @@
                 type: "GET",
                 // 1. url请求地址前加后端API地址origin
                 url: origin + "/be-hospital/" + hosrId + "/" + behId,      // {hosr-id}/{beh-id}
+                data: {jwtToken:jwtToken},
                 dataType: "json",
                 // 2. 允许携带cookie跨域请求
                 xhrFields: {

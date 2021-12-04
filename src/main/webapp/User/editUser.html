@@ -205,7 +205,7 @@
 			   withCredentials: true
 			},
 			crossDomain: true,
-            data: {pageSize:999,pageNum:1},
+            data: {pageSize:999,pageNum:1,jwtToken:jwtToken},
             dataType: "json",
             success: function (data) {
                 if(data.code === 200){
@@ -260,7 +260,7 @@
 						},
 						crossDomain: true,
                         data: {
-                            _method: "PUT", rId: rId, uEmail: uEmail,
+                            _method: "PUT", rId: rId, uEmail: uEmail,jwtToken:jwtToken,
                             uPassword: uPassword, uState: uState, uTrueName: uTrueName
                         },
                         dataType: "json",

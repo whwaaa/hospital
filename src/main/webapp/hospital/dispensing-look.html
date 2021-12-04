@@ -42,7 +42,8 @@
 				let hosrId = document.location.toString().GetValue("hosrId");
 				let reqData = {
 					pageNum: pageNum,
-					pageSize: globalPageSize
+					pageSize: globalPageSize,
+					jwtToken: jwtToken
 				};
 				let queryLayer = layer.load(0);
 				$.ajax({
@@ -109,7 +110,7 @@
 						withCredentials: true
 					},
 					crossDomain: true,
-					data: {num: num},
+					data: {num: num,jwtToken:jwtToken},
 					success: function(data) {
 						layer.close(loadId);
 						layer.msg(data.msg,{

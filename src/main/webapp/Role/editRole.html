@@ -83,7 +83,7 @@
         $.ajax({
             type: "GET",
             url: origin + "/menu/list",
-            data: {pageSize:999,pageNum:1},
+            data: {pageSize:999,pageNum:1,jwtToken:jwtToken},
             dataType: "json",
             async: false,
 			xhrFields: {
@@ -124,7 +124,7 @@
         $.ajax({
             type: "GET",
             url: origin + "/role/" + rId,
-            data: {},
+            data: {jwtToken:jwtToken},
             dataType: "json",
 			xhrFields: {
 			   withCredentials: true
@@ -177,7 +177,7 @@
                     $.ajax({
                         type: "GET",
                         url: origin + "/role/r-name/" + rName,
-                        data: {},
+                        data: {jwtToken:jwtToken},
                         dataType: "json",
                         async: false,
 						xhrFields: {
@@ -229,7 +229,7 @@
                 $.ajax({
                     type: "POST",
                     url: origin + "/role/" + rId,
-                    data: {rName:rName,rState:rState,menuIds:menuIds,_method:"PUT"},
+                    data: {rName:rName,rState:rState,menuIds:menuIds,_method:"PUT",jwtToken:jwtToken},
                     dataType: "json",
 					xhrFields: {
 					   withCredentials: true
