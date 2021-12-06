@@ -88,6 +88,9 @@
       <if test="behName != null">
         and beh_name LIKE concat(concat('%',#{behName}),'%')
       </if>
+      <if test="true">
+        and beh_close_price=0
+      </if>
     </where>
   </select>
   <select id="selectByExample" parameterType="com.kkb.pojo.BeHospitalExample" resultMap="BaseResultMap">

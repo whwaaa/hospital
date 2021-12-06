@@ -2,8 +2,11 @@ package com.kkb.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.kkb.mapper.DoctorMapper;
+import com.kkb.mapper.DrugMapper;
 import com.kkb.pojo.ChargeProject;
 import com.kkb.pojo.Doctor;
+import com.kkb.pojo.Drug;
+import com.kkb.pojo.DrugExample;
 import com.kkb.service.ChargeService;
 import com.kkb.vo.DoctorQueryVO;
 import junit.framework.TestCase;
@@ -29,14 +32,20 @@ public class ChargeControllerTest extends TestCase {
     @Resource
     private DoctorMapper doctorMapper;
 
+    @Resource
+    private DrugMapper drugMapper;
+
     @Test
     public void testDoctor(){
-        DoctorQueryVO vo = new DoctorQueryVO();
-        vo.setdId(4);
-        vo.setdKeshi("泌尿");
-        vo.setUserName("毒");
-        List<Doctor> doctorList = doctorMapper.selectDoctorList(vo);
-        System.out.println(doctorList);
+        // 条件
+        DrugExample drugExample = new DrugExample();
+        DrugExample.Criteria criteria = drugExample.createCriteria();
+
+        List<Drug> drugs = drugMapper.selectByExample(drugExample);
+        System.out.println(drugs);
+        for (Drug drug : drugs) {
+            System.out.println(drug);
+        }
     }
 
     @Test

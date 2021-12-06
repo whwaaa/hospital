@@ -75,7 +75,9 @@
         // 删除cookie
         $.removeCookie('jwtToken');
 		if(crossDomainMode){
-			$.removeCookie("jwtToken",{path:'/',domain: projectUrl.split("/")[2].split(":")[0]})
+            $.removeCookie("jwtToken",{path:'/'});
+            if(projectUrl != '')
+			    $.removeCookie("jwtToken",{path:'/',domain: projectUrl.split("/")[2].split(":")[0]})
 		}
         layer.msg("退出登陆成功")
         // 返回登陆界面

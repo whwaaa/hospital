@@ -236,7 +236,7 @@
             // 查询的条件
             let drName = $("#drName").val();
             let drType = $("#drType").val();
-            let url = origin + '/drug/export?drName=' + drName + "&drType=" + drType;
+            let url = origin + '/drug/export?drName=' + drName + "&drType=" + drType + "&jwtToken=" + jwtToken;
             reqExport(url, "药品信息", null, "");
         });
     })

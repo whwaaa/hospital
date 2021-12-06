@@ -76,7 +76,6 @@
                             $("#loginNameTips").show();
                         }
                     }
-                    // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
                     ,complete : function(xhr, status) {
                         myComplete(xhr, status);
                     }
@@ -208,7 +207,7 @@
 						   withCredentials: true
 						},
 						crossDomain: true,
-                        data: {rId:rId,uEmail:uEmail,uTrueName:uTrueName,
+                        data: {rId:rId,uEmail:uEmail,uTrueName:uTrueName,jwtToken:jwtToken,
                             uPassword:uPassword,uLoginName:uLoginName,uState:uState},
                         dataType: "json",
                         success: function (data) {

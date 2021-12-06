@@ -183,6 +183,7 @@
                     success: function (res) {
                         // 图片上传成功后，保存文本信息
                         if (res.code == 200) {  // 上传成功
+                            $("#drUrl").val((res.obj));
                             updateDrug();
                             // 上传失败
                         } else {
@@ -205,6 +206,7 @@
             $("#myForm").serialize();
             let drugForm = $('#myForm').serialize();
             drugForm += "&jwtToken=" + jwtToken;
+            drugForm += "&_method=PUT";
             drugForm += "&_method=PUT";
             $.ajax({
                 type: "post",

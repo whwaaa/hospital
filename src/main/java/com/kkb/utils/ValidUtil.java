@@ -19,13 +19,15 @@ public class ValidUtil {
         if (hasError){
             StringBuilder errorMessage = new StringBuilder();
             List<FieldError> errors = result.getFieldErrors();
-            for (FieldError fe : errors){
-                /* 这个是测试用来提示哪个字段不正确使用的 */
-//                errorMessage.append(fe.getField());
-//                errorMessage.append(":");
-                errorMessage.append(fe.getDefaultMessage());
-                errorMessage.append(";");
-            }
+            errorMessage.append(errors.get(0).getDefaultMessage());
+            errorMessage.append(";");
+//            for (FieldError fe : errors){
+//                /* 这个是测试用来提示哪个字段不正确使用的 */
+////                errorMessage.append(fe.getField());
+////                errorMessage.append(":");
+//                errorMessage.append(fe.getDefaultMessage());
+//                errorMessage.append(";");
+//            }
             errorMessage.replace(errorMessage.lastIndexOf(";"),errorMessage.lastIndexOf(";")+1,"。");
             return errorMessage.toString();
         }else {

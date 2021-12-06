@@ -101,7 +101,7 @@ public class CkChargeService {
         BeHospital beHospital = new BeHospital();
         beHospital.setBehId(behId);
         beHospital.setBehClosePrice(1);     // 是否结算 0未结算 1已结算
-       beHospital.setBehUpdateTime(new Date());
+        beHospital.setBehUpdateTime(new Date());
         return beHospitalMapper.updateByPrimaryKeySelective(beHospital);
     }
 
@@ -122,23 +122,25 @@ public class CkChargeService {
             PricePeopleExample.Criteria criteria = pricePeopleExample.createCriteria();
             criteria.andBehIdEqualTo(behId);
             List<PricePeople> pricePeople = pricePeopleMapper.selectByExample(pricePeopleExample);
-            if(pricePeople.size()!=1 || pricePeople.get(0).getChapId()==null){
+            if(pricePeople.size()<1 || pricePeople.get(0).getChapId()==null){
                 String msg = "无法通过收费项和病人中间表获取chapId, behId:" + behId;
                 String encode = URLEncoder.encode(msg, "UTF-8");
                 throw new Exception(encode);
             }
-            // 查询收费项目
-            ChargeProject chargeProject = chargeProjectMapper.selectByPrimaryKey(pricePeople.get(0).getChapId());
-            if(chargeProject == null){
-                String msg = " 查询收费项目为空, chapId:" + pricePeople.get(0).getChapId();
-                String encode = URLEncoder.encode(msg, "UTF-8");
-                throw new Exception(encode);
+            for (PricePeople pricePerson : pricePeople) {
+                // 查询收费项目
+                ChargeProject chargeProject = chargeProjectMapper.selectByPrimaryKey(pricePerson.getChapId());
+                if(chargeProject == null){
+                    String msg = " 查询收费项目为空, chapId:" + pricePeople.get(0).getChapId();
+                    String encode = URLEncoder.encode(msg, "UTF-8");
+                    throw new Exception(encode);
+                }
+                // 封装检查日期
+                chargeProject.setBeChargeTime(pricePeople.get(0).getCreateTime());
+                // 封装病人姓名
+                chargeProject.setBehName(beHospital.getBehName());
+                chargeProjectList.add(chargeProject);
             }
-            // 封装检查日期
-            chargeProject.setBeChargeTime(pricePeople.get(0).getCreateTime());
-            // 封装病人姓名
-            chargeProject.setBehName(beHospital.getBehName());
-            chargeProjectList.add(chargeProject);
         }
         return chargeProjectList;
     }

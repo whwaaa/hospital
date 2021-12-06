@@ -74,7 +74,7 @@
     function roleNameCheck(rName){
         roleNameCheckTime = setTimeout(function(){
             if(rName == null || rName == "" || rName == undefined){
-                layer.msg("登录名不能为空", function(){})
+                layer.msg("角色名不能为空", function(){})
                 $("input[name='rName']").addClass("warning")
             }else{
                 $.ajax({
@@ -92,7 +92,7 @@
                             roleNameCheckFlag = true;
                             $("input[name='rName']").removeClass("warning")
                         }else{
-                            layer.msg("登录名已存在，请重新输入。", function(){})
+                            layer.msg("角色已存在，请重新输入。", function(){})
                             roleNameCheckFlag = false;
                             $("input[name='rName']").addClass("warning")
                         }
