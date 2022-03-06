@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>发药详情</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="../Css/bootstrap.css" />
+		<link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
+		<link rel="stylesheet" type="text/css" href="../Css/style.css" />
+		<script type="text/javascript" src="../Js/jquery.js"></script>
+		<script type="text/javascript" src="../Js/jquery.sorted.js"></script>
+		<script type="text/javascript" src="../Js/bootstrap.js"></script>
+		<script type="text/javascript" src="../Js/ckform.js"></script>
+		<script type="text/javascript" src="../Js/common.js"></script>
+
+		<style type="text/css">
+			body {
+				padding-bottom: 40px;
+			}
+
+			.sidebar-nav {
+				padding: 9px 0;
+			}
+
+			@media (max-width: 980px) {
+
+				/* Enable use of floated navbar text */
+				.navbar-text.pull-right {
+					float: none;
+					padding-left: 5px;
+					padding-right: 5px;
+				}
+			}
+		</style>
+		<script type="text/javascript">
+			$(function() {
+				queryList(1);
+			});
+
+			// 重写queryList(分页查询方法)
+			queryList = function(pageNum) {
+				// 查询的条件
+				let hosrId = document.location.toString().GetValue("hosrId");
+				let reqData = {
+					pageNum: pageNum,
+					pageSize: globalPageSize,
+					jwtToken: jwtToken
+				};
+				let queryLayer = layer.load(0);
+				$.ajax({
+			  		type: "GET",
+					url: origin + "/drugPeople/order/" + hosrId,
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: reqData,
+					success: function(data) {
+					  	layer.close(queryLayer);
+						if (data.code === 200) {
+							// 更新全局分页参数
+							globalPageSize = data.obj.pageSize;
+							globalPageNum = data.obj.pageNum;
+							// 填充分页
+							fillPageData(data.obj);
+							// 填充内容
+							fillContent(data.obj);
+							$("#checkall").removeAttr("checked");
+						} else {
+							layer.msg(data.msg, function() {});
+						}
+					}
+					// 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+					,complete: function(xhr, status) {
+						myComplete(xhr, status);
+					}
+				});
+			}
+
+			// 填充列表数据
+			function fillContent(pageInfo) {
+				$("#mycon").find("tbody").empty();
+				$.each(pageInfo.list, function() {
+					let con = "<tr>\n" +
+						"             <td>" + this.hosrId + "</td>\n" +
+						"             <td>" + this.hosrName + "</td>\n" +
+						"             <td>" + this.drName + "</td>\n" +
+						"             <td>" + this.drOutprice + "</td>\n" +
+						"             <td>" + this.drugNumber + "</td>\n" +
+						"             <td>" + this.drugGiveNumber + "</td>\n" +
+						"             <td>" + this.drugLastNumber + "</td>\n" +
+						"             <td>\n" +
+					    "<a href='#' onclick='reqEndGivenDrug("+this.drugLastNumber+","+this.drugPeoId+")' >发全</a>&nbsp;&nbsp;&nbsp;" + 
+					    "<a href='#' onclick='reqEndGivenDrug(1,"+this.drugPeoId+")' >发1</a>&nbsp;&nbsp;&nbsp;" + 
+					    "<a href='#' onclick='reqEndGivenDrug(5,"+this.drugPeoId+")' >发5</a>&nbsp;&nbsp;&nbsp;" + 
+					    "<a href='#' onclick='reqEndGivenDrug(30,"+this.drugPeoId+")' >发30</a>&nbsp;&nbsp;&nbsp;" + 
+						"</td>\n" +
+						" </tr>"
+					$("#mycon").find("tbody").append($(con))
+				})
+			}
+
+			// 请求发药，给用户结算药品
+			// n为发药数量
+			function reqEndGivenDrug(num,drugPeoId) {
+				let loadId =  layer.load(0);
+				$.ajax({
+				 type: "POST",
+					url: origin + "/drugPeople/given/" + drugPeoId,
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					data: {num: num,jwtToken:jwtToken},
+					success: function(data) {
+						layer.close(loadId);
+						layer.msg(data.msg,{
+							time: 2*1000
+						});
+						if (data.code === 200) {
+							queryList(globalPageNum);
+						}
+					}
+					// 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+					,complete: function(xhr, status) {
+						myComplete(xhr, status);
+					}
+				});
+
+			}
+
+
+			// 返回在线发药的主页
+			$(function() {
+				$('#backid').click(function() {
+					window.location.href = "dispensing.html?pageSize="+globalPageSize+"&pageNum="+globalPageNum;
+				});
+			});
+		</script>
+	</head>
+	<body>
+
+		<table id="mycon" class="table table-bordered table-hover definewidth m10">
+			<thead>
+				<tr>
+					<th>病历号</th>
+					<th>姓名</th>
+					<th>药品名称</th>
+					<th>单价(元)</th>
+					<th>药品数量</th>
+					<th>已发数量</th>
+					<th>未发数量</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<!-- 列表数据 -->
+			<tbody></tbody>
+		</table>
+
+		<table class="table table-bordered table-hover definewidth m10">
+			<tr>
+				<th colspan="5">
+					<div id="pageInfo-box" class="inline pull-right page">
+					</div>
+					<div>
+						<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
+					</div>
+				</th>
+			</tr>
+		</table>
+
+	</body>
+</html>

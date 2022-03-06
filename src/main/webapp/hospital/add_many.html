@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>录入住院信息</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/style.css" />
+    <script type="text/javascript" src="../Js/jquery.js"></script>
+    <script type="text/javascript" src="../Js/bootstrap.js"></script>
+    <script type="text/javascript" src="../Js/ckform.js"></script>
+    <script type="text/javascript" src="../Js/common.js"></script>
+    <script type="text/javascript" src="../Js/ckeditor/ckeditor.js"></script>
+ 
+
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+    <script type="text/javascript">
+        // 获取地址栏信息
+        let hosrId = document.location.toString().GetValue("hosrId");
+        let behId = document.location.toString().GetValue("behId");
+
+        let behAntecedentFlag = false;
+        // 缴纳押金非空和数字校验
+        function behAntecedentCheck(){
+            let el = $("input[name='behAntecedent']");
+            let regx = /^\d+(\.\d{1,2})?$/
+            if( !regx.test(el.val().trim()) ){
+                if(el.val().trim() == ''){
+                    layer.msg("缴纳押金不能为空");
+                }else{
+                    layer.msg("缴纳押金只能是整数或两位以内小数");
+                }
+                el.addClass("warning");
+                behAntecedentFlag = false;
+            }else{
+                el.removeClass("warning");
+                behAntecedentFlag = true;
+            }
+        }
+        // 监听保存
+        let saveFlag = false;
+        function saveSubmit(){
+            setTimeout(function(){
+                if(behAntecedentFlag && !saveFlag){
+                    saveFlag = true;
+                    layer.load(0);
+                    let behAntecedent = $("input[name='behAntecedent']").val().trim();
+                    $.ajax({
+                        type: "POST",
+                        // 1. url请求地址前加后端API地址origin
+                        url: origin + "/be-hospital/add-amount/" + behId,
+                        data: {behAntecedent:behAntecedent,_method:"PUT",jwtToken:jwtToken},
+                        dataType: "json",
+                        // 2. 允许携带cookie跨域请求
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        crossDomain: true,
+                        success: function (data) {
+                            layer.closeAll();
+                            if(data.code = 200){
+                                // 更新
+                                layer.msg("缴纳成功");
+                                // 返回列表
+                                setTimeout(function(){
+                                    $('#backid').trigger("click");
+                                }, 800);
+                            }else{
+                                layer.msg(data.msg, function(){});
+                            }
+                        },
+                        complete : function(xhr, status) {
+                            myComplete(xhr, status);
+                        }
+                    })
+                }
+            }, 400)
+        }
+
+        // 根据病历号,住院号查询信息
+        function queryMsg(){
+            layer.load(0);
+            $.ajax({
+                type: "GET",
+                // 1. url请求地址前加后端API地址origin
+                url: origin + "/be-hospital/" + hosrId + "/" + behId,      // {hosr-id}/{beh-id}
+                data: {jwtToken:jwtToken},
+                dataType: "json",
+                // 2. 允许携带cookie跨域请求
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function (data) {
+                    layer.closeAll();
+                    if(data.code == 200){
+                        // 填充信息
+                        let hosRegister = data.obj.hosRegister;
+                        let beHospital = data.obj.beHospital;
+                        $("#hosrId").text(hosRegister.hosrId);
+                        $("#hosrName").text(hosRegister.hosrName);
+                        $("#hosrIdcar").text(hosRegister.hosrIdcar);
+                        $("#behAntecedent").text(beHospital.behAntecedent);
+                    }else{
+                        layer.msg(data.msg, function (){});
+                    }
+                },
+                complete : function(xhr, status) {
+                    myComplete(xhr, status);
+                }
+            })
+        }
+
+        $(function () {
+            // 根据病历号,住院号查询信息
+            queryMsg();
+            // 监听返回
+            $('#backid').click(function(){
+                window.location.href="index.html?pageSize="+globalPageSize+"&pageNum="+globalPageNum;
+            });
+            // 监听保存
+            $("#saveSubmit").on("click", function(){
+                // 再次校验参数
+                behAntecedentCheck();
+                // 执行保存
+                saveSubmit();
+            })
+        });
+    </script>
+</head>
+<body>
+<div class="definewidth m20">
+<table class="table table-bordered table-hover definewidth m10">
+    <tr>
+        <td width="10%" class="tableleft">病历号</td>
+        <td id="hosrId"></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">姓名</td>
+        <td id="hosrName"></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">证件号</td>
+        <td id="hosrIdcar"></td>
+    </tr>
+	
+	<tr>
+        <td width="10%" class="tableleft">余额</td>
+        <td id="behAntecedent"></td>
+    </tr>
+	
+    <tr>
+        <td width="10%" class="tableleft">缴费押金</td>
+        <td><input type="text" onblur="behAntecedentCheck()" name="behAntecedent" value=""/>元</td>
+    </tr>
+
+    <tr>
+        <td colspan="2">
+			<center>
+                <button id="saveSubmit" class="btn btn-primary" type="button">保存</button> &nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
+			</center>
+		</td>
+    </tr>
+</table>
+</div>
+</body>
+</html>

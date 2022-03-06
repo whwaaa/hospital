@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kkb.mapper.BeHospitalMapper">
+  <cache-ref namespace="com.kkb.mapper.UserMapper"/>
+  <resultMap id="BaseResultMap" type="com.kkb.pojo.BeHospital">
+    <id column="beh_id" jdbcType="INTEGER" property="behId" />
+    <result column="beh_name" jdbcType="VARCHAR" property="behName" />
+    <result column="beh_nurse_people" jdbcType="VARCHAR" property="behNursePeople" />
+    <result column="beh_pat_bed" jdbcType="VARCHAR" property="behPatBed" />
+    <result column="beh_antecedent" jdbcType="DECIMAL" property="behAntecedent" />
+    <result column="beh_illness" jdbcType="VARCHAR" property="behIllness" />
+    <result column="beh_close_price" jdbcType="INTEGER" property="behClosePrice" />
+    <result column="beh_state" jdbcType="INTEGER" property="behState" />
+    <result column="beh_is_del" jdbcType="INTEGER" property="behIsDel" />
+    <result column="beh_create_time" jdbcType="TIMESTAMP" property="behCreateTime" />
+    <result column="beh_update_time" jdbcType="TIMESTAMP" property="behUpdateTime" />
+    <result column="u_id" jdbcType="INTEGER" property="uId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    beh_id, beh_name, beh_nurse_people, beh_pat_bed, beh_antecedent, beh_illness, beh_close_price, 
+    beh_state, beh_is_del, beh_create_time, beh_update_time, u_id
+  </sql>
+  <!-- 自定义病历号,姓名模糊查询 -->
+  <select id="selectByBehIdAndBehName" parameterType="com.kkb.vo.CkChargeQueryVo" resultMap="BaseResultMap">
+    select * from be_hospital
+    <where>
+      <if test="behId != null">
+        and beh_id LIKE concat(concat('%',#{behId}),'%')
+      </if>
+      <if test="behName != null">
+        and beh_name LIKE concat(concat('%',#{behName}),'%')
+      </if>
+      <if test="true">
+        and beh_close_price=0
+      </if>
+    </where>
+  </select>
+  <select id="selectByExample" parameterType="com.kkb.pojo.BeHospitalExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from be_hospital
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from be_hospital
+    where beh_id = #{behId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from be_hospital
+    where beh_id = #{behId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.kkb.pojo.BeHospitalExample">
+    delete from be_hospital
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kkb.pojo.BeHospital">
+    insert into be_hospital (beh_id, beh_name, beh_nurse_people, 
+      beh_pat_bed, beh_antecedent, beh_illness, 
+      beh_close_price, beh_state, beh_is_del, 
+      beh_create_time, beh_update_time, u_id
+      )
+    values (#{behId,jdbcType=INTEGER}, #{behName,jdbcType=VARCHAR}, #{behNursePeople,jdbcType=VARCHAR}, 
+      #{behPatBed,jdbcType=VARCHAR}, #{behAntecedent,jdbcType=DECIMAL}, #{behIllness,jdbcType=VARCHAR}, 
+      #{behClosePrice,jdbcType=INTEGER}, #{behState,jdbcType=INTEGER}, #{behIsDel,jdbcType=INTEGER}, 
+      #{behCreateTime,jdbcType=TIMESTAMP}, #{behUpdateTime,jdbcType=TIMESTAMP}, #{uId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.kkb.pojo.BeHospital">
+    <selectKey keyProperty="behId" order="AFTER" resultType="java.lang.Integer">
+        select LAST_INSERT_ID()
+    </selectKey>
+    insert into be_hospital
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="behId != null">
+        beh_id,
+      </if>
+      <if test="behName != null">
+        beh_name,
+      </if>
+      <if test="behNursePeople != null">
+        beh_nurse_people,
+      </if>
+      <if test="behPatBed != null">
+        beh_pat_bed,
+      </if>
+      <if test="behAntecedent != null">
+        beh_antecedent,
+      </if>
+      <if test="behIllness != null">
+        beh_illness,
+      </if>
+      <if test="behClosePrice != null">
+        beh_close_price,
+      </if>
+      <if test="behState != null">
+        beh_state,
+      </if>
+      <if test="behIsDel != null">
+        beh_is_del,
+      </if>
+      <if test="behCreateTime != null">
+        beh_create_time,
+      </if>
+      <if test="behUpdateTime != null">
+        beh_update_time,
+      </if>
+      <if test="uId != null">
+        u_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="behId != null">
+        #{behId,jdbcType=INTEGER},
+      </if>
+      <if test="behName != null">
+        #{behName,jdbcType=VARCHAR},
+      </if>
+      <if test="behNursePeople != null">
+        #{behNursePeople,jdbcType=VARCHAR},
+      </if>
+      <if test="behPatBed != null">
+        #{behPatBed,jdbcType=VARCHAR},
+      </if>
+      <if test="behAntecedent != null">
+        #{behAntecedent,jdbcType=DECIMAL},
+      </if>
+      <if test="behIllness != null">
+        #{behIllness,jdbcType=VARCHAR},
+      </if>
+      <if test="behClosePrice != null">
+        #{behClosePrice,jdbcType=INTEGER},
+      </if>
+      <if test="behState != null">
+        #{behState,jdbcType=INTEGER},
+      </if>
+      <if test="behIsDel != null">
+        #{behIsDel,jdbcType=INTEGER},
+      </if>
+      <if test="behCreateTime != null">
+        #{behCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="behUpdateTime != null">
+        #{behUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uId != null">
+        #{uId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.kkb.pojo.BeHospitalExample" resultType="java.lang.Long">
+    select count(*) from be_hospital
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update be_hospital
+    <set>
+      <if test="record.behId != null">
+        beh_id = #{record.behId,jdbcType=INTEGER},
+      </if>
+      <if test="record.behName != null">
+        beh_name = #{record.behName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.behNursePeople != null">
+        beh_nurse_people = #{record.behNursePeople,jdbcType=VARCHAR},
+      </if>
+      <if test="record.behPatBed != null">
+        beh_pat_bed = #{record.behPatBed,jdbcType=VARCHAR},
+      </if>
+      <if test="record.behAntecedent != null">
+        beh_antecedent = #{record.behAntecedent,jdbcType=DECIMAL},
+      </if>
+      <if test="record.behIllness != null">
+        beh_illness = #{record.behIllness,jdbcType=VARCHAR},
+      </if>
+      <if test="record.behClosePrice != null">
+        beh_close_price = #{record.behClosePrice,jdbcType=INTEGER},
+      </if>
+      <if test="record.behState != null">
+        beh_state = #{record.behState,jdbcType=INTEGER},
+      </if>
+      <if test="record.behIsDel != null">
+        beh_is_del = #{record.behIsDel,jdbcType=INTEGER},
+      </if>
+      <if test="record.behCreateTime != null">
+        beh_create_time = #{record.behCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.behUpdateTime != null">
+        beh_update_time = #{record.behUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.uId != null">
+        u_id = #{record.uId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update be_hospital
+    set beh_id = #{record.behId,jdbcType=INTEGER},
+      beh_name = #{record.behName,jdbcType=VARCHAR},
+      beh_nurse_people = #{record.behNursePeople,jdbcType=VARCHAR},
+      beh_pat_bed = #{record.behPatBed,jdbcType=VARCHAR},
+      beh_antecedent = #{record.behAntecedent,jdbcType=DECIMAL},
+      beh_illness = #{record.behIllness,jdbcType=VARCHAR},
+      beh_close_price = #{record.behClosePrice,jdbcType=INTEGER},
+      beh_state = #{record.behState,jdbcType=INTEGER},
+      beh_is_del = #{record.behIsDel,jdbcType=INTEGER},
+      beh_create_time = #{record.behCreateTime,jdbcType=TIMESTAMP},
+      beh_update_time = #{record.behUpdateTime,jdbcType=TIMESTAMP},
+      u_id = #{record.uId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kkb.pojo.BeHospital">
+    update be_hospital
+    <set>
+      <if test="behName != null">
+        beh_name = #{behName,jdbcType=VARCHAR},
+      </if>
+      <if test="behNursePeople != null">
+        beh_nurse_people = #{behNursePeople,jdbcType=VARCHAR},
+      </if>
+      <if test="behPatBed != null">
+        beh_pat_bed = #{behPatBed,jdbcType=VARCHAR},
+      </if>
+      <if test="behAntecedent != null">
+        beh_antecedent = #{behAntecedent,jdbcType=DECIMAL},
+      </if>
+      <if test="behIllness != null">
+        beh_illness = #{behIllness,jdbcType=VARCHAR},
+      </if>
+      <if test="behClosePrice != null">
+        beh_close_price = #{behClosePrice,jdbcType=INTEGER},
+      </if>
+      <if test="behState != null">
+        beh_state = #{behState,jdbcType=INTEGER},
+      </if>
+      <if test="behIsDel != null">
+        beh_is_del = #{behIsDel,jdbcType=INTEGER},
+      </if>
+      <if test="behCreateTime != null">
+        beh_create_time = #{behCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="behUpdateTime != null">
+        beh_update_time = #{behUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uId != null">
+        u_id = #{uId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where beh_id = #{behId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kkb.pojo.BeHospital">
+    update be_hospital
+    set beh_name = #{behName,jdbcType=VARCHAR},
+      beh_nurse_people = #{behNursePeople,jdbcType=VARCHAR},
+      beh_pat_bed = #{behPatBed,jdbcType=VARCHAR},
+      beh_antecedent = #{behAntecedent,jdbcType=DECIMAL},
+      beh_illness = #{behIllness,jdbcType=VARCHAR},
+      beh_close_price = #{behClosePrice,jdbcType=INTEGER},
+      beh_state = #{behState,jdbcType=INTEGER},
+      beh_is_del = #{behIsDel,jdbcType=INTEGER},
+      beh_create_time = #{behCreateTime,jdbcType=TIMESTAMP},
+      beh_update_time = #{behUpdateTime,jdbcType=TIMESTAMP},
+      u_id = #{uId,jdbcType=INTEGER}
+    where beh_id = #{behId,jdbcType=INTEGER}
+  </update>
+</mapper>

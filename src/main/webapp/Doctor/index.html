@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>门诊医生</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/style.css" />
+    <script type="text/javascript" src="../Js/jquery.js"></script>
+    <script type="text/javascript" src="../Js/jquery.sorted.js"></script>
+    <script type="text/javascript" src="../Js/bootstrap.js"></script>
+    <script type="text/javascript" src="../Js/ckform.js"></script>
+    <script type="text/javascript" src="../Js/common.js"></script>
+
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+    <script type="text/javascript">
+	    $(function () {
+		    $('#newNav').click(function(){
+				window.location.href="add.html?pageSize=" + globalPageSize + "&pageNum=" + globalPageNum;
+		    });
+            queryList(globalPageNum);
+        });
+
+        // 重写queryList(分页查询方法)
+        queryList = function(pageNum){
+            // 查询的条件
+            let dId = $("#dId").val();
+            let userName= $("#dName").val();
+            let dKeshi = $("#dKeshi").val();
+            layer.load(0);
+            $.ajax({
+                type: "GET",
+                url: origin + "/doctor/list",
+                data: {pageNum:pageNum, pageSize:globalPageSize,
+                    dId:dId, userName:userName, dKeshi:dKeshi,jwtToken:jwtToken},
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function (data) {
+                    layer.closeAll()
+                    if(data.code === 200){
+                        // 更新全局分页参数
+                        globalPageSize = data.obj.pageSize;
+                        globalPageNum = data.obj.pageNum;
+                        // 填充分页
+                        fillPageData(data.obj);
+                        // 填充内容
+                        fillContent(data.obj);
+                        $("#checkall").removeAttr("checked");
+                    }else{
+                        layer.msg(data.msg, function(){});
+                    }
+                }
+                // 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+                ,complete : function(xhr, status) {
+                    myComplete(xhr, status);
+                }
+            });
+        }
+
+        // 填充列表数据
+        function fillContent(pageInfo){
+            $("#mycon").find("tbody").empty()
+            $.each(pageInfo.list, function(){
+                let con = "<tr>\n" +
+                    "             <td style='vertical-align:middle;'><input type='checkbox' name='check' value='"+ this.dId +"'></td>\n" +
+                    "             <td>"+ this.dId +"</td>\n" +
+                    "             <td>"+ this.doctorName +"</td>\n" +
+                    "             <td>"+ this.dIntime +"</td>\n" +
+                    "             <td>"+ this.dKeshi +"</td>\n" +
+                    "             <td>\n" +
+                    "                 <a href='edit.html?pageNum="+ pageInfo.pageNum +"&pageSize="+ pageInfo.pageSize +"&dId="+ this.dId +"'>更改</a>&nbsp;&nbsp;&nbsp;"
+                    +"<a href='look.html?pageNum="+ pageInfo.pageNum +"&pageSize="+ pageInfo.pageSize +"&dId="+ this.dId +"'>详情</a>&nbsp;&nbsp;&nbsp;" +
+                    "<a href='javascript:deleteDoctorById("+this.dId+", "+this.uId+");'>删除</a>\n"+
+                    "             </td>\n" +
+                    "         </tr>"
+                $("#mycon").find("tbody").append($(con))
+            })
+        }
+        // 清空
+        function reset(){
+            $("#dId").val("")
+            $("#dName").val("")
+            $("#dKeshi").val("")
+            queryList(1);
+        }
+        // 删除医生byId
+        function deleteDoctorById(dId, uId){
+            if(confirm("确定要执行删除?")){
+                layer.load(0)
+                $.ajax({
+                    type: "POST",
+                    // 1. url请求地址前加后端API地址origin
+                    url: origin + "/doctor/" + dId,
+                    data: {uId:uId,_method:"DELETE",jwtToken:jwtToken},
+                    dataType: "json",
+                    // 2. 允许携带cookie跨域请求
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
+                    success: function (data) {
+                        layer.closeAll();
+                        if(data.code == 204){
+                            // 删除成功
+                            layer.msg("删除成功",{time:1000},function(){
+                                // 更新当前页信息
+                                queryList(globalPageNum);
+                            });
+                        }else{
+                            // 删除失败
+                            layer.msg(data.msg, function(){});
+                        }
+                    },
+                    complete : function(xhr, status) {
+                        myComplete(xhr, status);
+                    }
+                })
+            }
+
+        }
+    	function checkall(){
+			var alls=document.getElementsByName("check");
+			var ch=document.getElementById("checkall");
+			if(ch.checked){
+				for(var i=0;i<alls.length;i++){
+					alls[i].checked=true;	
+				}	
+			}else{
+				for(var i=0;i<alls.length;i++){
+					alls[i].checked=false;	
+				}	
+			}
+		}
+		function delAll(){
+			var alls=document.getElementsByName("check");
+			var ids=new Array();
+			for(var i=0;i<alls.length;i++){
+				if(alls[i].checked){
+					ids.push(alls[i].value);
+				}		
+			}
+			if(ids.length>0){
+				if(confirm("确认操作?")){
+					alert("成功!");
+				}
+			}else{
+				alert("请选中要操作的项");
+			}
+		}
+
+        // 导出Excel
+        function exportExcel(){
+            var alls=document.getElementsByName("check");
+            var ids = new Array();
+            for(var i=0;i<alls.length;i++){
+                if(alls[i].checked){
+                    ids.push(alls[i].value);
+                }
+            }
+            if(ids.length > 0){
+                // 导出
+                let url = origin + "/doctor/export";
+                reqExport(url, "门诊医生信息", ids, "dIds");
+            }else{
+                alert("请选中要操作的项");
+            }
+        }
+
+    </script>
+</head>
+<body>
+
+<div class="definewidth m20">
+<table class="table table-bordered table-hover definewidth m10">
+    <tr>
+        <td width="10%" class="tableleft">医生编号：</td>
+        <td><input type="text" name="dId" id="dId" value=""/></td>
+		
+        <td width="10%" class="tableleft">医生姓名：</td>
+        <td><input type="text" name="dName" id="dName" value=""/></td>
+		
+        <td width="10%" class="tableleft">科室：</td>
+        <td><input type="text" name="dKeshi" id="dKeshi" value=""/></td>
+    </tr>
+    <tr>
+		  <td colspan="6"><center>
+            <button onclick="queryList(1)" class="btn btn-primary" type="button">查询</button>
+            <button class="btn btn-primary" onclick="reset()" type="reset">清空</button>
+			</center></td>
+    </tr>
+</table>
+</div>
+   
+<table id="mycon" class="table table-bordered table-hover definewidth m10" >
+    <thead>
+        <tr>
+    	    <th><input type="checkbox" id="checkall" onChange="checkall();"></th>
+            <th>医生编号</th>
+            <th>医生姓名</th>
+            <th>入院时间</th>
+            <th>所属科室</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!--列表加载数据的位置-->
+    </tbody>
+	     <!--<tr >
+         	<td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
+            <td style="vertical-align:middle;">1103</td>
+            <td style="vertical-align:middle;">程俊</td>
+            <td style="vertical-align:middle;">2015-09-09 12：12：12</td>
+            <td style="vertical-align:middle;">血液科</td>
+            <td style="vertical-align:middle;"><a href="look.html">详情>>></a>&nbsp;&nbsp;&nbsp;<a href="edit.html">更改</a></td>
+        </tr>
+	     <tr >
+         	<td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
+            <td style="vertical-align:middle;">1104</td>
+            <td style="vertical-align:middle;">王博</td>
+            <td style="vertical-align:middle;">2015-12-09 12：12：12</td>
+            <td style="vertical-align:middle;">骨科</td>
+            <td style="vertical-align:middle;"><a href="look.html">详情>>></a>&nbsp;&nbsp;&nbsp;<a href="edit.html">更改</a></td>
+        </tr>
+	     <tr >
+         	<td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
+            <td style="vertical-align:middle;">1105</td>
+            <td style="vertical-align:middle;">沈青川</td>
+            <td style="vertical-align:middle;">2015-02-04 15：11：12</td>
+            <td style="vertical-align:middle;">外科</td>
+            <td style="vertical-align:middle;"><a href="look.html">详情>>></a>&nbsp;&nbsp;&nbsp;<a href="edit.html">更改</a></td>
+        </tr>
+	     <tr >
+         	<td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
+            <td style="vertical-align:middle;">1106</td>
+            <td style="vertical-align:middle;">欧阳雨露</td>
+            <td style="vertical-align:middle;">2014-09-05 12：12：12</td>
+            <td style="vertical-align:middle;">急诊科</td>
+            <td style="vertical-align:middle;"><a href="look.html">详情>>></a>&nbsp;&nbsp;&nbsp;<a href="edit.html">更改</a></td>
+        </tr>
+	     <tr >
+         	<td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
+            <td style="vertical-align:middle;">1107</td>
+            <td style="vertical-align:middle;">艾小天</td>
+            <td style="vertical-align:middle;">2014-02-09 12：12：11</td>
+            <td style="vertical-align:middle;">妇科</td>
+            <td style="vertical-align:middle;"><a href="look.html">详情>>></a>&nbsp;&nbsp;&nbsp;<a href="edit.html">更改</a></td>
+        </tr>-->
+</table>
+  
+<table class="table table-bordered table-hover definewidth m10" >
+  	<tr><th colspan="5">
+        <div id="pageInfo-box" class="inline pull-right page">
+          <!--<a href='#' >第一页</a> <a href='#'>上一页</a>     <span class='current'>1</span><a href='#'>2</a><a href='/chinapost/index.php?m=Label&a=index&p=3'>3</a><a href='#'>4</a><a href='#'>5</a>  <a href='#' >下一页</a> <a href='#' >最后一页</a>
+		  &nbsp;&nbsp;&nbsp;共<span class='current'>32</span>条记录<span class='current'> 1/33 </span>页-->
+        </div>
+        <div>
+            <button type="button" class="btn btn-success" id="newNav">添加新医生</button>
+            <button type="button" class="btn btn-success" onclick="exportExcel()" id="delPro">导出Excel</button>
+        </div>
+    </th></tr>
+</table>
+  
+</body>
+</html>

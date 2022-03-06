@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>门诊查询</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/style.css" />
+    <script type="text/javascript" src="../Js/jquery.js"></script>
+    <script type="text/javascript" src="../Js/bootstrap.js"></script>
+    <script type="text/javascript" src="../Js/ckform.js"></script>
+    <script type="text/javascript" src="../Js/common.js"></script>
+
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+    <script type="text/javascript">
+
+    queryList = function(pageNum){
+		// 病历号
+		let hosrId = $("input[name='hosrId']").val().trim()
+		// 医生名字
+		let doctorName = $("input[name='doctorName']").val().trim()
+		// 医生所属科室
+		let dKeshi = $("input[name='dKeshi']").val().trim();
+		// 挂号开始时间
+		let createTimeStartBlur = $("input[name='createTimeStartBlur']").val().trim()
+		// 挂号结束时间
+		let createTimeEndBlur = $("input[name='createTimeEndBlur']").val().trim()
+        layer.load(0)
+        $.ajax({
+            type: "GET",
+            url: origin + "/register/list",
+            data: {pageNum:pageNum,pageSize:globalPageSize,hosrId:hosrId,doctorName:doctorName,jwtToken:jwtToken,
+			dKeshi:dKeshi,createTimeStartBlur:createTimeStartBlur,createTimeEndBlur:createTimeEndBlur},
+            // 允许携带cookie跨域请求
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+            success: function (data) {
+                layer.closeAll();
+                if(data.code === 200){
+                    // 填充分页
+                    fillPageData(data.obj);
+                    // 更新全局页数信息
+                    globalPageSize = data.obj.pageSize;
+                    globalPageNum = data.obj.pageNum;
+                    // 填充内容
+                    fillContentData(data.obj.list);
+                }else{
+                    layer.msg(data.msg,function(){})
+                }
+            },
+            complete : function(xhr, status) {
+                myComplete(xhr, status);
+            }
+        });
+    }
+	// 退号
+	function tuihao(hosrId){
+		if(confirm("确定退号吗?")){
+			layer.load(0)
+			$.ajax({
+			    type: "POST",
+			    // 1. url请求地址前加后端API地址origin
+			    url: origin + "/register/" + hosrId,
+			    data: {_method:"PUT",hosrState:3,jwtToken:jwtToken},
+			    dataType: "json",
+			    // 2. 允许携带cookie跨域请求
+			    xhrFields: {
+			        withCredentials: true
+			    },
+			    crossDomain: true,
+			    success: function (data) {
+			        layer.closeAll()
+					if(data.code == 200){
+						layer.msg("退号成功")
+						// 更新显示信息
+						$("#td_" + hosrId).find("a").eq(1).remove();
+						$("#td_" + hosrId).find("a").eq(1).remove();
+                        $("#td_" + hosrId).prev().text("已退号");
+					}else{
+						layer.msg(data.msg, function(){})
+					}
+					$("input[type='checkbox']").prop("checked",false);
+			    },
+			    complete : function(xhr, status) {
+			        myComplete(xhr, status);
+			    }
+			})
+		}
+	}
+	// 监听清空
+	function resetClear(){
+		$("button[type='reset']").on("click", function(){
+			$("input").val("");
+			queryList(1);
+		})
+	}
+    // 填充内容
+    function fillContentData(cont){
+        // 先清空数据
+        $("table.content").find("tbody").empty();
+        $.each(cont, function(){
+            // 挂号状态：0挂号 1已住院 2已出院 3已退号
+            let hosrState = "";
+            if(this.hosrState == 0){
+                hosrState = "已挂号";
+            }else if(this.hosrState == 1){
+                hosrState = "已住院";
+            }else if(this.hosrState == 2){
+                hosrState = "已出院";
+            }else if(this.hosrState == 3){
+                hosrState = "已退号";
+            }
+            let con =
+                "<tr>\n" +
+                "            <td style='vertical-align:middle;'><input type='checkbox' name='check' value='" + this.hosrId + "'></td>\n" +
+                "            <td style='vertical-align:middle;'>" + this.hosrId + "</td>\n" +
+                "            <td style='vertical-align:middle;'>" + this.doctorName + "</td>\n" +
+                "            <td style='vertical-align:middle;'>" + this.hosrCreateTimeStr + "</td>\n" +
+                "            <td style='vertical-align:middle;'>" + this.keshi + "</td>\n" +
+                "            <td style='vertical-align:middle;'>" + hosrState + "</td>\n";
+			if(this.hosrState == 0){
+				con += "            <td id='td_" + this.hosrId + "' style='vertical-align:middle;'><a href='look.html?hosrId="+ this.hosrId +"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>详情>>></a>&nbsp;&nbsp;&nbsp;<a href='edit.html?hosrId="+ this.hosrId +"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>更改</a>&nbsp;&nbsp;&nbsp;<a href='javascript:tuihao(" + this.hosrId + ")'>退号</a></td>\n";
+			}else if(this.hosrState == 1){
+			    con += "            <td style='vertical-align:middle;'><a href='look.html?hosrId="+ this.hosrId +"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>详情>>></a>&nbsp;&nbsp;&nbsp;<a href='edit.html?hosrId="+ this.hosrId +"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>更改</a></td>\n";
+			}else{
+				con += "            <td style='vertical-align:middle;'><a href='look.html?hosrId="+ this.hosrId +"&pageNum="+globalPageNum+"&pageSize="+globalPageSize+"'>详情>>></a></td>\n";
+			}
+            con += "        </tr>";
+            $("table.content").find("tbody").append($(con));
+        })
+
+    }
+	// 导出Excel
+	function exportExcel(){
+		var alls=document.getElementsByName("check");
+		var ids = new Array();
+		for(var i=0;i<alls.length;i++){
+		    if(alls[i].checked){
+		        ids.push(alls[i].value);
+		    }
+		}
+		if(ids.length > 0){
+		    // 导出
+			let url = origin + "/register/export";
+			reqExport(url, "挂号信息", ids, "hosrIds");
+		}else{
+		    alert("请选中要操作的项");
+		}
+	}
+	// 全选复选框
+    function checkall(){
+        var alls=document.getElementsByName("check");
+        var ch=document.getElementById("checkall");
+        if(ch.checked){
+            for(var i=0;i<alls.length;i++){
+                alls[i].checked=true;
+            }
+        }else{
+            for(var i=0;i<alls.length;i++){
+                alls[i].checked=false;
+            }
+        }
+    }
+    function delAll(){
+        var alls=document.getElementsByName("check");
+        var ids = new Array();
+        for(var i=0;i<alls.length;i++){
+            if(alls[i].checked){
+                ids.push(alls[i].value);
+				if( $("#td_" + alls[i].value).find("a").eq(2).size()==0 || $("#td_" + alls[i].value).find("a").eq(2).text()!="退号"){
+					layer.msg(alls[i].value + "不能退号",function(){})
+					$.each($("input[name='check']"),function(){
+						if($(this).val() == alls[i].value){
+							$(this).prop("checked",false)
+						}
+					})
+					return false;
+				}
+				// 已挂号
+            }
+        }
+        if(ids.length>0){
+            if(confirm("确认操作?")){
+				layer.load(0)
+				let delStatu = true;	// 删除成功标志
+				$.each(ids, function(index, id){
+					$.ajax({
+					    type: "POST",
+					    // 1. url请求地址前加后端API地址origin
+					    url: origin + "/register/" + id,
+					    data: {_method:"PUT",hosrState:3,jwtToken:jwtToken},
+					    dataType: "json",
+					    // 2. 允许携带cookie跨域请求
+					    xhrFields: {
+					        withCredentials: true
+					    },
+					    crossDomain: true,
+					    success: function (data) {
+							if(data.code == 200){
+								// 是最后一个ajax请求
+								if(index == ids.length-1){
+									layer.closeAll()
+									if(delStatu){
+										layer.msg("批量退号成功")
+									}else{
+										layer.msg("批量退号出错, 请逐个检查", function(){})
+									}
+									setTimeout(function() {
+										queryList(globalPageNum)     // 刷新页面
+									}, 500);
+									$("input[type='checkbox']").prop("checked",false);
+								}
+							}else{
+								layer.closeAll()
+								layer.msg(data.msg, function(){})
+								delStatu = false;	 // 标志删除失败
+							}
+					    },
+					    complete : function(xhr, status) {
+					        myComplete(xhr, status);
+					    }
+					})
+				})
+            }
+        }else{
+            alert("请选中要操作的项");
+        }
+    }
+	
+	$(function () {
+	    // 查询第一页
+	    queryList(globalPageNum);
+		// 监听清空
+		resetClear();
+	});
+    </script>
+</head>
+<body>
+
+<div class="definewidth m20">
+<table class="table table-bordered table-hover definewidth m10">
+    <tr>
+        <td width="10%" class="tableleft">病历号：</td>
+        <td><input placeholder="请输入病历号" type="text" name="hosrId" value=""/></td>
+		
+        <td width="10%" class="tableleft">主治医生：</td>
+        <td><input placeholder="请输入主治医生姓名" type="text" name="doctorName" value=""/></td>
+		
+        <td width="10%" class="tableleft">科室：</td>
+        <td><input placeholder="请输入科室名称" type="text" name="dKeshi" value=""/></td>
+    </tr>
+    <tr>
+		
+        <td width="10%" class="tableleft">挂号时间：</td>
+		
+		  <td colspan="5">
+			<input type="text" placeholder="2099-01-01 00:00:00" name="createTimeStartBlur" value=""/>&nbsp;至&nbsp;<input placeholder="2099-01-01 00:00:00" type="text" name="createTimeEndBlur" value=""/>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="button" class="query btn btn-primary" onclick="queryList(1)">查询</button>
+            <button type="reset" class="btn btn-primary">清空</button>
+        </td>
+    </tr>
+</table>
+</div>
+   
+<table class="content table table-bordered table-hover definewidth m10" >
+   <thead>
+    <tr>
+    	<th><input type="checkbox" id="checkall" onChange="checkall();"></th>
+        <th>门诊编号</th>
+        <th>主治医生</th>
+        <th>挂号时间</th>
+        <th>挂号科室</th>
+        <th>状态</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+
+    </table>
+  
+  <table class="table table-bordered table-hover definewidth m10" >
+  	<tr><th colspan="5">
+
+        <div id="pageInfo-box" class="inline pull-right page"></div>
+
+		 <div><button type="button" class="btn btn-success" onclick="javascript:window.location.href = 'add.html';">门诊挂号</button>&nbsp;&nbsp;&nbsp;
+		 <button type="button" class="btn btn-success" id="delPro1" onclick="delAll();">退号</button>&nbsp;&nbsp;&nbsp;
+		 <button type="button" class="btn btn-success" id="delPro2" onclick="exportExcel()">导出Excel</button>
+		
+		 
+		 </div>
+		 
+	</th></tr>
+  </table>
+  
+</body>
+</html>

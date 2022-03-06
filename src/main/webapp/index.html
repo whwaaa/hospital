@@ -1,0 +1,194 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>枣阳市第二人民医院信息管理系统</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="./assets/css/dpl-min.css" rel="stylesheet" type="text/css" />
+    <link href="./assets/css/bui-min.css" rel="stylesheet" type="text/css" />
+    <link href="./assets/css/main-min.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+
+<!--<div class="header">
+
+    <div class="dl-title">
+        <img src="/chinapost/Public/assets/img/top.png">
+    </div>
+
+    <div class="dl-log">欢迎您，<span class="dl-log-user">张三</span><a href="/chinapost/index.php?m=Public&a=logout" title="退出系统" class="dl-log-quit">[退出]</a>
+    </div>
+</div>-->
+<div class="content">
+    <div class="dl-main-nav">
+        <div class="dl-inform"><div class="dl-inform-title"><s class="dl-inform-icon dl-up"></s></div></div>
+        <ul id="J_Nav"  class="nav-list ks-clear" style="float:left">
+			<li style=" color:#fff; font-size:20px; margin-top:10px; margin-left:20px;">山东省第二人民医院管理平台</li>
+		</ul>
+		<div  style="float:right; color:#fff;">欢迎您，<span class="dl-log-user"></span><a href="javascript:void(0);" title="退出系统" class="dl-log-quit">[退出]</a></div>
+    </div>
+    <ul id="J_NavContent" class="dl-tab-conten">
+    </ul>
+</div>
+<script type="text/javascript" src="./assets/js/jquery-1.6.js"></script>
+<script type="text/javascript" src="./assets/js/bui.js"></script>
+<script type="text/javascript" src="./assets/js/common/main-min.js"></script>
+<script type="text/javascript" src="./assets/js/config-min.js"></script>
+<script type="text/javascript" src="./Js/jquery.js"></script>
+<script type="text/javascript" src="./Js/common.js"></script>
+
+<script>
+    $(function(){
+        // 获取用户,角色,资源信息
+        getUserMessage();
+    })
+
+    // 获取用户,角色,资源信息
+    function getUserMessage(){
+        $.ajax({
+            type: "GET",
+            url: origin + "/access/user",
+            data: {jwtToken:jwtToken},
+            dataType: "json",
+		    xhrFields: {
+		       withCredentials: true
+		    },
+		    crossDomain: true,
+            success: function (data) {
+                if (data.code == 200){
+                    $(".dl-log-user").text(data.obj.uLoginName)
+                    // 加载导航栏
+                    loadNav(data.obj);
+                }
+            },
+            error: function(){
+                layer.alert("服务器好像跑路了");
+            }
+            // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上下面的代码
+            ,complete : function(xhr, status) {
+                myComplete(xhr, status)
+            }
+        })
+    }
+    // 监听退出登陆按钮
+    $(".dl-log-quit").on("click", function (){
+        // 删除cookie
+        $.removeCookie('jwtToken');
+		if(crossDomainMode){
+            $.removeCookie("jwtToken",{path:'/'});
+            if(projectUrl != '')
+                $.removeCookie("jwtToken",{path:'/',domain: projectUrl.split("/")[2].split(":")[0]})
+		}
+        layer.msg("退出登陆成功")
+        // 返回登陆界面
+        setTimeout(function(){
+			if(crossDomainMode){
+				window.location.href = projectUrl + "/index/login.html?callBackUrL=" + projectUrl + "/index.html";
+			}else{
+				window.location.href = "/index/login.html?callBackUrL=http://localhost";
+			}
+        }, 1000)
+    })
+    // 加载导航栏
+    function loadNav(user){
+        BUI.use('common/main',function(){
+            // 获取当前url
+            let nowHref = window.location.href;
+            // 获取url中最后的数字 例: newhref=http://localhost/#1/9  urlNum=9
+            let urlNum = nowHref.split("/")[nowHref.split("/").length-1];
+            // 将要刷新的href
+            let refreshHref;
+            // 将要刷新的资源名称
+            let refreshName;
+            var config = [
+                {id:'1',menu:[{text:'快速通道',items:[]}]}];
+            var myarr = [];
+            // 遍历用户数据
+            $.each(user.menuList, function(i, v){
+                let myobj = {id:'',text:'',href:''}
+                if(refreshHref === undefined && urlNum == v.mId){
+					// 跨域标识
+					if(crossDomainMode){   
+						// 获取将要刷新的href
+						// 非http
+						if(v.mUrl.indexOf("http") != 0){
+							// 前缀有"/"
+							if(v.mUrl.indexOf("/")==0){
+								refreshHref = projectUrl + v.mUrl; 
+							}else{
+								refreshHref = projectUrl + "/" + v.mUrl; 
+							}
+						}else{
+							refreshHref = v.mUrl; 
+						}
+					}else{
+						// 获取将要刷新的href
+						refreshHref = v.mUrl;
+					}
+                    // 将要刷新的资源名称
+                    refreshName = v.mName;
+                }
+                myobj.id = v.mId;
+                myobj.text = v.mName;
+				// 跨域标识
+				if(crossDomainMode){   
+					// 非http
+					if(v.mUrl.indexOf("http") != 0){
+						// 前缀有"/"
+						if(v.mUrl.indexOf("/")==0){
+							myobj.href = projectUrl + v.mUrl; 
+						}else{
+							myobj.href = projectUrl + "/" + v.mUrl; 
+						}
+					}else{
+						myobj.href = v.mUrl; 
+					}
+				}else{
+					myobj.href = v.mUrl; 
+				}
+                myarr[i] = myobj;
+            })
+            // 将用户数据添加进config
+            config[0].menu[0].items = myarr;
+            new PageUtil.MainPage({
+                modulesConfig : config
+            });
+            // 遍历找到属性data-id=urlNum(url后缀数字)的导航栏
+            let $nav = $("#J_NavContent").find("li.bui-menu-item").find("ul").find("li")
+            $.each($nav, function(){
+                if($(this).attr("data-id") == urlNum){
+                    // 找到导航栏, 添加class
+                    $(this).siblings().removeClass("bui-menu-item-selected");
+                    $(this).addClass("bui-menu-item-selected");
+                }
+            })
+            // 刷新页面
+            $("#J_NavContent").find("iframe").attr("src",refreshHref)
+            // 修改title
+            $("s.tab-item-close").siblings("span").text(refreshName)
+        });
+    }
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

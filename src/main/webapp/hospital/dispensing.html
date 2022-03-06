@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>发药</title>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="../Css/bootstrap.css" />
+		<link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
+		<link rel="stylesheet" type="text/css" href="../Css/style.css" />
+		<script type="text/javascript" src="../Js/jquery.js"></script>
+		<script type="text/javascript" src="../Js/jquery.sorted.js"></script>
+		<script type="text/javascript" src="../Js/bootstrap.js"></script>
+		<script type="text/javascript" src="../Js/ckform.js"></script>
+		<script type="text/javascript" src="../Js/common.js"></script>
+
+		<style type="text/css">
+			body {
+				padding-bottom: 40px;
+			}
+
+			.sidebar-nav {
+				padding: 9px 0;
+			}
+
+			@media (max-width: 980px) {
+
+				/* Enable use of floated navbar text */
+				.navbar-text.pull-right {
+					float: none;
+					padding-left: 5px;
+					padding-right: 5px;
+				}
+			}
+		</style>
+		<script type="text/javascript">
+
+			$(function () {
+				// 发药（生成订单）
+			    $('#addOrder').click(function () {
+			        window.location.href = "dispensing-gives.html?pageSize=" + globalPageSize + "&pageNum=" + globalPageNum;
+			    });
+			    var indexUrl = decodeURI(document.location.toString());
+			    let pageNum = indexUrl.GetValue("pageNum");
+			    let searchHosrId = indexUrl.GetValue("searchHosrId");
+			    let searchHosrName = indexUrl.GetValue("searchHosrName");
+			    // 默认进来的处理
+			    if (pageNum == null) {
+			        queryList(1);
+			    } else {
+			        // 从编辑页面或者详情页面返回的时候
+			        $("#hosrId").val(searchHosrId);
+			        $("#hosrName").val(searchHosrName);
+			        queryList(pageNum);
+			    }
+				// 监听查询
+				$("#query").on("click", function(){
+					queryList(globalPageNum);
+				})
+				// 监听清空
+				$("#reset").on("click", function(){
+					$("#hosrId").val('');
+					$("#hosrName").val('');
+					queryList(1);
+				})
+			});
+
+			// 重写queryList(分页查询方法)
+			queryList = function (pageNum) {
+			    // 查询的条件
+			    let hosrId = $("#hosrId").val();
+			    let hosrName = $("#hosrName").val();
+			    let reqData = {
+			        pageNum: pageNum,
+			        pageSize: globalPageSize,
+			        hosrId: hosrId,
+			        hosrName: hosrName,
+					jwtToken: jwtToken
+			    };
+			    layer.load(0);
+			    $.ajax({
+			        type: "GET",
+			        url: origin + "/drugPeople/hosRegister/list",
+					xhrFields: {
+					   withCredentials: true
+					},
+					crossDomain: true,
+			        data: reqData,
+			        success: function (data) {
+			            layer.closeAll()
+			            if (data.code === 200) {
+			                // 更新全局分页参数
+			                globalPageSize = data.obj.pageSize;
+			                globalPageNum = data.obj.pageNum;
+			                // 填充分页
+			                fillPageData(data.obj);
+			                // 填充内容
+			                fillContent(data.obj);
+			                $("#checkall").removeAttr("checked");
+			            } else {
+			                layer.msg(data.msg, function () {
+			                });
+			            }
+			        }
+			        // 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+			        , complete: function (xhr, status) {
+			            myComplete(xhr, status);
+			        }
+			    });
+			}
+
+			// 填充列表数据
+			function fillContent(pageInfo) {
+			    $("#mycon").find("tbody").empty();
+			    // 查询的条件
+			    let searchHosrId = $("#hosrId").val();
+			    let searchHosrName = $("#hosrName").val();
+			    $.each(pageInfo.list, function () {
+			        let addOrderUrl = 'dispensing-give.html?pageNum=' + pageInfo.pageNum + '&pageSize=' + pageInfo.pageSize + '&searchHosrId=' + searchHosrId + '&searchHosrName=' + searchHosrName + "&hosrId=" + this.hosrId + "&hosrName=" +this.hosrName;
+			        let lookUrl = 'dispensing-look.html?pageNum=' + pageInfo.pageNum + '&pageSize=' + pageInfo.pageSize + '&searchHosrId=' + searchHosrId + '&searchHosrName=' + searchHosrName + "&hosrId=" + this.hosrId;
+			        let con = "<tr>\n" +
+			            "             <td style='vertical-align:middle;'><input type='checkbox' name='check' value='" + this.hosrId + "'></td>\n" +
+			            "             <td>" + this.hosrId + "</td>\n" +
+			            "             <td>" + this.hosrName + "</td>\n" +
+			            "             <td>" + this.doctorName + "</td>\n" +
+			            "             <td>\n" +
+			            "<a href='" + addOrderUrl + "'>发药(订单)</a>&nbsp;&nbsp;&nbsp;" +
+						"<a href='" + lookUrl + "'>详情</a>\n" +
+			            "</td>\n" +
+			            " </tr>"
+			        $("#mycon").find("tbody").append($(con))
+			    })
+			}
+			// 选中所有
+			function checkall() {
+				var alls = document.getElementsByName("check");
+				var ch = document.getElementById("checkall");
+				if (ch.checked) {
+					for (var i = 0; i < alls.length; i++) {
+						alls[i].checked = true;
+					}
+				} else {
+					for (var i = 0; i < alls.length; i++) {
+						alls[i].checked = false;
+					}
+				}
+			}
+			// 批量操作，请求记录药品
+			function addOrders() {
+				var alls = document.getElementsByName("check");
+				var idsStr = "?";
+				for (var i = 0; i < alls.length; i++) {
+					if (alls[i].checked) {
+						idsStr = idsStr +"hosrId="+ alls[i].value + "&";
+					}
+				}
+				if (idsStr.length > 2) {
+					 idsStr = idsStr.substr(0, idsStr.length-1);
+					 window.location.href = "dispensing-gives.html" + idsStr;
+				} else {
+					layer.msg("请选中要操作的项");
+				}
+			}
+		</script>
+	</head>
+	<body>
+
+		<div class="definewidth m20">
+			<table class="table table-bordered table-hover definewidth m10">
+				<tr>
+					<td width="10%" class="tableleft" >门诊号：</td>
+					<td><input id="hosrId" type="text" value="" /></td>
+					<td width="10%" class="tableleft" >姓名：</td>
+					<td><input id="hosrName" type="text" value="" /></td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<center>
+							<button id="query" class="btn btn-primary" type="button">查询</button>
+							<button class="btn btn-primary" id="reset" type="reset">清空</button>
+						</center>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<table id="mycon" class="table table-bordered table-hover definewidth m10">
+			<thead>
+				<tr>
+					<th><input type="checkbox" id="checkall" onChange="checkall();"></th>
+					<th>门诊号</th>
+					<th>姓名</th>
+					<th>负责人</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<!-- 列表数据 -->
+			<tbody>
+			</tbody>
+		</table>
+		<table class="table table-bordered table-hover definewidth m10">
+			<tr>
+				<th colspan="5">
+					<!-- 分页条 -->
+					<div id="pageInfo-box" class="inline pull-right page">
+					</div>
+					<!-- 操作按钮 -->
+					<div>
+						<button type="button" class="btn btn-success" id="addOrders" onclick="addOrders()">发药(订单)</button>
+					</div>
+				</th>
+			</tr>
+		</table>
+
+	</body>
+</html>

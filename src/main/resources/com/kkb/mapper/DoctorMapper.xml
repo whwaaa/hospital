@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kkb.mapper.DoctorMapper">
+  <cache-ref namespace="com.kkb.mapper.UserMapper"/>
+  <resultMap id="BaseResultMap" type="com.kkb.pojo.Doctor">
+    <id column="d_id" jdbcType="INTEGER" property="dId" />
+    <result column="d_id_car" jdbcType="VARCHAR" property="dIdCar" />
+    <result column="d_phone" jdbcType="VARCHAR" property="dPhone" />
+    <result column="d_telphone" jdbcType="VARCHAR" property="dTelphone" />
+    <result column="d_sex" jdbcType="INTEGER" property="dSex" />
+    <result column="d_birthday" jdbcType="DATE" property="dBirthday" />
+    <result column="d_age" jdbcType="INTEGER" property="dAge" />
+    <result column="d_email" jdbcType="VARCHAR" property="dEmail" />
+    <result column="d_keshi" jdbcType="VARCHAR" property="dKeshi" />
+    <result column="d_xueli" jdbcType="VARCHAR" property="dXueli" />
+    <result column="d_desc" jdbcType="VARCHAR" property="dDesc" />
+    <result column="d_intime" jdbcType="DATE" property="dIntime" />
+    <result column="d_state" jdbcType="INTEGER" property="dState" />
+    <result column="d_is_del" jdbcType="INTEGER" property="dIsDel" />
+    <result column="d_create_time" jdbcType="TIMESTAMP" property="dCreateTime" />
+    <result column="d_update_time" jdbcType="TIMESTAMP" property="dUpdateTime" />
+    <result column="u_id" jdbcType="INTEGER" property="uId" />
+  </resultMap>
+  <resultMap id="MyBaseResultMap" extends="BaseResultMap" type="com.kkb.pojo.Doctor">
+    <result column="u_true_name" jdbcType="VARCHAR" property="doctorName" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    d_id, d_id_car, d_phone, d_telphone, d_sex, d_birthday, d_age, d_email, d_keshi, 
+    d_xueli, d_desc, d_intime, d_state, d_is_del, d_create_time, d_update_time, u_id
+  </sql>
+  <!-- 多条件查询模糊查询doctors -->
+  <select id="selectDoctorList" parameterType="com.kkb.vo.DoctorQueryVO" resultMap="MyBaseResultMap">
+    select * from doctor
+    inner join `user` on doctor.u_id=`user`.u_id
+    <where>
+      <if test="userName!=null">
+        and `user`.u_true_name LIKE concat(concat('%',#{userName}),'%')
+      </if>
+      <if test="dId!=null">
+        and doctor.d_id LIKE concat(concat('%',#{dId}),'%')
+      </if>
+      <if test="dKeshi!=null">
+        and doctor.d_keshi LIKE concat(concat('%',#{dKeshi}),'%')
+      </if>
+      <if test="true">
+        and doctor.d_is_del=0
+      </if>
+    </where>
+  </select>
+  <!-- 多条件查询Id和所属科室 -->
+  <select id="selectDoctorIdList" parameterType="com.kkb.pojo.UserExample" resultType="java.lang.Integer">
+    select d_id docterKeshi from doctor
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.kkb.pojo.DoctorExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from doctor
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from doctor
+    where d_id = #{dId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from doctor
+    where d_id = #{dId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.kkb.pojo.DoctorExample">
+    delete from doctor
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kkb.pojo.Doctor">
+    insert into doctor (d_id, d_id_car, d_phone, 
+      d_telphone, d_sex, d_birthday, 
+      d_age, d_email, d_keshi, 
+      d_xueli, d_desc, d_intime, 
+      d_state, d_is_del, d_create_time, 
+      d_update_time, u_id)
+    values (#{dId,jdbcType=INTEGER}, #{dIdCar,jdbcType=VARCHAR}, #{dPhone,jdbcType=VARCHAR}, 
+      #{dTelphone,jdbcType=VARCHAR}, #{dSex,jdbcType=INTEGER}, #{dBirthday,jdbcType=DATE}, 
+      #{dAge,jdbcType=INTEGER}, #{dEmail,jdbcType=VARCHAR}, #{dKeshi,jdbcType=VARCHAR}, 
+      #{dXueli,jdbcType=VARCHAR}, #{dDesc,jdbcType=VARCHAR}, #{dIntime,jdbcType=DATE}, 
+      #{dState,jdbcType=INTEGER}, #{dIsDel,jdbcType=INTEGER}, #{dCreateTime,jdbcType=TIMESTAMP}, 
+      #{dUpdateTime,jdbcType=TIMESTAMP}, #{uId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kkb.pojo.Doctor">
+    insert into doctor
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dId != null">
+        d_id,
+      </if>
+      <if test="dIdCar != null">
+        d_id_car,
+      </if>
+      <if test="dPhone != null">
+        d_phone,
+      </if>
+      <if test="dTelphone != null">
+        d_telphone,
+      </if>
+      <if test="dSex != null">
+        d_sex,
+      </if>
+      <if test="dBirthday != null">
+        d_birthday,
+      </if>
+      <if test="dAge != null">
+        d_age,
+      </if>
+      <if test="dEmail != null">
+        d_email,
+      </if>
+      <if test="dKeshi != null">
+        d_keshi,
+      </if>
+      <if test="dXueli != null">
+        d_xueli,
+      </if>
+      <if test="dDesc != null">
+        d_desc,
+      </if>
+      <if test="dIntime != null">
+        d_intime,
+      </if>
+      <if test="dState != null">
+        d_state,
+      </if>
+      <if test="dIsDel != null">
+        d_is_del,
+      </if>
+      <if test="dCreateTime != null">
+        d_create_time,
+      </if>
+      <if test="dUpdateTime != null">
+        d_update_time,
+      </if>
+      <if test="uId != null">
+        u_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dId != null">
+        #{dId,jdbcType=INTEGER},
+      </if>
+      <if test="dIdCar != null">
+        #{dIdCar,jdbcType=VARCHAR},
+      </if>
+      <if test="dPhone != null">
+        #{dPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="dTelphone != null">
+        #{dTelphone,jdbcType=VARCHAR},
+      </if>
+      <if test="dSex != null">
+        #{dSex,jdbcType=INTEGER},
+      </if>
+      <if test="dBirthday != null">
+        #{dBirthday,jdbcType=DATE},
+      </if>
+      <if test="dAge != null">
+        #{dAge,jdbcType=INTEGER},
+      </if>
+      <if test="dEmail != null">
+        #{dEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="dKeshi != null">
+        #{dKeshi,jdbcType=VARCHAR},
+      </if>
+      <if test="dXueli != null">
+        #{dXueli,jdbcType=VARCHAR},
+      </if>
+      <if test="dDesc != null">
+        #{dDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="dIntime != null">
+        #{dIntime,jdbcType=DATE},
+      </if>
+      <if test="dState != null">
+        #{dState,jdbcType=INTEGER},
+      </if>
+      <if test="dIsDel != null">
+        #{dIsDel,jdbcType=INTEGER},
+      </if>
+      <if test="dCreateTime != null">
+        #{dCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dUpdateTime != null">
+        #{dUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uId != null">
+        #{uId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.kkb.pojo.DoctorExample" resultType="java.lang.Long">
+    select count(*) from doctor
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update doctor
+    <set>
+      <if test="record.dId != null">
+        d_id = #{record.dId,jdbcType=INTEGER},
+      </if>
+      <if test="record.dIdCar != null">
+        d_id_car = #{record.dIdCar,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dPhone != null">
+        d_phone = #{record.dPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dTelphone != null">
+        d_telphone = #{record.dTelphone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dSex != null">
+        d_sex = #{record.dSex,jdbcType=INTEGER},
+      </if>
+      <if test="record.dBirthday != null">
+        d_birthday = #{record.dBirthday,jdbcType=DATE},
+      </if>
+      <if test="record.dAge != null">
+        d_age = #{record.dAge,jdbcType=INTEGER},
+      </if>
+      <if test="record.dEmail != null">
+        d_email = #{record.dEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dKeshi != null">
+        d_keshi = #{record.dKeshi,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dXueli != null">
+        d_xueli = #{record.dXueli,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dDesc != null">
+        d_desc = #{record.dDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dIntime != null">
+        d_intime = #{record.dIntime,jdbcType=DATE},
+      </if>
+      <if test="record.dState != null">
+        d_state = #{record.dState,jdbcType=INTEGER},
+      </if>
+      <if test="record.dIsDel != null">
+        d_is_del = #{record.dIsDel,jdbcType=INTEGER},
+      </if>
+      <if test="record.dCreateTime != null">
+        d_create_time = #{record.dCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.dUpdateTime != null">
+        d_update_time = #{record.dUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.uId != null">
+        u_id = #{record.uId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update doctor
+    set d_id = #{record.dId,jdbcType=INTEGER},
+      d_id_car = #{record.dIdCar,jdbcType=VARCHAR},
+      d_phone = #{record.dPhone,jdbcType=VARCHAR},
+      d_telphone = #{record.dTelphone,jdbcType=VARCHAR},
+      d_sex = #{record.dSex,jdbcType=INTEGER},
+      d_birthday = #{record.dBirthday,jdbcType=DATE},
+      d_age = #{record.dAge,jdbcType=INTEGER},
+      d_email = #{record.dEmail,jdbcType=VARCHAR},
+      d_keshi = #{record.dKeshi,jdbcType=VARCHAR},
+      d_xueli = #{record.dXueli,jdbcType=VARCHAR},
+      d_desc = #{record.dDesc,jdbcType=VARCHAR},
+      d_intime = #{record.dIntime,jdbcType=DATE},
+      d_state = #{record.dState,jdbcType=INTEGER},
+      d_is_del = #{record.dIsDel,jdbcType=INTEGER},
+      d_create_time = #{record.dCreateTime,jdbcType=TIMESTAMP},
+      d_update_time = #{record.dUpdateTime,jdbcType=TIMESTAMP},
+      u_id = #{record.uId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kkb.pojo.Doctor">
+    update doctor
+    <set>
+      <if test="dIdCar != null">
+        d_id_car = #{dIdCar,jdbcType=VARCHAR},
+      </if>
+      <if test="dPhone != null">
+        d_phone = #{dPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="dTelphone != null">
+        d_telphone = #{dTelphone,jdbcType=VARCHAR},
+      </if>
+      <if test="dSex != null">
+        d_sex = #{dSex,jdbcType=INTEGER},
+      </if>
+      <if test="dBirthday != null">
+        d_birthday = #{dBirthday,jdbcType=DATE},
+      </if>
+      <if test="dAge != null">
+        d_age = #{dAge,jdbcType=INTEGER},
+      </if>
+      <if test="dEmail != null">
+        d_email = #{dEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="dKeshi != null">
+        d_keshi = #{dKeshi,jdbcType=VARCHAR},
+      </if>
+      <if test="dXueli != null">
+        d_xueli = #{dXueli,jdbcType=VARCHAR},
+      </if>
+      <if test="dDesc != null">
+        d_desc = #{dDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="dIntime != null">
+        d_intime = #{dIntime,jdbcType=DATE},
+      </if>
+      <if test="dState != null">
+        d_state = #{dState,jdbcType=INTEGER},
+      </if>
+      <if test="dIsDel != null">
+        d_is_del = #{dIsDel,jdbcType=INTEGER},
+      </if>
+      <if test="dCreateTime != null">
+        d_create_time = #{dCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dUpdateTime != null">
+        d_update_time = #{dUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uId != null">
+        u_id = #{uId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where d_id = #{dId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kkb.pojo.Doctor">
+    update doctor
+    set d_id_car = #{dIdCar,jdbcType=VARCHAR},
+      d_phone = #{dPhone,jdbcType=VARCHAR},
+      d_telphone = #{dTelphone,jdbcType=VARCHAR},
+      d_sex = #{dSex,jdbcType=INTEGER},
+      d_birthday = #{dBirthday,jdbcType=DATE},
+      d_age = #{dAge,jdbcType=INTEGER},
+      d_email = #{dEmail,jdbcType=VARCHAR},
+      d_keshi = #{dKeshi,jdbcType=VARCHAR},
+      d_xueli = #{dXueli,jdbcType=VARCHAR},
+      d_desc = #{dDesc,jdbcType=VARCHAR},
+      d_intime = #{dIntime,jdbcType=DATE},
+      d_state = #{dState,jdbcType=INTEGER},
+      d_is_del = #{dIsDel,jdbcType=INTEGER},
+      d_create_time = #{dCreateTime,jdbcType=TIMESTAMP},
+      d_update_time = #{dUpdateTime,jdbcType=TIMESTAMP},
+      u_id = #{uId,jdbcType=INTEGER}
+    where d_id = #{dId,jdbcType=INTEGER}
+  </update>
+</mapper>

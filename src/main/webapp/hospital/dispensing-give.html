@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>发药</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css"/>
+    <link rel="stylesheet" type="text/css" href="../Css/style.css"/>
+    <script type="text/javascript" src="../Js/jquery.js"></script>
+    <script type="text/javascript" src="../Js/jquery.sorted.js"></script>
+    <script type="text/javascript" src="../Js/bootstrap.js"></script>
+    <script type="text/javascript" src="../Js/ckform.js"></script>
+    <script type="text/javascript" src="../Js/common.js"></script>
+    <script type="text/javascript" src="../Js/ckeditor/ckeditor.js"></script>
+
+
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            // 从地址参数中获取挂号id和姓名
+            let indexUrl = decodeURI(document.location.toString());
+            let hosrId = indexUrl.GetValue("hosrId");
+            let hosrName = indexUrl.GetValue("hosrName");
+            $("#hosrId").text(hosrId);
+            $("#hosrName").text(hosrName);
+            // 获取所有的药品，显示到下拉框中
+            $.ajax({
+                type: "GET",
+                url: origin + "/drug/list/all",
+                data: {jwtToken:jwtToken},
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function (data) {
+                    if (data.code === 200) {
+                        let drugs = data.obj.list;
+                        // 填充到下拉框中
+                        let drugSelect = $("#drId");
+                        for (var i = 0; i < drugs.length; i++) {
+                            let item = "<option value='" + drugs[i].drId + "'>" + drugs[i].drName +
+                                "</option>";
+                            drugSelect.append(item);
+                        }
+                    } else {
+                        layer.msg("药品获取失败");
+                    }
+                }
+                // 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+                ,
+                complete: function (xhr, status) {
+                    myComplete(xhr, status);
+                }
+            });
+
+
+            // 数量只能输入正整数，并且小于100
+            $("#num").blur(function () {
+                valiadNum();
+            });
+            // 提交分发的数量
+            $("#addOrder").click(function () {
+                valiadNum();
+                let hosrIds = [hosrId];
+                let drId = $("#drId").val();
+                let num = $("#num").val();
+                let reqData = {
+                    hosrIds: hosrIds,
+                    drId: drId,
+                    num: num,
+                    jwtToken: jwtToken
+                };
+                let loadId = layer.load(0);
+                $.ajax({
+                    type: "POST",
+                    url: origin + "/drugPeople/addOrder",
+                    data: reqData,
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
+                    success: function (data) {
+                        layer.close(loadId);
+                        if (data.code === 200) {
+                            layer.msg("操作成功",{
+                                time: 1500
+                            }, function () {
+                                window.location.href = "dispensing.html?pageSize="+globalPageSize+"&pageNum="+globalPageNum;
+                            });
+                        } else {
+                            layer.msg(data.msg);
+                        }
+                    }
+                    // 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+                    ,
+                    complete: function (xhr, status) {
+                        myComplete(xhr, status);
+                    }
+                });
+            });
+
+            $('#backid').click(function () {
+                window.location.href = "dispensing.html?pageSize="+globalPageSize+"&pageNum="+globalPageNum;
+            });
+
+            // 检查是不是正整数，却小于100；
+            function valiadNum() {
+                var num = document.getElementById("num").value;
+                if (num == "") {
+                    layer.msg("请输入数量");
+                    return false;
+                }
+                if (!(/(^[1-9]\d*$)/.test(num))) {
+                    layer.msg("请输入正整数");
+                    return false;
+                }
+                if (num > 100) {
+                    layer.msg("数量不能超过100");
+                    return false;
+                }
+            }
+        });
+    </script>
+</head>
+<body>
+<form action="dispensing.html" method="post" class="definewidth m20">
+    <table class="table table-bordered table-hover definewidth m10">
+        <tr>
+            <td width="10%" class="tableleft">门诊号</td>
+            <td id="hosrId"></td>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft">姓名</td>
+            <td id="hosrName"></td>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft">药品名称</td>
+            <td>
+                <select id="drId">
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td width="10%" class="tableleft">发药数量</td>
+            <td><input type="text" name="num" id="num"/></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button class="btn btn-primary" type="button" id="addOrder">记录</button> &nbsp;&nbsp;<button
+                    type="button" class="btn btn-success" name="backid" id="backid">返回列表
+            </button>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

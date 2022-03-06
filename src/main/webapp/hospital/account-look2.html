@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>结算详细--中软高科-2015</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/style.css" />
+    <script type="text/javascript" src="../Js/jquery.js"></script>
+    <script type="text/javascript" src="../Js/bootstrap.js"></script>
+    <script type="text/javascript" src="../Js/ckform.js"></script>
+    <script type="text/javascript" src="../Js/common.js"></script>
+
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+
+
+    </style>
+    <script type="text/javascript">
+    	function checkall(){
+			var alls=document.getElementsByName("check");
+			var ch=document.getElementById("checkall");
+			if(ch.checked){
+				for(var i=0;i<alls.length;i++){
+					alls[i].checked=true;	
+				}	
+			}else{
+				for(var i=0;i<alls.length;i++){
+					alls[i].checked=false;	
+				}	
+			}
+		}
+		function delAll(){
+			var alls=document.getElementsByName("check");
+			var ids=new Array();
+			for(var i=0;i<alls.length;i++){
+				if(alls[i].checked){
+					ids.push(alls[i].value);
+				}		
+			}
+			if(ids.length>0){
+				if(confirm("确认操作?")){
+					alert("成功!");
+				}
+			}else{
+				alert("请选中要操作的项");
+			}
+		}
+
+		function back() {
+            window.location.href="charge2.html?pageSize="+globalPageSize+"&pageNum="+globalPageNum;
+        }
+    </script>
+</head>
+<body>
+   
+<table class="table table-bordered table-hover definewidth m10" >
+   <thead>
+    <tr>	    
+        <th>收费项目ID</th>
+        <th>病人名称</th>
+        <th>收费项目</th>
+        <th>收费金额</th>
+        <th>检查日期</th>
+    </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+  
+  <table class="table table-bordered table-hover definewidth m10" >
+  	<tr>
+        <th colspan="5">
+          <div  id="pageInfo-box" class="inline pull-right page">
+		  </div>
+		 <div>
+				<button type="button" class="btn btn-success" name="backid" id="backid" onclick="back()">返回列表</button>
+				<button type="button" class="btn btn-success" onclick="exportExcel()" >导出excel</button>
+		 </div>
+		 
+		 </th>
+    </tr>
+  </table>
+  
+  
+<table class="table table-bordered table-hover definewidth m10">
+    <tr>
+        <td width="10%" class="tableleft">总花费：</td>
+        <td id="allCast"></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">押金：</td>
+        <td id="behAntecedent"></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">余额：</td>
+        <td id="balance"></td>
+    </tr>
+</table>
+  
+</body>
+</html>
+<script>
+    // 获取地址栏信息
+    let behId = document.location.toString().GetValue("behId");
+
+    // 导出Excel
+    function exportExcel(){
+        let ids = new Array();
+        ids.push(behId)
+        let url = origin + "/ckcharge/export";
+        reqExport(url, "结算账单", ids, "behIds");
+    }
+
+
+    $(function () {
+        queryList(globalPageNum);
+    });
+    queryList = function(pageNum){
+        layer.load(0);
+        $.ajax({
+            type: "GET",
+            url: origin + "/ckcharge/chargelist/?pageNum="+pageNum+"&pageSize="+globalPageSize,
+            data:{
+                behId:behId,
+                jwtToken:jwtToken
+            },
+            xhrFields: {
+                withCredentials: true
+            },
+            crossDomain: true,
+            success: function (data) {
+                layer.closeAll();
+                console.log(data);
+                if(data.code == 200){
+                    // 填充分页
+                    fillPageData(data.obj);
+                    // 更新当前页全局变量
+                    globalPageNum = data.obj.pageNum;
+                    // 更新每页条数全局变量
+                    globalPageSize = data.obj.pageSize;
+                    // 填充内容
+                    loadDate(data);
+                }else{
+                }
+            }
+            // TODO: 后端拦截ajax请求进行登陆跳转需要前端相互配合, 每一个ajax请求都需要加上以下的代码
+            ,complete : function(xhr, status) {
+                myComplete(xhr, status);
+            }
+        });
+    }
+    function loadDate(data) {
+        let list = data.obj.list;
+
+        let str = "";
+        let allCast=0;
+        let behAntecedent = 0;
+        for (let i =0;i<list.length;i++){
+            let obj = list[i];
+            let id=obj.chapId==null?'':obj.chapId;
+            let behName=obj.beHospital.behName==null?'':obj.beHospital.behName;
+            let name=obj.chapName==null?'':obj.chapName;
+            let chapMoney=obj.chapMoney==null?'':obj.chapMoney;
+            let createtime=obj.beChargeTime==null?'':obj.beChargeTime;
+            allCast+=chapMoney;
+            behAntecedent = obj.beHospital.behAntecedent;
+            str+='<tr>' +
+                '            <td>'+id+'</td>' +
+                '            <td>'+behName+'</td>' +
+                '            <td>'+name+'</td>' +
+                '            <td>'+chapMoney+'</td>' +
+                '            <td>'+createtime+'</td>'+
+            '</tr>'
+
+        }
+        let balance = behAntecedent-allCast;
+        if (balance<0){
+         balance = "欠费"+ Math.abs(balance);
+        }
+
+        $("#tbody").html($(str));
+        $("#allCast").html(allCast+"元");
+        $("#balance").html(balance+"元");
+        $("#behAntecedent").html(behAntecedent+"元");
+
+    }
+
+</script>

@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kkb.mapper.UserMapper">
+  <!-- 引入redis第三方缓存 -->
+<!--  <cache type="com.kkb.utils.RedisCache"/>-->
+  <cache>
+    <property name="eviction" value="LRU"/><!--回收策略为LRU-->
+    <property name="flushInterval" value="600000"/><!--自动刷新时间间隔为600S-->
+    <property name="size" value="1024"/><!--最多缓存1024个引用对象-->
+    <property name="readOnly" value="true"/><!--只读-->
+  </cache>
+  <resultMap id="BaseResultMap" type="com.kkb.pojo.User">
+    <id column="u_id" jdbcType="INTEGER" property="uId" />
+    <result column="u_login_name" jdbcType="VARCHAR" property="uLoginName" />
+    <result column="u_password" jdbcType="VARCHAR" property="uPassword" />
+    <result column="u_true_name" jdbcType="VARCHAR" property="uTrueName" />
+    <result column="u_email" jdbcType="VARCHAR" property="uEmail" />
+    <result column="u_state" jdbcType="INTEGER" property="uState" />
+    <result column="r_id" jdbcType="INTEGER" property="rId" />
+    <result column="u_is_del" jdbcType="INTEGER" property="uIsDel" />
+    <result column="u_create_time" jdbcType="TIMESTAMP" property="uCreateTime" />
+    <result column="u_update_time" jdbcType="TIMESTAMP" property="uUpdateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    u_id, u_login_name, u_password, u_true_name, u_email, u_state, r_id, u_is_del, u_create_time, 
+    u_update_time
+  </sql>
+  <select id="selectUserIdByExample" parameterType="com.kkb.pojo.UserExample" resultType="java.lang.Integer">
+    select u_id from user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.kkb.pojo.UserExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where u_id = #{uId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where u_id = #{uId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.kkb.pojo.UserExample">
+    delete from user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kkb.pojo.User">
+    insert into user (u_id, u_login_name, u_password, 
+      u_true_name, u_email, u_state, 
+      r_id, u_is_del, u_create_time, 
+      u_update_time)
+    values (#{uId,jdbcType=INTEGER}, #{uLoginName,jdbcType=VARCHAR}, #{uPassword,jdbcType=VARCHAR}, 
+      #{uTrueName,jdbcType=VARCHAR}, #{uEmail,jdbcType=VARCHAR}, #{uState,jdbcType=INTEGER}, 
+      #{rId,jdbcType=INTEGER}, #{uIsDel,jdbcType=INTEGER}, #{uCreateTime,jdbcType=TIMESTAMP}, 
+      #{uUpdateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kkb.pojo.User">
+    <selectKey order="AFTER" keyProperty="uId" resultType="java.lang.Integer">
+      select LAST_INSERT_ID()
+    </selectKey>
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uId != null">
+        u_id,
+      </if>
+      <if test="uLoginName != null">
+        u_login_name,
+      </if>
+      <if test="uPassword != null">
+        u_password,
+      </if>
+      <if test="uTrueName != null">
+        u_true_name,
+      </if>
+      <if test="uEmail != null">
+        u_email,
+      </if>
+      <if test="uState != null">
+        u_state,
+      </if>
+      <if test="rId != null">
+        r_id,
+      </if>
+      <if test="uIsDel != null">
+        u_is_del,
+      </if>
+      <if test="uCreateTime != null">
+        u_create_time,
+      </if>
+      <if test="uUpdateTime != null">
+        u_update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uId != null">
+        #{uId,jdbcType=INTEGER},
+      </if>
+      <if test="uLoginName != null">
+        #{uLoginName,jdbcType=VARCHAR},
+      </if>
+      <if test="uPassword != null">
+        #{uPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="uTrueName != null">
+        #{uTrueName,jdbcType=VARCHAR},
+      </if>
+      <if test="uEmail != null">
+        #{uEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="uState != null">
+        #{uState,jdbcType=INTEGER},
+      </if>
+      <if test="rId != null">
+        #{rId,jdbcType=INTEGER},
+      </if>
+      <if test="uIsDel != null">
+        #{uIsDel,jdbcType=INTEGER},
+      </if>
+      <if test="uCreateTime != null">
+        #{uCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uUpdateTime != null">
+        #{uUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.kkb.pojo.UserExample" resultType="java.lang.Long">
+    select count(*) from user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update user
+    <set>
+      <if test="record.uId != null">
+        u_id = #{record.uId,jdbcType=INTEGER},
+      </if>
+      <if test="record.uLoginName != null">
+        u_login_name = #{record.uLoginName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.uPassword != null">
+        u_password = #{record.uPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.uTrueName != null">
+        u_true_name = #{record.uTrueName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.uEmail != null">
+        u_email = #{record.uEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.uState != null">
+        u_state = #{record.uState,jdbcType=INTEGER},
+      </if>
+      <if test="record.rId != null">
+        r_id = #{record.rId,jdbcType=INTEGER},
+      </if>
+      <if test="record.uIsDel != null">
+        u_is_del = #{record.uIsDel,jdbcType=INTEGER},
+      </if>
+      <if test="record.uCreateTime != null">
+        u_create_time = #{record.uCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.uUpdateTime != null">
+        u_update_time = #{record.uUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update user
+    set u_id = #{record.uId,jdbcType=INTEGER},
+      u_login_name = #{record.uLoginName,jdbcType=VARCHAR},
+      u_password = #{record.uPassword,jdbcType=VARCHAR},
+      u_true_name = #{record.uTrueName,jdbcType=VARCHAR},
+      u_email = #{record.uEmail,jdbcType=VARCHAR},
+      u_state = #{record.uState,jdbcType=INTEGER},
+      r_id = #{record.rId,jdbcType=INTEGER},
+      u_is_del = #{record.uIsDel,jdbcType=INTEGER},
+      u_create_time = #{record.uCreateTime,jdbcType=TIMESTAMP},
+      u_update_time = #{record.uUpdateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kkb.pojo.User">
+    update user
+    <set>
+      <if test="uLoginName != null">
+        u_login_name = #{uLoginName,jdbcType=VARCHAR},
+      </if>
+      <if test="uPassword != null">
+        u_password = #{uPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="uTrueName != null">
+        u_true_name = #{uTrueName,jdbcType=VARCHAR},
+      </if>
+      <if test="uEmail != null">
+        u_email = #{uEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="uState != null">
+        u_state = #{uState,jdbcType=INTEGER},
+      </if>
+      <if test="rId != null">
+        r_id = #{rId,jdbcType=INTEGER},
+      </if>
+      <if test="uIsDel != null">
+        u_is_del = #{uIsDel,jdbcType=INTEGER},
+      </if>
+      <if test="uCreateTime != null">
+        u_create_time = #{uCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uUpdateTime != null">
+        u_update_time = #{uUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where u_id = #{uId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kkb.pojo.User">
+    update user
+    set u_login_name = #{uLoginName,jdbcType=VARCHAR},
+      u_password = #{uPassword,jdbcType=VARCHAR},
+      u_true_name = #{uTrueName,jdbcType=VARCHAR},
+      u_email = #{uEmail,jdbcType=VARCHAR},
+      u_state = #{uState,jdbcType=INTEGER},
+      r_id = #{rId,jdbcType=INTEGER},
+      u_is_del = #{uIsDel,jdbcType=INTEGER},
+      u_create_time = #{uCreateTime,jdbcType=TIMESTAMP},
+      u_update_time = #{uUpdateTime,jdbcType=TIMESTAMP}
+    where u_id = #{uId,jdbcType=INTEGER}
+  </update>
+</mapper>

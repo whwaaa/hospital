@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kkb.mapper.RoleMapper">
+  <cache-ref namespace="com.kkb.mapper.UserMapper"/>
+  <resultMap id="BaseResultMap" type="com.kkb.pojo.Role">
+    <id column="r_id" jdbcType="INTEGER" property="rId" />
+    <result column="r_name" jdbcType="VARCHAR" property="rName" />
+    <result column="r_state" jdbcType="INTEGER" property="rState" />
+    <result column="r_is_del" jdbcType="INTEGER" property="rIsDel" />
+    <result column="r_create_time" jdbcType="TIMESTAMP" property="rCreateTime" />
+    <result column="r_update_time" jdbcType="TIMESTAMP" property="rUpdateTime" />
+    <result column="u_id" jdbcType="INTEGER" property="uId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    r_id, r_name, r_state, r_is_del, r_create_time, r_update_time, u_id
+  </sql>
+  <select id="selectDoctorId" resultType="java.lang.Integer">
+    select r_id from role where r_name="医生"
+  </select>
+  <select id="selectByExample" parameterType="com.kkb.pojo.RoleExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from role
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from role
+    where r_id = #{rId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from role
+    where r_id = #{rId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.kkb.pojo.RoleExample">
+    delete from role
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.kkb.pojo.Role">
+    insert into role (r_id, r_name, r_state, 
+      r_is_del, r_create_time, r_update_time, 
+      u_id)
+    values (#{rId,jdbcType=INTEGER}, #{rName,jdbcType=VARCHAR}, #{rState,jdbcType=INTEGER}, 
+      #{rIsDel,jdbcType=INTEGER}, #{rCreateTime,jdbcType=TIMESTAMP}, #{rUpdateTime,jdbcType=TIMESTAMP}, 
+      #{uId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.kkb.pojo.Role">
+    <selectKey keyProperty="rId" order="AFTER" resultType="java.lang.Integer">
+      select LAST_INSERT_ID()
+    </selectKey>
+    insert into role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rId != null">
+        r_id,
+      </if>
+      <if test="rName != null">
+        r_name,
+      </if>
+      <if test="rState != null">
+        r_state,
+      </if>
+      <if test="rIsDel != null">
+        r_is_del,
+      </if>
+      <if test="rCreateTime != null">
+        r_create_time,
+      </if>
+      <if test="rUpdateTime != null">
+        r_update_time,
+      </if>
+      <if test="uId != null">
+        u_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rId != null">
+        #{rId,jdbcType=INTEGER},
+      </if>
+      <if test="rName != null">
+        #{rName,jdbcType=VARCHAR},
+      </if>
+      <if test="rState != null">
+        #{rState,jdbcType=INTEGER},
+      </if>
+      <if test="rIsDel != null">
+        #{rIsDel,jdbcType=INTEGER},
+      </if>
+      <if test="rCreateTime != null">
+        #{rCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rUpdateTime != null">
+        #{rUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uId != null">
+        #{uId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.kkb.pojo.RoleExample" resultType="java.lang.Long">
+    select count(*) from role
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update role
+    <set>
+      <if test="record.rId != null">
+        r_id = #{record.rId,jdbcType=INTEGER},
+      </if>
+      <if test="record.rName != null">
+        r_name = #{record.rName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rState != null">
+        r_state = #{record.rState,jdbcType=INTEGER},
+      </if>
+      <if test="record.rIsDel != null">
+        r_is_del = #{record.rIsDel,jdbcType=INTEGER},
+      </if>
+      <if test="record.rCreateTime != null">
+        r_create_time = #{record.rCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.rUpdateTime != null">
+        r_update_time = #{record.rUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.uId != null">
+        u_id = #{record.uId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update role
+    set r_id = #{record.rId,jdbcType=INTEGER},
+      r_name = #{record.rName,jdbcType=VARCHAR},
+      r_state = #{record.rState,jdbcType=INTEGER},
+      r_is_del = #{record.rIsDel,jdbcType=INTEGER},
+      r_create_time = #{record.rCreateTime,jdbcType=TIMESTAMP},
+      r_update_time = #{record.rUpdateTime,jdbcType=TIMESTAMP},
+      u_id = #{record.uId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kkb.pojo.Role">
+    update role
+    <set>
+      <if test="rName != null">
+        r_name = #{rName,jdbcType=VARCHAR},
+      </if>
+      <if test="rState != null">
+        r_state = #{rState,jdbcType=INTEGER},
+      </if>
+      <if test="rIsDel != null">
+        r_is_del = #{rIsDel,jdbcType=INTEGER},
+      </if>
+      <if test="rCreateTime != null">
+        r_create_time = #{rCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rUpdateTime != null">
+        r_update_time = #{rUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uId != null">
+        u_id = #{uId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where r_id = #{rId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kkb.pojo.Role">
+    update role
+    set r_name = #{rName,jdbcType=VARCHAR},
+      r_state = #{rState,jdbcType=INTEGER},
+      r_is_del = #{rIsDel,jdbcType=INTEGER},
+      r_create_time = #{rCreateTime,jdbcType=TIMESTAMP},
+      r_update_time = #{rUpdateTime,jdbcType=TIMESTAMP},
+      u_id = #{uId,jdbcType=INTEGER}
+    where r_id = #{rId,jdbcType=INTEGER}
+  </update>
+</mapper>

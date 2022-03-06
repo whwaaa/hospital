@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>更改挂号</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/style.css" />
+    <script type="text/javascript" src="../Js/jquery.js"></script>
+    <script type="text/javascript" src="../Js/bootstrap.js"></script>
+    <script type="text/javascript" src="../Js/ckform.js"></script>
+    <script type="text/javascript" src="../Js/common.js"></script>
+    <script type="text/javascript" src="../Js/ckeditor/ckeditor.js"></script>
+ 
+
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+		
+		.warning{
+		    border-color: red !important;
+		}
+		
+
+
+    </style>
+    <script type="text/javascript">
+	
+	// 地址栏获取id
+	let hosrId = document.location.toString().GetValue("hosrId");
+	// 提交标志,一旦提交即锁死,防止多次提交 -> 未提交:false 已提交:true
+	let submitFlag = false;
+	// 监听提交优先执行,延迟预校验定时器
+	let checkTime = new Array();
+	// 填充所属科室
+	function fillKeshiSelect(keshi){
+		$("select[name='keshi']").empty();
+		$("select[name='keshi']").append($("<option value='-1'>--请选择科室--</option>"))
+		$.each(keshi, function(){
+			$("select[name='keshi']").append($("<option value='"+ this[0].dKeshi +"'>"+ this[0].dKeshi +"</option>"))
+		})
+	}
+	// 获取所有医生信息
+	let doctorMsgKeshi;
+	// 查询完成标志  -> true:完成  false:未完成
+	let getDoctorMegOk = false; 
+	function getDoctorMeg(){
+		layer.load(0)
+		$.ajax({
+		    type: "GET",
+		    url: origin + "/register/doctor/list",
+		    data: {jwtToken:jwtToken},
+		    dataType: "json",
+		    // 允许携带cookie跨域请求
+		    xhrFields: {
+		        withCredentials: true
+		    },
+		    crossDomain: true,
+		    success: function (data) {
+				layer.closeAll()
+				doctorMsgKeshi = data.obj;
+				// 填充所属科室
+				fillKeshiSelect(doctorMsgKeshi);
+				// 查询完成标志
+				getDoctorMegOk = true;
+		    },
+		    complete : function(xhr, status) {
+		        myComplete(xhr, status);
+		    }
+		})
+	}
+	// 监听科室选择
+	let listenkeshiSelectCheckFlag = false;
+	function listenkeshiSelectCheck(time){
+		checkTime[6] = setTimeout(function() {
+			// 拿到选择的科室value
+			let keshiValue = $("select[name='keshi']").val();
+			// 填充医生select
+			let doctors = doctorMsgKeshi[keshiValue];
+			if(doctors == undefined){
+				$("select[name='doctor']").empty();
+				$("select[name='doctor']").append($("<option value='-1'>--请先选择科室--</option>"))
+				// layer.msg("请选择科室");
+				listenkeshiSelectCheckFlag = false;
+				// 取消其他校验
+				for(let i=0; i<10; i++){clearTimeout(checkTime[i]);}
+				// css样式切换
+				$("select[name='keshi']").addClass("warning")
+			}else{
+				// 获取医生初始选择项
+				let original = $("select[name='doctor']").val();
+				$("select[name='doctor']").empty();
+				$("select[name='doctor']").append($("<option value='-1'>--请选择医生--</option>"))
+				$.each(doctors, function(){
+					$("select[name='doctor']").append($("<option value='"+ this.dId +"'>"+ this.doctorName +"</option>"))
+				})
+				// 遍历更新的医生select, 查看如果存在option与原始相同, 则恢复select选项
+				$.each($("select[name='doctor']").find("option"),function(){
+				    if($(this).val() == original){
+				        $("select[name='doctor']").val(original)
+				    }
+				})
+				// 校验通过
+				listenkeshiSelectCheckFlag = true;
+				// css样式切换
+				$("select[name='keshi']").removeClass("warning")
+			}
+		}, time)
+	}
+	// 监听医生选择 
+	let listenDoctorSelectCheckFlag = false; 
+	function listenDoctorSelectCheck(time){
+		checkTime[7] = setTimeout(function() {
+			let doctorId = $("select[name='doctor']").val().trim();
+			if(doctorId == -1){
+				// layer.msg("请选择医生");
+				listenDoctorSelectCheckFlag = false;
+				// 取消其他校验
+				for(let i=0; i<10; i++){clearTimeout(checkTime[i]);}
+				// css样式切换
+				$("select[name='doctor']").addClass("warning")
+			}else{
+				listenDoctorSelectCheckFlag = true;
+				// css样式切换
+				$("select[name='doctor']").removeClass("warning")
+			}
+		}, time)
+	}
+	// 返回列表
+	function callback(){
+		window.location.href="index.html?pageNum=" + globalPageNum + "&pageSize=" + globalPageSize;
+	}
+	// 病人姓名非空校验
+	let hosrNameCheckFlag = false;
+	function hosrNameCheck(time){
+		checkTime[0] = setTimeout(function() {
+			let hosrName = $("input[name='hosrName']").val().trim();
+			if(hosrName == ''){
+				hosrNameCheckFlag = false;
+				layer.msg("姓名不能为空");
+				// 取消其他校验
+				for(let i=0; i<10; i++){clearTimeout(checkTime[i]);}
+				// css样式切换
+				$("input[name='hosrName']").addClass("warning")
+			}else{
+				hosrNameCheckFlag = true;
+				// css样式切换
+				$("input[name='hosrName']").removeClass("warning")
+			}
+		}, time);
+	}
+	// 身份证合法性校验 (自动填入性别, 年龄, 社保号)
+	let hosrIdcarCheckFlag = false;
+	function hosrIdcarCheck(time){
+		checkTime[1] = setTimeout(function() {
+			let hosrIdcar = $("input[name='hosrIdcar']").val().trim();
+			let regx = /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/;
+			if( !regx.test(hosrIdcar) ){
+				hosrIdcarCheckFlag = false;
+				layer.msg("身份证不合法");
+				$("input[name='hosrAge'").val('');
+				// 取消其他校验
+				for(let i=0; i<10; i++){clearTimeout(checkTime[i]);}
+				// css样式切换
+				$("input[name='hosrIdcar']").addClass("warning")
+			}else{
+				// 计算年龄
+				let year = parseInt(hosrIdcar.substr(6,4));
+				let month = parseInt(hosrIdcar.substr(10,2));
+				let day = parseInt(hosrIdcar.substr(12,2));
+				let nowYear = new Date().getFullYear();
+				let nowMoth = new Date().getMonth() + 1;
+				let nowDay = new Date().getDate();
+				if(nowMoth - month > 0){
+					// 年龄即年份相减
+					$("input[name='hosrAge'").val(nowYear - year);
+				}else if(nowMoth - month < 0){
+					// 年龄即年份相减再减一
+					$("input[name='hosrAge'").val(nowYear - year - 1);
+				}else if(nowDay - day >= 0){
+					// 月分相等, 日相等或更大, 即刚好满岁或不超出一个月 -> 年龄即年份相减
+					$("input[name='hosrAge'").val(nowYear - year);
+				}else{
+					// 今年生日没到 -> 年龄即年份相减再减一
+					$("input[name='hosrAge'").val(nowYear - year 	);
+				}
+				// 计算男女 第17位奇数是男, 偶数是女
+				if( hosrIdcar.substr(16,1)%2 == 0 ){
+					$("input[name='hosrSex']").eq(1).prop("checked",true);	// 女
+				}else{
+					$("input[name='hosrSex']").eq(0).prop("checked",true);  // 男
+				}
+				// 填充社保号
+				$("input[name='hosrMedical']").val(hosrIdcar);
+				hosrIdcarCheckFlag = true;
+				// css样式切换
+				$("input[name='hosrIdcar']").removeClass("warning")
+			}
+		}, time);
+	}
+	// 社保号合法性校验
+	let hosrMedicalCheckFlag = false;
+	function hosrMedicalCheck(time){
+		checkTime[2] = setTimeout(function() {
+			let hosrMedical = $("input[name='hosrMedical']").val().trim();
+			let regx = /^(\d{18,18}|\d{15,15}|\d{17,17}X)$/;
+			if( !regx.test(hosrMedical) ){
+				hosrMedicalCheckFlag = false;
+				layer.msg("社保号不合法");
+				// 取消其他校验
+				for(let i=0; i<10; i++){clearTimeout(checkTime[i]);}
+				// css样式切换
+				$("input[name='hosrMedical']").addClass("warning")
+			}else{
+				hosrMedicalCheckFlag = true;
+				// css样式切换
+				$("input[name='hosrMedical']").removeClass("warning")
+			}
+		}, time);
+	}
+	// 挂号费校验
+	let hosrRegPriceCheckFlag = false;
+	function hosrRegPriceCheck(time){
+		checkTime[3] = setTimeout(function() {
+			let hosrRegPrice = $("input[name='hosrRegPrice']").val().trim();
+			let regx = /^\d+(\.\d{1,2})?$/
+			if( !regx.test(hosrRegPrice) ){
+				hosrRegPriceCheckFlag = false;
+				layer.msg("挂号费只能是整数或两位以内小数");
+				// 取消其他校验
+				for(let i=0; i<10; i++){clearTimeout(checkTime[i]);}
+				// css样式切换
+				$("input[name='hosrRegPrice']").addClass("warning")
+			}else{
+				hosrRegPriceCheckFlag = true;
+				// css样式切换
+				$("input[name='hosrRegPrice']").removeClass("warning")
+			}
+		}, time);
+	}
+	// 正规电话号校验
+	let hosrPhoneCheckFlag = false;
+	function hosrPhoneCheck(time){
+		checkTime[4] = setTimeout(function() {
+			let hosrPhone = $("input[name='hosrPhone']").val().trim();
+			regx = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/;
+			if( !regx.test(hosrPhone) ){
+				hosrPhoneCheckFlag = false;
+				layer.msg("请输入正规手机号");
+				// 取消其他校验
+				for(let i=0; i<10; i++){clearTimeout(checkTime[i]);}
+				// css样式切换
+				$("input[name='hosrPhone']").addClass("warning")
+			}else{
+				hosrPhoneCheckFlag = true;
+				// css样式切换
+				$("input[name='hosrPhone']").removeClass("warning")
+			}
+		}, time);
+	}
+	// 职业非空校验
+	let hosrWorkCheckFlag = false;
+	function hosrWorkCheck(time){
+		checkTime[5] = setTimeout(function() {
+			let hosrWork = $("input[name='hosrWork']").val().trim();
+			if(hosrWork == ''){
+				hosrWorkCheckFlag = false;
+				layer.msg("职业不能为空");
+				// 取消其他校验
+				for(let i=0; i<10; i++){clearTimeout(checkTime[i]);}
+				// css样式切换
+				$("input[name='hosrWork']").addClass("warning")
+			}else{
+				hosrWorkCheckFlag = true;
+				// css样式切换
+				$("input[name='hosrWork']").removeClass("warning")
+			}
+		}, time);
+	}
+	// 提交
+	function submit(){
+		// 取消onblur预校验, 执行再校验
+		clearTimeout(checkTime);
+		hosrNameCheck(0);
+		hosrIdcarCheck(0);
+		hosrMedicalCheck(0);
+		hosrRegPriceCheck(0);
+		hosrPhoneCheck(0);
+		hosrWorkCheck(0);
+		listenkeshiSelectCheck(0);
+		listenDoctorSelectCheck(0); 
+		// 设置延时, 保证先执行校验
+		setTimeout(function() {
+			// 检查校验结果
+			if( !hosrNameCheckFlag || !hosrIdcarCheckFlag ||!hosrMedicalCheckFlag || !listenkeshiSelectCheckFlag ||
+			 !hosrRegPriceCheckFlag || !hosrPhoneCheckFlag || !hosrWorkCheckFlag || !listenDoctorSelectCheckFlag){
+				return false;}
+			// 校验完成,即将提交
+			let hosrName = $("input[name='hosrName']").val().trim();
+			let hosrIdcar = $("input[name='hosrIdcar']").val().trim();
+			let hosrMedical = $("input[name='hosrMedical']").val().trim();
+			let hosrRegPrice = $("input[name='hosrRegPrice']").val().trim();
+			let hosrPhone = $("input[name='hosrPhone']").val().trim();
+			let hosrSelfPrice = $("input[name='hosrSelfPrice']:checked").val().trim();
+			let hosrSex = $("input[name='hosrSex']").val().trim();
+			let hosrAge = $("input[name='hosrAge']").val().trim();
+			let hosrWork = $("input[name='hosrWork']").val().trim();
+			let hosrLookDoctor = $("input[name='hosrLookDoctor']:checked").val().trim();
+			let dId = $("select[name='doctor']").val().trim();
+			let hosrRemark = $("textarea[name='hosrRemark']").val().trim();
+			let hosrState = 0;	// 挂号状态 0挂号
+			if( !submitFlag ){
+				submitFlag = true;
+				layer.load(0)
+				$.ajax({
+				    type: "POST",
+				    // url请求地址前加后端API地址origin
+				    url: origin + "/register/" + hosrId,
+				    data: {hosrName:hosrName,hosrIdcar:hosrIdcar,hosrMedical:hosrMedical,hosrRegPrice:hosrRegPrice,hosrPhone:hosrPhone,hosrSelfPrice:hosrSelfPrice,
+					hosrState:hosrState,hosrRemark:hosrRemark,dId:dId,hosrLookDoctor:hosrLookDoctor,hosrWork:hosrWork,hosrAge:hosrAge,hosrSex:hosrSex,_method:"PUT",jwtToken:jwtToken},
+				    dataType: "json",
+				    // 允许携带cookie跨域请求
+				    xhrFields: {
+				        withCredentials: true
+				    },
+				    crossDomain: true,
+				    success: function (data) {
+				        layer.closeAll()
+						if(data.code == 200){
+							layer.msg("更新成功")
+							setTimeout(function() {
+								// 返回index
+								callback();
+							}, 500);
+						}else{
+							layer.msg(data.msg, function(){})
+						}
+				    },
+				    complete : function(xhr, status) {
+				        myComplete(xhr, status);
+				    }
+				})
+			}
+		}, 300);
+	}
+	
+	// 查询信息
+	function queryMsg(){
+		layer.load(0)
+		$.ajax({
+		    type: "GET",
+		    // 1. url请求地址前加后端API地址origin
+		    url: origin + "/register/" + hosrId,
+		    data: {jwtToken:jwtToken},
+		    dataType: "json",
+		    // 2. 允许携带cookie跨域请求
+		    xhrFields: {
+		        withCredentials: true
+		    },
+		    crossDomain: true,
+		    success: function (data) {
+				layer.closeAll()
+				if(data.code == 200){
+					// 等待医生科室信息先查询完成
+					delay(data.obj);
+				}else{
+					layer.msg(data.msg, function(){});
+				}
+		    },
+		    complete : function(xhr, status) {
+		        myComplete(xhr, status);
+		    }
+		})
+	}
+	// 等待医生科室信息先查询完成,再填充信息
+	function delay(guahao){
+		console.log("等待...")
+		setTimeout(function() {
+			if(getDoctorMegOk){ // 查询完成
+				// 填充姓名
+				$("input[name='hosrName']").val(guahao.hosrName);
+				// 填充身份证
+				$("input[name='hosrIdcar']").val(guahao.hosrIdcar)
+				// 填充社保号
+				$("input[name='hosrMedical']").val(guahao.hosrMedical);
+				// 填充挂号费
+				$("input[name='hosrRegPrice']").val(guahao.hosrRegPrice);
+				// 填充联系电话
+				$("input[name='hosrPhone']").val(guahao.hosrPhone);
+				// 填充是否自费
+				if(guahao.hosrSelfPrice == 0){
+					// 是否自费：1免费 0自费
+					$("input[name='hosrSelfPrice']").eq(1).prop("checked",true)
+				}else{
+					$("input[name='hosrSelfPrice']").eq(0).prop("checked",true)
+				}
+				// 触发身份证检测自动填写性别年龄
+				$("input[name='hosrIdcar']").trigger("blur");
+				// 填充职业
+				$("input[name='hosrWork']").val(guahao.hosrWork);
+				// 指定初复诊
+				if(guahao.hosrLookDoctor == 0){
+					// 初复诊： 0初诊 1复诊
+					$("input[name='hosrLookDoctor']").eq(0).prop("checked",true)
+				}else{
+					$("input[name='hosrLookDoctor']").eq(1).prop("checked",true)
+				}
+				// 指定科室
+				$("select[name='keshi']").val(guahao.keshi);
+				// 触发科室onblur
+				$("select[name='keshi']").trigger("blur")
+				// 指定医生
+				setTimeout(function() {$("select[name='doctor']").val(guahao.dId);}, 300);
+				// 填充备注
+				$("textarea[name='hosrRemark']").val(guahao.hosrRemark);
+			}else{
+				// 未完成,递归等待
+				delay(guahao);
+			}
+		}, 100);
+		
+	}
+	
+    $(function () {       
+		// 查询挂号信息
+		queryMsg();
+		// 查询所有科室和医生信息
+		getDoctorMeg();
+    });
+    </script>
+</head>
+<body>
+<table class="table table-bordered table-hover definewidth m10">
+    <tr>
+        <td width="10%" class="tableleft">姓名</td>
+        <td><input type="text" onblur="hosrNameCheck(150)" name="hosrName" value=""/></td>
+    </tr>
+
+    <tr>
+        <td width="10%" class="tableleft">身份证号</td>
+        <td><input type="text" onblur="hosrIdcarCheck(150)" name="hosrIdcar" value=""/></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">社保号</td>
+        <td><input type="text" onblur="hosrMedicalCheck(150)" name="hosrMedical" value=""/></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">挂号费</td>
+        <td><input type="text" onblur="hosrRegPriceCheck(150)" name="hosrRegPrice" value=""/>元</td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">联系电话</td>
+        <td><input type="text" onblur="hosrPhoneCheck(150)" name="hosrPhone" value=""/></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">是否自费</td>
+        <td><input type="radio" name="hosrSelfPrice" value="1"/>否&nbsp;&nbsp;&nbsp;<input type="radio" name="hosrSelfPrice" value="0" checked/>是</td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">性别</td>
+        <td><input readonly onclick="javascript:return false;" type="radio" name="hosrSex" value="0" checked/>男&nbsp;&nbsp;&nbsp;<input onclick="javascript:return false;" type="radio" readonly name="hosrSex" value="1"/>女</td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">年龄</td>
+        <td><input type="text" name="hosrAge" readonly value=""/></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">职业</td>
+        <td><input type="text" onblur="hosrWorkCheck(150)" name="hosrWork" value=""/></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">初复诊</td>
+        <td><input type="radio" name="hosrLookDoctor" value="0" checked/>初诊&nbsp;&nbsp;&nbsp;<input type="radio" name="hosrLookDoctor" value="1"/>复诊</td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">所挂科室</td>
+        <td><select name='keshi' onblur="listenkeshiSelectCheck(150)"><option value='-1'>--请选择科室--</option></select></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">指定医生</td>
+        <td><select name='doctor' onblur="listenDoctorSelectCheck(150)"><option value='-1'>--请先选择科室--</option></select></td>
+    </tr>
+	<tr>
+        <td width="10%" class="tableleft">备注</td>
+        <td><textarea name='hosrRemark'></textarea></td>
+	</tr>
+    <tr>
+        <td colspan="2">
+			<center>
+				<button class="btn btn-primary" onclick="submit()" type="button">保存</button> &nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" onclick="callback()">返回列表</button>
+			</center>
+		</td>
+    </tr>
+</table>
+</body>
+</html>

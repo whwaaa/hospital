@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>修改住院信息</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/bootstrap-responsive.css" />
+    <link rel="stylesheet" type="text/css" href="../Css/style.css" />
+    <script type="text/javascript" src="../Js/jquery.js"></script>
+    <script type="text/javascript" src="../Js/jquery.sorted.js"></script>
+    <script type="text/javascript" src="../Js/bootstrap.js"></script>
+    <script type="text/javascript" src="../Js/ckform.js"></script>
+    <script type="text/javascript" src="../Js/common.js"></script>
+    <script type="text/javascript" src="../Js/ckeditor/ckeditor.js"></script>
+ 
+
+    <style type="text/css">
+        body {
+            padding-bottom: 40px;
+        }
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        @media (max-width: 980px) {
+            /* Enable use of floated navbar text */
+            .navbar-text.pull-right {
+                float: none;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+        }
+        .warning{
+            border-color: red !important;
+        }
+
+    </style>
+    <script type="text/javascript">
+        // 获取地址栏参数
+        let hosrId = document.location.toString().GetValue("hosrId");
+        let behId = document.location.toString().GetValue("behId");
+        // 查询病人信息
+        function queryInfo(){
+            layer.load(0)
+            $.ajax({
+                type: "GET",
+                // 1. url请求地址前加后端API地址origin
+                url: origin + "/be-hospital/" + hosrId,
+                data: {jwtToken:jwtToken},
+                dataType: "json",
+                // 2. 允许携带cookie跨域请求
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function (data) {
+                    layer.closeAll();
+                    if(data.code == 200){
+                        let hosRegister = data.obj.hosRegister;
+                        let beHospital = data.obj.beHospital;
+                        // 填充数据
+                        $("#hosrId").text(hosRegister.hosrId);
+                        $("#hosrName").text(hosRegister.hosrName);
+                        $("#hosrIdcar").text(hosRegister.hosrIdcar);
+                        $("#hosrMedical").text(hosRegister.hosrMedical);
+                        $("#hosrPhone").text(hosRegister.hosrPhone);
+                        // 是否自费：0自费 1免费
+                        if(hosRegister.hosrSelfPrice == 0){
+                            $("input[name='hosrSelfPrice']").eq(1).prop("checked", true); // 是
+                        }else{
+                            $("input[name='hosrSelfPrice']").eq(0).prop("checked", true); // 否
+                        }
+                        // 计算年龄
+                        let year = parseInt(hosRegister.hosrIdcar.substr(6,4));
+                        let month = parseInt(hosRegister.hosrIdcar.substr(10,2));
+                        let day = parseInt(hosRegister.hosrIdcar.substr(12,2));
+                        let nowYear = new Date().getFullYear();
+                        let nowMoth = new Date().getMonth() + 1;
+                        let nowDay = new Date().getDate();
+                        if(nowMoth - month > 0){
+                            // 年龄即年份相减
+                            $("#hosrAge").text(nowYear - year);
+                        }else if(nowMoth - month < 0){
+                            // 年龄即年份相减再减一
+                            $("#hosrAge").text(nowYear - year - 1);
+                        }else if(nowDay - day >= 0){
+                            // 月分相等, 日相等或更大, 即刚好满岁或不超出一个月 -> 年龄即年份相减
+                            $("#hosrAge").text(nowYear - year);
+                        }else{
+                            // 今年生日没到 -> 年龄即年份相减再减一
+                            $("#hosrAge").text(nowYear - year - 1);
+                        }
+                        // 计算性别 第17位奇数是男, 偶数是女
+                        if( hosRegister.hosrIdcar.substr(16,1)%2 == 0 ){
+                            $("input[name='hosrSex']").eq(1).prop("checked", true); // 女
+                        }else{
+                            $("input[name='hosrSex']").eq(0).prop("checked", true); // 男
+                        }
+                        // 初复诊：0初诊 1复诊
+                        if(hosRegister.hosrLookDoctor == 0){
+                            $("input[name='hosrLookDoctor']").eq(0).prop("checked", true); // 初诊
+                        }else{
+                            $("input[name='hosrLookDoctor']").eq(1).prop("checked", true); // 复诊
+                        }
+                        $("#keshi").text(hosRegister.keshi);
+                        $("#doctor").text(hosRegister.doctorName);
+                        $("#hosrRemark").text(hosRegister.hosrRemark);
+                        $("input[name='behNursePeople']").val(beHospital.behNursePeople);
+                        $("input[name='behPatBed']").val(beHospital.behPatBed);
+                        $("#behIllness").val(beHospital.behIllness);
+                    }else{
+                        layer.msg(data.msg, function(){});
+                    }
+                },
+                complete : function(xhr, status) {
+                    myComplete(xhr, status);
+                }
+            })
+        }
+        // 非空校验
+        function notNullCheck(va, el){
+            if(va.trim() == ''){
+                el.addClass("warning");
+                return false;
+            }else{
+                el.removeClass("warning");
+                return true;
+            }
+        }
+        // 护理非空校验
+        let behNursePeopleFlag = false;
+        function behNursePeopleCheck(){
+            let el = $("input[name='behNursePeople']");
+            if(!notNullCheck(el.val(), el)){
+                // 空
+                layer.msg("护理不能为空");
+                behNursePeopleFlag = false;
+            }else{
+                behNursePeopleFlag = true;
+            }
+        }
+        let behPatBedFlag = false;
+        // 床位号非空校验
+        function behPatBedCheck(){
+            let el = $("input[name='behPatBed']");
+            if(!notNullCheck(el.val(), el)){
+                // 空
+                layer.msg("床位号不能为空");
+                behPatBedFlag = false;
+            }else{
+                behPatBedFlag = true;
+            }
+        }
+        let behIllnessFlag = false;
+        // 病情非空校验
+        function behIllnessCheck(){
+            let el = $("#behIllness");
+            if(!notNullCheck(el.val(), el)){
+                // 空
+                layer.msg("病情不能为空");
+                behIllnessFlag = false;
+            }else{
+                behIllnessFlag = true;
+            }
+        }
+        // 监听保存
+        let saveFlag = false;
+        function saveSubmit(){
+            setTimeout(function(){
+                if(behNursePeopleFlag && behPatBedFlag && behIllnessFlag && !saveFlag){
+                    saveFlag = true;
+                    layer.load(0);
+                    let behNursePeople = $("input[name='behNursePeople']").val().trim();
+                    let behPatBed = $("input[name='behPatBed']").val().trim();
+                    let behIllness = $("#behIllness").val().trim();
+                    $.ajax({
+                        type: "POST",
+                        // 1. url请求地址前加后端API地址origin
+                        url: origin + "/be-hospital/" + behId,
+                        data: {behNursePeople:behNursePeople,behPatBed:behPatBed
+                            ,behIllness:behIllness,_method:"PUT",jwtToken:jwtToken},
+                        dataType: "json",
+                        // 2. 允许携带cookie跨域请求
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        crossDomain: true,
+                        success: function (data) {
+                            layer.closeAll();
+                            if(data.code = 201){
+                                // 添加成功
+                                layer.msg("修改成功");
+                                // 返回列表
+                                setTimeout(function(){
+                                    $('#backid').trigger("click");
+                                }, 800);
+                            }else{
+                                layer.msg(data.msg, function(){});
+                            }
+                        },
+                        complete : function(xhr, status) {
+                            myComplete(xhr, status);
+                        }
+                    })
+                }
+            }, 400)
+        }
+
+        $(function () {
+            // 查询病人信息
+            queryInfo();
+            // 监听返回
+            $('#backid').click(function(){
+                window.location.href="index.html?pageSize="+globalPageSize+"&pageNum="+globalPageNum;
+            });
+            // 监听保存
+            $("#saveSubmit").on("click", function(){
+                // 再次校验所有参数
+                $("input[name='behNursePeople']").trigger("blur");
+                $("input[name='behPatBed']").trigger("blur");
+                $("input[name='behAntecedent']").trigger("blur");
+                $("#behIllness").trigger("blur");
+                // 提交
+                saveSubmit();
+            })
+        });
+    </script>
+</head>
+<body>
+<form action="index.html" method="post" class="definewidth m20">
+<table class="table table-bordered table-hover definewidth m10">
+    <tr>
+        <td width="10%" class="tableleft">病历号</td>
+        <td id="hosrId"></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">姓名</td>
+        <td id="hosrName"></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">证件类型</td>
+        <td>身份证</td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">证件号</td>
+        <td id="hosrIdcar"></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">社保号</td>
+        <td id="hosrMedical"></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">联系电话</td>
+        <td id="hosrPhone"></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">是否自费</td>
+        <td><input type="radio" name="hosrSelfPrice" value="1" readonly onclick="javascript:return false;"/>否&nbsp;&nbsp;&nbsp;<input readonly onclick="javascript:return false;" type="radio" name="hosrSelfPrice" value="0"/>是</td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">性别</td>
+        <td><input type="radio" readonly onclick="javascript:return false;" name="hosrSex" value="" checked/>男&nbsp;&nbsp;&nbsp;<input readonly onclick="javascript:return false;" type="radio" name="hosrSex" value=""/>女</td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">年龄</td>
+        <td id="hosrAge"></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">初复诊</td>
+        <td><input type="radio" readonly onclick="javascript:return false;" name="hosrLookDoctor" value="" checked/>初诊&nbsp;&nbsp;&nbsp;<input readonly onclick="javascript:return false;" type="radio" name="hosrLookDoctor" value=""/>复诊</td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">所挂科室</td>
+        <td id="keshi"></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">指定医生</td>
+        <td id="doctor"></td>
+    </tr>
+	<tr>
+        <td width="10%" class="tableleft">备注</td>
+        <td id="hosrRemark"></td>
+	</tr>
+    <tr>
+        <td width="10%" class="tableleft">护理</td>
+        <td><input type="text" onblur="behNursePeopleCheck()" name="behNursePeople" value=""/></td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">床位号</td>
+        <td><input type="text" onblur="behPatBedCheck()" name="behPatBed" value=""/></td>
+    </tr>
+
+    <tr>
+        <td width="10%" class="tableleft">病情</td>
+        <td><textarea onblur="behIllnessCheck()" id="behIllness"></textarea></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+			<center>
+                <button id="saveSubmit" class="btn btn-primary" type="button">保存</button> &nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
+			</center>
+		</td>
+    </tr>
+</table>
+</form>
+</body>
+</html>
